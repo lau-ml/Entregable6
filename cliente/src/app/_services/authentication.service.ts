@@ -23,7 +23,7 @@ export class AuthenticationService {
   }
 
   login(username: string, password: string) {
-    return this.http.post<any>(`${env.url}/auth`, {username, password})
+    return this.http.post<any>(`${env.url}/auth/login`, {username, password})
       .pipe(map(credentials => {
         // login successful si hay un token en la respuesta
         if (credentials && credentials.token) {
