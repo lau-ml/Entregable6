@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class Entregable6V2ApplicationTests {
+class Entregable6ApplicationTests {
 
     @Test
     void contextLoads() {

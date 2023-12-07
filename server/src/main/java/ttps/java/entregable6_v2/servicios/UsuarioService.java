@@ -1,29 +1,50 @@
 package ttps.java.entregable6_v2.servicios;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 import ttps.java.entregable6_v2.excepciones.UsuarioInvalidoException;
+import ttps.java.entregable6_v2.helpers.requests.usuarios.LoginRequest;
+import ttps.java.entregable6_v2.helpers.requests.usuarios.RegisterRequest;
 import ttps.java.entregable6_v2.modelos.Usuario;
 import ttps.java.entregable6_v2.repository.UsuarioJPA;
+import ttps.java.entregable6_v2.response.AuthResponse;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
-
-@org.springframework.stereotype.Service
+@RequiredArgsConstructor
+@Service
 public class UsuarioService {
 
-    @Autowired
-    private UsuarioJPA dao;
 
+    private final UsuarioJPA dao;
 
-    public Usuario persistir(Usuario register) throws UsuarioInvalidoException {
-        System.out.println(register.getUsuario());
-        System.out.println(register.getEmail());
-        if (dao.findByUsuario(register.getUsuario()) != null || dao.findByEmail(register.getEmail()) != null) {
+    private final JwtService jwtService;
+
+    private final  PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+
+    public AuthResponse register(RegisterRequest request) throws UsuarioInvalidoException {
+
+        if (dao.findByUsuario(request.getUsername()).orElse(null) != null || dao.findByEmail(request.getEmail()) != null) {
             throw new UsuarioInvalidoException("El usuario o mail ya existe");
         }
-        return dao.save(register);
+        Usuario entity = Usuario
+                .builder()
+                .nombre(request.getNombre())
+                .apellido(request.getApellido())
+                .usuario(request.getUsername())
+                .email(request.getEmail())
+                .contrasena(passwordEncoder.encode(request.getPassword()))
+                .build();
+        dao.save(entity);
+        return AuthResponse.builder().token(jwtService.getToken(entity)).build();
+
     }
 
 
@@ -43,14 +64,18 @@ public class UsuarioService {
     }
 
 
-    public Usuario login(String login, String password) throws UsuarioInvalidoException {
-        Usuario user = null;
-        user = dao.findByUsuario(login);
-        if (user != null && user.getContrasena().equals(password)) {
-            return user;
-        } else {
-            throw new UsuarioInvalidoException("Usuario o contraseña incorrectos");
-        }
+    public AuthResponse login(LoginRequest request) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+        UserDetails user=dao.findByUsuario(request.getUsername()).orElseThrow();
+        String token=jwtService.getToken(user);
+        return AuthResponse.builder()
+                .token(token)
+                .build();
+
     }
 
+
+    public Optional<Usuario> findByUsername(String username) {
+        return dao.findByUsuario(username);
+    }
 }

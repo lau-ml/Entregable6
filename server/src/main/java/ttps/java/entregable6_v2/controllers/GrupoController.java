@@ -19,7 +19,7 @@ import ttps.java.entregable6_v2.servicios.UsuarioService;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/grupo")
+@RequestMapping("/grupo")
 public class GrupoController {
     @Autowired
     GrupoService grupoService;

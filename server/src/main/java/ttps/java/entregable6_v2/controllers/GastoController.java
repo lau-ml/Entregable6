@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 import static ttps.java.entregable6_v2.helpers.actualizarGasto.Gasto.actualizarGasto;
 
 @RestController
-@RequestMapping("/api/gasto")
+@RequestMapping("/gasto")
 public class GastoController {
 
 
