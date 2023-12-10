@@ -59,6 +59,9 @@ yarn-error.log
 !.vscode/extensions.json
 .history/*
 
+
+
+
 # Miscellaneous
 /.angular/cache
 .sass-cache/
@@ -73,5 +76,5 @@ testem.log
 Thumbs.db
 
 
-
+/server/src/main/resources/application.properties
 

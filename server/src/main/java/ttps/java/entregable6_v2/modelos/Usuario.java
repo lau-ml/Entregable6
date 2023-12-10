@@ -25,6 +25,8 @@ public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "verification_code", length = 64)
+    private String verificationCode;
 
     private String nombre;
     private String apellido;
@@ -35,6 +37,8 @@ public class Usuario implements UserDetails {
     private String email;
 
     private Double saldo;
+
+    private Boolean activo;
 
     @ManyToMany
     @JoinTable(
@@ -103,6 +107,6 @@ public class Usuario implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return getActivo();
     }
 }

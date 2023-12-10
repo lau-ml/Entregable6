@@ -14,6 +14,8 @@ public interface UsuarioJPA extends JpaRepository<Usuario, Long> {
 
     public Usuario findByEmail(String email);
 
+    @Query("SELECT u FROM Usuario u WHERE u.verificationCode = ?1")
+    public Usuario findByVerificationCode(String code);
     @Query("SELECT u FROM Usuario u JOIN FETCH u.grupos WHERE u.id = :id")
     public Usuario recuperarConGrupos(long id);
 

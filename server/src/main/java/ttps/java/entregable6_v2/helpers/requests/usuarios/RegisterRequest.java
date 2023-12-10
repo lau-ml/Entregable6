@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class RegisterRequest {
     String username;
     String password;
+    String confirmPassword;
     String nombre;
     String apellido;
     String email;
@@ -19,7 +20,7 @@ public class RegisterRequest {
     public boolean isValid() {
         return username != null && password != null && nombre != null && apellido != null && email != null
                 && !username.isEmpty() && !password.isEmpty() && !nombre.isEmpty() && !apellido.isEmpty()
-                && !email.isEmpty();
+                && !email.isEmpty() && password.equals(confirmPassword);
     }
 }
 
