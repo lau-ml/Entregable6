@@ -1,17 +1,12 @@
-<nav class="navbar navbar-expand navbar-dark bg-primary" style="font-size: 24px;" *ngIf="currentUser">
-  <div class="navbar-nav mr-auto">
-    <a class="nav-item nav-link active" routerLink="/">Home</a>
-    <a class="nav-item nav-link" (click)="logout()">Salir</a>
-  </div>
-</nav>
-
-<!-- main app container -->
-<div class="jumbotron">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-6 offset-md-3">
-        <router-outlet></router-outlet>
-      </div>
+<div id="wrapper">
+    <app-nav></app-nav>
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <app-topnav></app-topnav>
+            <div class="container-fluid">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+        <app-footer></app-footer>
     </div>
-  </div>
 </div>

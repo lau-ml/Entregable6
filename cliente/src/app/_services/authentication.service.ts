@@ -1,44 +1,62 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {environment as env} from '../../environments/environment';
+import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
+import {BehaviorSubject, Observable, throwError} from 'rxjs';
+import {catchError, map, tap} from 'rxjs/operators';
+import {environment, environment as env} from '../../environments/environment';
 
 import {User} from '../_models';
+import {LoginRequest} from "../_requests/loginRequest";
 
 @Injectable({providedIn: 'root'})
 export class AuthenticationService {
-  private currentUserSubject: BehaviorSubject<User | null>;
-  public currentUser: Observable<User | null>;
 
-  constructor(private http: HttpClient) {
-    const storedUser = localStorage.getItem('currentUser');
-    const initialUser = storedUser ? JSON.parse(storedUser) : null;
-    this.currentUserSubject = new BehaviorSubject<User | null>(initialUser);
-    this.currentUser = this.currentUserSubject.asObservable();
-  }
+    public currentUser: BehaviorSubject<String> = new BehaviorSubject<String>("");
+    private isLogged: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  public get currentUserValue(): User | null {
-    return this.currentUserSubject.value;
-  }
+    constructor(private http: HttpClient) {
+        this.isLogged = new BehaviorSubject<boolean>(sessionStorage.getItem("token") != null);
+        this.currentUser = new BehaviorSubject<String>(sessionStorage.getItem("token") || "");
+    }
 
-  login(username: string, password: string) {
-    return this.http.post<any>(`${env.url}/auth/login`, {username, password})
-      .pipe(map(credentials => {
-        // login successful si hay un token en la respuesta
-        if (credentials && credentials.token) {
-          // store user details and jwt token in local storage to keep user logged in between page refreshes
-          localStorage.setItem('currentUser', JSON.stringify(credentials));
-          this.currentUserSubject.next(credentials);
+    public get currentUserValue(): Observable<String> {
+        return this.currentUser.asObservable();
+    }
+
+    public get isLoggedValue(): Observable<boolean> {
+        return this.isLogged.asObservable();
+    }
+
+
+    login(credenciales: LoginRequest) {
+        return this.http.post<any>(environment.urlHost + "auth/login", credenciales).pipe(
+            tap((userData) => {
+                sessionStorage.setItem("token", userData.token);
+                this.currentUser.next(userData.token);
+                this.isLogged.next(true);
+            }),
+            map((userData) => userData.token),
+            catchError(this.handleError)
+        );
+    }
+
+    private handleError(error: HttpErrorResponse) {
+        if (error.status === 0) {
+            console.error('Ocurrio un error:', error.status, error.message);
+        } else {
+            console.error(
+                `Backend returned code ${error.status}, ` +
+                `body was: ${error.error}`);
         }
+        return throwError(() => new Error('Algo malo sucedio; por favor intente mas tarde.'));
+    }
 
-        return credentials;
-      }));
-  }
+    logout() {
+        sessionStorage.removeItem('token');
+        this.isLogged.next(false);
+    }
 
-  logout() {
-    // elimino las credenciales del localstorage al deslogearme
-    localStorage.removeItem('currentUser');
-    this.currentUserSubject.next(null);
-  }
+    get userToken(): String {
+        return this.currentUser.value;
+    }
+
 }

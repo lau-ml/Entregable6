@@ -9,6 +9,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import {JwtInterceptor, ErrorInterceptor} from './_helpers';
 import {LoginComponent} from './login';
+import {NavComponent} from "./nav/nav.component";
+import {FooterComponent} from "./footer/footer.component";
+import {TopnavComponent} from "./topnav/topnav.component";
 
 @NgModule({
   imports: [
@@ -20,7 +23,10 @@ import {LoginComponent} from './login';
   ],
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    NavComponent,
+    TopnavComponent,
+    FooterComponent
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},

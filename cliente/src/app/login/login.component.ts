@@ -1,69 +1,62 @@
 import {Component, OnInit} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
-import {catchError, finalize, first, tap} from 'rxjs/operators';
+import {FormBuilder, Validators} from '@angular/forms';
+
 
 import {AuthenticationService} from '../_services';
 import {throwError} from "rxjs";
+import {LoginRequest} from "../_requests/loginRequest";
 
-@Component({templateUrl: 'login.component.html'})
+@Component({templateUrl: 'login.component.html', styleUrl: "./login.css"})
 export class LoginComponent implements OnInit {
-  loginForm: UntypedFormGroup = new UntypedFormGroup({})
-  loading = false;
-  submitted = false;
-  returnUrl: string = '';
-  error = '';
+    loading = false;
+    submitted = false;
+    error = '';
+    loginForm = this.formBuilder.group({
+        username: ['', Validators.required],
+        password: ['', Validators.required]
+    })
 
-  constructor(
-    private formBuilder: UntypedFormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private authenticationService: AuthenticationService
-  ) {
-  }
-
-  ngOnInit() {
-    this.loginForm = this.formBuilder.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required]
-    });
-
-    // elimino las credenciales del usuario, si es que existen
-    this.authenticationService.logout();
-
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-  }
-
-  get f() {
-    return this.loginForm.controls;
-  }
-
-  onSubmit() {
-    this.submitted = true;
-
-    // Valido que el formulario sea valido antes del submit
-    if (this.loginForm.invalid) {
-      return;
+    constructor(
+        private formBuilder: FormBuilder,
+        private router: Router,
+        private authenticationService: AuthenticationService
+    ) {
     }
 
-    this.loading = true;
-    this.authenticationService.login(this.f['username'].value, this.f['password'].value)
-      .pipe(
-        first(),
-        tap((data) => {
-          this.router.navigate([this.returnUrl]).then(r => console.log(r));
-        }),
-        catchError((error) => {
-          this.error = 'Nombre de usuario o Contraseña incorrectas';
-          this.loading = false;
-          // You can handle the error further if needed
-          return throwError(error); // Rethrow the error or return a default value
-        }),
-        finalize(() => {
-          console.log('LoginComponent.onSubmit() completed');
-          // Any cleanup code you want to execute, regardless of success or error
-        })
-      )
-      .subscribe();
-  }
+    ngOnInit() {
+
+    }
+
+
+    get f() {
+        return this.loginForm.controls;
+    }
+
+    onSubmit() {
+        this.submitted = true;
+        this.loading = true;
+        if (this.loginForm.invalid) {
+            this.loginForm.markAllAsTouched();
+
+        } else {
+
+            this.loading = true;
+            this.authenticationService.login(this.loginForm.value as LoginRequest).subscribe({
+                next: (userData) => {
+                    console.log(userData);
+                },
+                error: (errorData) => {
+                    this.error = errorData;
+                    console.error(errorData);
+                },
+                complete: () => {
+                    console.info("Login completo");
+                    this.router.navigateByUrl('/').then(r => console.log(r));
+                    this.loginForm.reset();
+                }
+            })
+        }
+        this.loading = false;
+    }
 }
