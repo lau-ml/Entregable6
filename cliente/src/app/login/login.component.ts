@@ -6,31 +6,68 @@ import {FormBuilder, Validators} from '@angular/forms';
 import {AuthenticationService} from '../_services';
 import {throwError} from "rxjs";
 import {LoginRequest} from "../_requests/loginRequest";
+import {SweetalertService} from "../_services/sweetalert.service";
 
 @Component({templateUrl: 'login.component.html', styleUrl: "./login.css"})
 export class LoginComponent implements OnInit {
     loading = false;
     submitted = false;
     error = '';
+    errorReenviar = '';
+
+    isResendEmail: boolean = false;
+    isRecoverPass: boolean = false;
     loginForm = this.formBuilder.group({
         username: ['', Validators.required],
         password: ['', Validators.required]
     })
 
+    reenviarForm = this.formBuilder.group({
+        email: ['', [Validators.required, Validators.email]],
+    })
+
+    recoverForm = this.formBuilder.group({
+        email: ['', [Validators.required, Validators.email]],
+    })
+    errorRecuperar: boolean = false;
+
+
     constructor(
         private formBuilder: FormBuilder,
         private router: Router,
-        private authenticationService: AuthenticationService
+        private authenticationService: AuthenticationService,
+        private sweetAlertService: SweetalertService
     ) {
     }
 
     ngOnInit() {
-
+        this.authenticationService.isResendEmailValue.subscribe(
+            {
+                next: (isResendEmail) => {
+                    this.isResendEmail = isResendEmail;
+                }
+            }
+        )
+        this.authenticationService.isRecoverPassValue.subscribe(
+            {
+                next: (isRecoverPass) => {
+                    this.isRecoverPass = isRecoverPass;
+                }
+            }
+        )
     }
 
 
     get f() {
         return this.loginForm.controls;
+    }
+
+    get reenviarf() {
+        return this.reenviarForm.controls;
+    }
+
+    get recoverf() {
+        return this.recoverForm.controls;
     }
 
     onSubmit() {
@@ -41,14 +78,13 @@ export class LoginComponent implements OnInit {
 
         } else {
 
-            this.loading = true;
             this.authenticationService.login(this.loginForm.value as LoginRequest).subscribe({
                 next: (userData) => {
                     console.log(userData);
                 },
                 error: (errorData) => {
-                    this.error = errorData;
                     console.error(errorData);
+                    this.error = errorData;
                 },
                 complete: () => {
                     console.info("Login completo");
@@ -58,5 +94,52 @@ export class LoginComponent implements OnInit {
             })
         }
         this.loading = false;
+    }
+
+
+
+    onSubmitReenviar() {
+        if (this.reenviarForm.invalid) {
+            this.reenviarForm.markAllAsTouched();
+        } else {
+            this.sweetAlertService.showLoadingAlert();
+
+            this.authenticationService.resendEmail(this.reenviarForm.value.email as string).subscribe({
+                next: () => this.sweetAlertService.showAlert('success', 'Éxito!', 'Envío de correo exitoso.'),
+                error: (errorData) => {
+                    this.sweetAlertService.showAlert('error', 'Error!', 'El usuario ya se encuentra activo o no existe');
+                    console.error(errorData);
+                    this.errorReenviar = errorData;
+                },
+                complete: () => {
+                    this.router.navigateByUrl('/login').then(r => console.log(r));
+                    this.reenviarForm.reset();
+                },
+            });
+        }
+    }
+
+    onSubmitRecover() {
+        if (this.reenviarForm.invalid) {
+            this.reenviarForm.markAllAsTouched();
+        } else {
+            this.sweetAlertService.showLoadingAlert();
+
+            this.authenticationService.recoverPassword(this.reenviarForm.value.email as string).subscribe({
+                next: () => {
+                    this.sweetAlertService.showAlert('success', 'Success!', 'Envio de correo exitoso.');
+
+                    // Navigate to login on success
+                    this.router.navigateByUrl('/login').then(r => console.log(r));
+
+                    // Reset the form
+                    this.reenviarForm.reset();
+                },
+                error: (errorData) => {
+                    this.sweetAlertService.showAlert('error', 'Error!', 'El usuario no se encuentra activo o no existe');
+                    this.errorRecuperar = errorData;
+                },
+            });
+        }
     }
 }

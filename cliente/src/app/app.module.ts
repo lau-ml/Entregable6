@@ -12,20 +12,23 @@ import {LoginComponent} from './login';
 import {NavComponent} from "./nav/nav.component";
 import {FooterComponent} from "./footer/footer.component";
 import {TopnavComponent} from "./topnav/topnav.component";
-
+import {RegisterComponent} from "./register/register.component";
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 @NgModule({
   imports: [
     BrowserModule,
     ReactiveFormsModule,
     HttpClientModule,
     NgbModule,
-    routing
+    routing,
+    SweetAlert2Module.forRoot()
   ],
   declarations: [
     AppComponent,
     LoginComponent,
     NavComponent,
     TopnavComponent,
+    RegisterComponent,
     FooterComponent
   ],
   providers: [

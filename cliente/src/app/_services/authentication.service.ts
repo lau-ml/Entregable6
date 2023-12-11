@@ -12,7 +12,8 @@ export class AuthenticationService {
 
     public currentUser: BehaviorSubject<String> = new BehaviorSubject<String>("");
     private isLogged: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-
+    private isResendEmail: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    private isRecoverPass: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     constructor(private http: HttpClient) {
         this.isLogged = new BehaviorSubject<boolean>(sessionStorage.getItem("token") != null);
         this.currentUser = new BehaviorSubject<String>(sessionStorage.getItem("token") || "");
@@ -26,6 +27,13 @@ export class AuthenticationService {
         return this.isLogged.asObservable();
     }
 
+    public get isResendEmailValue(): Observable<boolean> {
+        return this.isResendEmail.asObservable();
+    }
+
+    public get isRecoverPassValue(): Observable<boolean> {
+        return this.isRecoverPass.asObservable();
+    }
 
     login(credenciales: LoginRequest) {
         return this.http.post<any>(environment.urlHost + "auth/login", credenciales).pipe(
@@ -39,6 +47,25 @@ export class AuthenticationService {
         );
     }
 
+    resendEmail(email: String) {
+        return this.http.post<any>(environment.urlHost + "auth/resend", {email: email}).pipe(
+          tap((userData) => {
+            this.isResendEmail.next(true);
+          }),
+          map((userData) => userData.message),
+          catchError(this.handleError)
+        );
+    }
+
+    recoverPassword(email: String) {
+        return this.http.post<any>(environment.urlHost + "auth/recover", {email: email}).pipe(
+            tap((userData) => {
+                this.isRecoverPass.next(true);
+            }),
+            map((userData) => userData.message),
+            catchError(this.handleError)
+        );
+    }
     private handleError(error: HttpErrorResponse) {
         if (error.status === 0) {
             console.error('Ocurrio un error:', error.status, error.message);
@@ -46,6 +73,7 @@ export class AuthenticationService {
             console.error(
                 `Backend returned code ${error.status}, ` +
                 `body was: ${error.error}`);
+            return throwError(() => new Error(error.error));
         }
         return throwError(() => new Error('Algo malo sucedio; por favor intente mas tarde.'));
     }

@@ -28,6 +28,9 @@ public class Usuario implements UserDetails {
     @Column(name = "verification_code", length = 64)
     private String verificationCode;
 
+    @Column(name = "contra_code", length = 64)
+    private String contraCode;
+
     private String nombre;
     private String apellido;
     @Column(unique = true)

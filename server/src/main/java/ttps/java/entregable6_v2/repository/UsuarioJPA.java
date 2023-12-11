@@ -19,5 +19,7 @@ public interface UsuarioJPA extends JpaRepository<Usuario, Long> {
     @Query("SELECT u FROM Usuario u JOIN FETCH u.grupos WHERE u.id = :id")
     public Usuario recuperarConGrupos(long id);
 
+    @Query("SELECT u FROM Usuario u WHERE u.contraCode = ?1")
+    public Usuario findByContraCode(String code);
 
 }
