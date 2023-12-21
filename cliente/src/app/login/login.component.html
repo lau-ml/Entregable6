@@ -18,12 +18,13 @@
                 <form class="user" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                   <div class="form-group">
                     <label for="username">Nombre de usuario</label>
-                    <input id="username" type="text" placeholder="Ingresa correo electrónico" formControlName="username"
+                    <input id="username" type="text" placeholder="Ingresa tu usuario" formControlName="username"
                            class="form-control form-control-user"
                            [ngClass]="{ 'is-invalid':  f['username'].invalid && (f['username'].dirty || f['username'].touched )}"/>
                     <div *ngIf="f['username'].invalid && (f['username'].dirty || f['username'].touched )"
                          class="invalid-feedback">
                       <div *ngIf="f['username'].errors?.['required']">Username es requerido</div>
+
                     </div>
                   </div>
                   <div class="form-group">

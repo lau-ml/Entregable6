@@ -2,7 +2,7 @@ export interface RegisterRequest {
     username: String;
     password: String;
     confirmPassword: String;
-    nombre: String;
-    apellido: String;
+    firstName: String;
+    lastName: String;
     email: String;
 }

@@ -23,7 +23,6 @@ public class JwtService {
     public String getToken(UserDetails user) {
         return getToken(new HashMap<>(), user);
     }
-
     private String getToken(Map<String,Object> extraClaims, UserDetails user) {
         return Jwts
                 .builder()
@@ -74,4 +73,6 @@ public class JwtService {
     {
         return getExpiration(token).before(new Date());
     }
+
+
 }

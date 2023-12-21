@@ -42,8 +42,7 @@ export class AuthenticationService {
                 this.currentUser.next(userData.token);
                 this.isLogged.next(true);
             }),
-            map((userData) => userData.token),
-            catchError(this.handleError)
+            map((userData) => userData.token)
         );
     }
 
@@ -52,8 +51,7 @@ export class AuthenticationService {
           tap((userData) => {
             this.isResendEmail.next(true);
           }),
-          map((userData) => userData.message),
-          catchError(this.handleError)
+          map((userData) => userData.message)
         );
     }
 
@@ -62,21 +60,10 @@ export class AuthenticationService {
             tap((userData) => {
                 this.isRecoverPass.next(true);
             }),
-            map((userData) => userData.message),
-            catchError(this.handleError)
+            map((userData) => userData.message)
         );
     }
-    private handleError(error: HttpErrorResponse) {
-        if (error.status === 0) {
-            console.error('Ocurrio un error:', error.status, error.message);
-        } else {
-            console.error(
-                `Backend returned code ${error.status}, ` +
-                `body was: ${error.error}`);
-            return throwError(() => new Error(error.error));
-        }
-        return throwError(() => new Error('Algo malo sucedio; por favor intente mas tarde.'));
-    }
+
 
     logout() {
         sessionStorage.removeItem('token');

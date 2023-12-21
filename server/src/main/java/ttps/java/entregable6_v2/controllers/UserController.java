@@ -19,12 +19,10 @@ public class UserController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Usuario> getUser(@PathVariable("id") long id) {
-        System.out.println("Obteniendo usuario con id " + id);
         Usuario user = null;
         try {
             user = userService.recuperar(id);
         } catch (UsuarioInvalidoException e) {
-            System.out.println("Usuario con id " + id + " no encontrado");
             return new ResponseEntity<Usuario>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<Usuario>(user, HttpStatus.OK);

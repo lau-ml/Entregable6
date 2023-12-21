@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ttps.java.entregable6_v2.excepciones.UsuarioInvalidoException;
 import ttps.java.entregable6_v2.helpers.requests.grupos.GrupoCreateRequest;
@@ -34,6 +36,12 @@ public class GrupoController {
     @RequestMapping(value = "/crear", method = RequestMethod.POST)
     public ResponseEntity<?> crearGrupo(HttpSession httpSession, @RequestBody GrupoCreateRequest grupoCreateRequest) throws UsuarioInvalidoException {
         Long user_id = (Long) httpSession.getAttribute("connectedUser");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // You can now access the username or other user details from the authentication object
+        String username = authentication.getName();
+        System.out.println(username);
+
         if (user_id == null) {
             return new ResponseEntity<String>("No hay usuario conectado", HttpStatus.UNAUTHORIZED);
         }

@@ -1,14 +1,8 @@
 package ttps.java.entregable6_v2.servicios;
 
-import java.io.UnsupportedEncodingException;
-
-import net.bytebuddy.utility.RandomString;
 import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,8 +16,10 @@ import ttps.java.entregable6_v2.helpers.requests.usuarios.RegisterRequest;
 import ttps.java.entregable6_v2.modelos.Usuario;
 import ttps.java.entregable6_v2.repository.UsuarioJPA;
 import ttps.java.entregable6_v2.response.AuthResponse;
+import ttps.java.entregable6_v2.response.MessageResponse;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,63 +33,42 @@ public class UsuarioService {
 
     private final JwtService jwtService;
 
-    @Autowired
-    private JavaMailSender mailSender;
-
+    private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    public AuthResponse register(RegisterRequest request, String siteUrl) throws UsuarioInvalidoException, MessagingException, UnsupportedEncodingException {
+    public MessageResponse register(RegisterRequest request, String siteUrl) throws UsuarioInvalidoException, MessagingException, UnsupportedEncodingException {
 
-        if (dao.findByUsuario(request.getUsername()).orElse(null) != null || dao.findByEmail(request.getEmail()) != null) {
-            throw new UsuarioInvalidoException("El usuario o mail ya existe");
+        Usuario usuarioByEmail = dao.findByEmail(request.getEmail());
+        Optional<Usuario> usuarioByUsuario = dao.findByUsuario(request.getUsername());
+
+        if (usuarioByEmail != null && usuarioByUsuario.isPresent()) {
+            throw new UsuarioInvalidoException("El mail y/o el usuario ingresado ya existe");
         }
+
+        if (usuarioByEmail != null) {
+            throw new UsuarioInvalidoException("El mail ingresado ya existe");
+        }
+        if (usuarioByUsuario.isPresent()) {
+            throw new UsuarioInvalidoException("El usuario ingresado ya existe");
+        }
+
+
         String randomCode = RandomString.make(64);
         Usuario entity = Usuario
                 .builder()
-                .nombre(request.getNombre())
-                .apellido(request.getApellido())
+                .nombre(request.getFirstName())
+                .apellido(request.getLastName())
                 .usuario(request.getUsername())
                 .email(request.getEmail())
                 .contrasena(passwordEncoder.encode(request.getPassword()))
                 .activo(false)
                 .verificationCode(randomCode)
                 .build();
-        sendVerificationEmail(entity, siteUrl + "/verify", randomCode, "verificar");
+
+        emailService.sendVerificationEmail(entity, siteUrl + "/verify", randomCode, "verificar");
         dao.save(entity);
-        return AuthResponse.builder().message("Usuario creado con exito").build();
-
-    }
-
-
-    private void sendVerificationEmail(Usuario user, String siteURL, String randomCode, String msg)
-            throws MessagingException, UnsupportedEncodingException {
-        String toAddress = user.getEmail();
-        String fromAddress = "lautaromoller345@gmail.com";
-        String senderName = "CuentasClaras";
-        String subject = "Confirmar cuenta";
-        String content = "Estimado [[name]],<br>"
-                + "Haz click en el sigueiente enlace para " + msg + " tu cuenta:<br>"
-                + "<h3><a href=\"[[URL]]\" target=\"_self\">Verificar</a></h3>"
-                + "Muchas gracias,<br>"
-                + "Atentamente el equipo de CuentasClaras.";
-
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
-
-        helper.setFrom(fromAddress, senderName);
-        helper.setTo(toAddress);
-        helper.setSubject(subject);
-
-        content = content.replace("[[name]]", user.getApellido());
-        String verifyURL = siteURL + "?code=" + randomCode;
-
-        content = content.replace("[[URL]]", verifyURL);
-
-        helper.setText(content, true);
-
-        mailSender.send(message);
-
+        return MessageResponse.builder().message("Usuario creado con exito").build();
     }
 
 
@@ -152,7 +127,7 @@ public class UsuarioService {
             user.setContraCode(randomCode);
             dao.save(user);
             try {
-                sendVerificationEmail(user, siteUrl + "/reset", randomCode, "recuperar");
+                emailService.sendVerificationEmail(user, siteUrl + "/reset", randomCode, "recuperar");
             } catch (MessagingException | UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             }
@@ -183,7 +158,7 @@ public class UsuarioService {
             user.setVerificationCode(randomCode);
             dao.save(user);
             try {
-                sendVerificationEmail(user, url + "/verify", randomCode, "verificar");
+                emailService.sendVerificationEmail(user, url + "/verify", randomCode, "verificar");
             } catch (MessagingException | UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             }

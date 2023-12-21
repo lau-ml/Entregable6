@@ -4,7 +4,7 @@ import {FormBuilder, Validators} from '@angular/forms';
 
 
 import {AuthenticationService} from '../_services';
-import {throwError} from "rxjs";
+
 import {LoginRequest} from "../_requests/loginRequest";
 import {SweetalertService} from "../_services/sweetalert.service";
 
@@ -80,14 +80,11 @@ export class LoginComponent implements OnInit {
 
             this.authenticationService.login(this.loginForm.value as LoginRequest).subscribe({
                 next: (userData) => {
-                    console.log(userData);
                 },
                 error: (errorData) => {
-                    console.error(errorData);
-                    this.error = errorData;
+                    this.error = errorData.message;
                 },
                 complete: () => {
-                    console.info("Login completo");
                     this.router.navigateByUrl('/').then(r => console.log(r));
                     this.loginForm.reset();
                 }
@@ -105,11 +102,10 @@ export class LoginComponent implements OnInit {
             this.sweetAlertService.showLoadingAlert();
 
             this.authenticationService.resendEmail(this.reenviarForm.value.email as string).subscribe({
-                next: () => this.sweetAlertService.showAlert('success', 'Éxito!', 'Envío de correo exitoso.'),
+                next: () => this.sweetAlertService.showAlert('success', '¡Éxito!', 'Envío de correo exitoso.'),
                 error: (errorData) => {
-                    this.sweetAlertService.showAlert('error', 'Error!', 'El usuario ya se encuentra activo o no existe');
-                    console.error(errorData);
-                    this.errorReenviar = errorData;
+                    this.sweetAlertService.showAlert('error', '¡Error!', 'El usuario ya se encuentra activo o no existe');
+                    this.errorReenviar = errorData.message;
                 },
                 complete: () => {
                     this.router.navigateByUrl('/login').then(r => console.log(r));
@@ -120,24 +116,25 @@ export class LoginComponent implements OnInit {
     }
 
     onSubmitRecover() {
-        if (this.reenviarForm.invalid) {
-            this.reenviarForm.markAllAsTouched();
+        if (this.recoverForm.invalid) {
+            this.recoverForm.markAllAsTouched();
         } else {
             this.sweetAlertService.showLoadingAlert();
 
-            this.authenticationService.recoverPassword(this.reenviarForm.value.email as string).subscribe({
+            this.authenticationService.recoverPassword(this.recoverForm.value.email as string).subscribe({
                 next: () => {
-                    this.sweetAlertService.showAlert('success', 'Success!', 'Envio de correo exitoso.');
+                    this.sweetAlertService.showAlert('success', '¡Éxito!', 'Envio de correo exitoso.');
 
                     // Navigate to login on success
                     this.router.navigateByUrl('/login').then(r => console.log(r));
 
                     // Reset the form
-                    this.reenviarForm.reset();
+                    this.recoverForm.reset();
                 },
                 error: (errorData) => {
-                    this.sweetAlertService.showAlert('error', 'Error!', 'El usuario no se encuentra activo o no existe');
-                    this.errorRecuperar = errorData;
+                  alert(errorData.message)
+                    this.sweetAlertService.showAlert('error', '¡Error!', 'El usuario no se encuentra activo o no existe');
+                    this.errorRecuperar = errorData.message;
                 },
             });
         }

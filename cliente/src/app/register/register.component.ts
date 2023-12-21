@@ -1,4 +1,9 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {FormBuilder, Validators} from "@angular/forms";
+import {Router} from "@angular/router";
+import {RegisterService} from "../_services/register.service";
+import {RegisterRequest} from "../_requests/registerRequest";
+import {SweetalertService} from "../_services/sweetalert.service";
 
 @Component({
   selector: 'app-register',
@@ -6,5 +11,55 @@ import { Component } from '@angular/core';
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
+  submitted = false;
+  errorMail = false;
+  errorUser = false;
+  registerForm = this.formBuilder.group({
+    username: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]],
+    password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&#+_\\-\\/\\\\|:;\\.,])[A-Za-z\\d@$!%*?&#+_\\-\\/\\\\|:;\\.,]{8,}$")]],
+    email: ['', [Validators.required, Validators.email, Validators.maxLength(150)]],
+    firstName: ['', [Validators.required, Validators.maxLength(50)]],
+    lastName: ['', [Validators.required, Validators.maxLength(50)]],
+    confirmPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&#+_\\-\\/\\\\|:;\\.,])[A-Za-z\\d@$!%*?&#+_\\-\\/\\\\|:;\\.,]{8,}$")]],
+  })
 
+  constructor(private formBuilder: FormBuilder,
+              private router: Router,
+              private registerService: RegisterService,
+              private sweetAlertService: SweetalertService
+  ) {
+  }
+
+  get f() {
+    return this.registerForm.controls;
+  }
+
+  onSubmit(): void {
+    this.submitted = true;
+    this.errorMail = false;
+    this.errorUser = false;
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
+    } else {
+      this.sweetAlertService.showLoadingAlert();
+      this.registerService.register(this.registerForm.value as RegisterRequest).subscribe(
+        {
+          next: (response) => {
+            this.sweetAlertService.showAlert('success', '¡Éxito!', 'La cuenta ha sido registrada. ' +
+              'Recuerde que debe verificar su cuenta siguiendo el enlace enviado a su correo.')
+            this.router.navigate(['/login']);
+          },
+          error: (errorData) => {
+            if (errorData.message.includes("mail")) {
+              this.errorMail = true;
+            }
+            if (errorData.message.includes("usuario")) {
+              this.errorUser = true;
+            }
+            this.sweetAlertService.showAlert('error', '¡Error!', 'Los datos ingresados se encuentran en uso.');
+          }
+        }
+      )
+    }
+  }
 }

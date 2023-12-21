@@ -8,6 +8,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import ttps.java.entregable6_v2.excepciones.UsuarioInvalidoException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,8 +47,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(UsuarioInvalidoException.class)
+    public ResponseEntity<String> handleUsuarioInvalidoException(UsuarioInvalidoException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handleRuntimeException(RuntimeException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_GATEWAY);
+        return new ResponseEntity<>("Error interno de servidor", HttpStatus.BAD_GATEWAY);
     }
 }
