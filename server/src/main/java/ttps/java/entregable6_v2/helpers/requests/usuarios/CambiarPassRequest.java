@@ -24,4 +24,5 @@ public class CambiarPassRequest {
     @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
             message = "Debe tener 8 caracteres, y al menos una letra minúscula, una letra mayúscula, un número y un caracter especial")
     String confirmPassword;
+    String code;
 }

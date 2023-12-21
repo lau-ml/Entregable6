@@ -9,10 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ttps.java.entregable6_v2.excepciones.UsuarioInvalidoException;
-import ttps.java.entregable6_v2.helpers.requests.usuarios.CambiarPassRequest;
-import ttps.java.entregable6_v2.helpers.requests.usuarios.EmailRequest;
-import ttps.java.entregable6_v2.helpers.requests.usuarios.LoginRequest;
-import ttps.java.entregable6_v2.helpers.requests.usuarios.RegisterRequest;
+import ttps.java.entregable6_v2.helpers.requests.usuarios.*;
 import ttps.java.entregable6_v2.modelos.Usuario;
 import ttps.java.entregable6_v2.repository.UsuarioJPA;
 import ttps.java.entregable6_v2.response.AuthResponse;
@@ -98,8 +95,8 @@ public class UsuarioService {
 
     }
 
-    public boolean verify(String verificationCode) {
-        Usuario user = dao.findByVerificationCode(verificationCode);
+    public boolean verify(VerificacionRequest verificacionRequest) {
+        Usuario user = dao.findByVerificationCode(verificacionRequest.getCode());
 
         if (user == null || user.isEnabled()) {
             return false;
@@ -135,13 +132,13 @@ public class UsuarioService {
         }
     }
 
-    public boolean reset(String code, CambiarPassRequest password) {
-        Usuario user = dao.findByContraCode(code);
+    public boolean reset(CambiarPassRequest request) {
+        Usuario user = dao.findByContraCode(request.getCode());
 
         if (user == null || !user.isEnabled()) {
             return false;
         } else {
-            user.setContrasena(passwordEncoder.encode(password.getPassword()));
+            user.setContrasena(passwordEncoder.encode(request.getPassword()));
             user.setContraCode(null);
             dao.save(user);
             return true;

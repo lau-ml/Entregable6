@@ -14,6 +14,8 @@ import {FooterComponent} from "./footer/footer.component";
 import {TopnavComponent} from "./topnav/topnav.component";
 import {RegisterComponent} from "./register/register.component";
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import {VerificarComponent} from "./verificar/verificar.component";
+import {RecuperarContraComponent} from "./recuperar-contra/recuperar-contra.component";
 @NgModule({
   imports: [
     BrowserModule,
@@ -29,7 +31,10 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     NavComponent,
     TopnavComponent,
     RegisterComponent,
-    FooterComponent
+    FooterComponent,
+    VerificarComponent,
+    RecuperarContraComponent
+
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},

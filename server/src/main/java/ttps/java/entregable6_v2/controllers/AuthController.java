@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ttps.java.entregable6_v2.excepciones.UsuarioInvalidoException;
-import ttps.java.entregable6_v2.helpers.requests.usuarios.CambiarPassRequest;
-import ttps.java.entregable6_v2.helpers.requests.usuarios.EmailRequest;
-import ttps.java.entregable6_v2.helpers.requests.usuarios.LoginRequest;
-import ttps.java.entregable6_v2.helpers.requests.usuarios.RegisterRequest;
+import ttps.java.entregable6_v2.helpers.requests.usuarios.*;
 import ttps.java.entregable6_v2.response.AuthResponse;
 import ttps.java.entregable6_v2.response.MessageResponse;
 import ttps.java.entregable6_v2.servicios.UsuarioService;
@@ -54,21 +51,22 @@ public class AuthController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<MessageResponse> register(@Valid @RequestBody RegisterRequest request) throws MessagingException, UsuarioInvalidoException, UnsupportedEncodingException {
-        return new ResponseEntity<>(userService.register(request, environment.getProperty("url") + "/auth"), HttpStatus.OK);
+        return new ResponseEntity<>(userService.register(request, environment.getProperty("url")), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/resend", method = RequestMethod.POST)
     public ResponseEntity<?> resendVerification(@Valid @RequestBody EmailRequest emailRequest) {
-        if (userService.resendVerification(emailRequest.getEmail(), environment.getProperty("url") + "/auth")) {
+        if (userService.resendVerification(emailRequest.getEmail(), environment.getProperty("url"))) {
             return new ResponseEntity<>(MessageResponse.builder().message("Código de verificación enviado").build(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(MessageResponse.builder().message("No se pudo enviar el mensaje de verificación").build(), HttpStatus.UNAUTHORIZED);
         }
     }
 
-    @RequestMapping("/verify")
-    public ResponseEntity<?> verifyUser(@Param("code") String code) {
-        if (userService.verify(code)) {
+    @RequestMapping(value = "/verify", method = RequestMethod.PATCH)
+    public ResponseEntity<?> verifyUser(@RequestBody VerificacionRequest verificacionRequest) {
+
+        if (userService.verify(verificacionRequest)) {
             return new ResponseEntity<>(MessageResponse.builder().message("Usuario verificado").build(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(MessageResponse.builder().message("No se pudo verificar el usuario").build(), HttpStatus.UNAUTHORIZED);
@@ -77,16 +75,16 @@ public class AuthController {
 
     @RequestMapping(value = "/recover", method = RequestMethod.POST)
     public ResponseEntity<?> recoverUser(@Valid @RequestBody EmailRequest emailRequest) {
-        if (userService.recover(emailRequest, environment.getProperty("url") + "/auth")) {
-            return new ResponseEntity<>(MessageResponse.builder().message("Codigación de recuperación enviado").build(), HttpStatus.OK);
+        if (userService.recover(emailRequest, environment.getProperty("url"))) {
+            return new ResponseEntity<>(MessageResponse.builder().message("Código de recuperación enviado").build(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(MessageResponse.builder().message("No se pudo recuperar el usuario").build(), HttpStatus.UNAUTHORIZED);
         }
     }
 
-    @RequestMapping(value = "/reset", method = RequestMethod.POST)
-    public ResponseEntity<MessageResponse> resetUser(@Param("code") String code, @Valid @RequestBody CambiarPassRequest request) {
-        if (userService.reset(code, request)) {
+    @RequestMapping(value = "/reset", method = RequestMethod.PATCH)
+    public ResponseEntity<MessageResponse> resetUser( @Valid @RequestBody CambiarPassRequest request) {
+        if (userService.reset(request)) {
             return new ResponseEntity<>(MessageResponse.builder().message("Contraseña cambiada").build(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(MessageResponse.builder().message("No se pudo cambiar la contraseña").build(), HttpStatus.UNAUTHORIZED);

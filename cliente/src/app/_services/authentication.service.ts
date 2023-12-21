@@ -1,77 +1,89 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
-import {BehaviorSubject, Observable, throwError} from 'rxjs';
-import {catchError, map, tap} from 'rxjs/operators';
-import {environment, environment as env} from '../../environments/environment';
-
-import {User} from '../_models';
+import {HttpClient} from '@angular/common/http';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {map, tap} from 'rxjs/operators';
+import {environment} from '../../environments/environment';
 import {LoginRequest} from "../_requests/loginRequest";
+import {RegisterRequest} from "../_requests/registerRequest";
+import {PasswordRequest} from "../_requests/passwordRequest";
 
 @Injectable({providedIn: 'root'})
 export class AuthenticationService {
 
-    public currentUser: BehaviorSubject<String> = new BehaviorSubject<String>("");
-    private isLogged: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    private isResendEmail: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    private isRecoverPass: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    constructor(private http: HttpClient) {
-        this.isLogged = new BehaviorSubject<boolean>(sessionStorage.getItem("token") != null);
-        this.currentUser = new BehaviorSubject<String>(sessionStorage.getItem("token") || "");
-    }
+  public currentUser: BehaviorSubject<String> = new BehaviorSubject<String>("");
+  private isLogged: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private isResendEmail: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private isRecoverPass: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-    public get currentUserValue(): Observable<String> {
-        return this.currentUser.asObservable();
-    }
+  constructor(private http: HttpClient) {
+    this.isLogged = new BehaviorSubject<boolean>(sessionStorage.getItem("token") != null);
+    this.currentUser = new BehaviorSubject<String>(sessionStorage.getItem("token") || "");
+  }
 
-    public get isLoggedValue(): Observable<boolean> {
-        return this.isLogged.asObservable();
-    }
+  public get currentUserValue(): Observable<String> {
+    return this.currentUser.asObservable();
+  }
 
-    public get isResendEmailValue(): Observable<boolean> {
-        return this.isResendEmail.asObservable();
-    }
+  public get isLoggedValue(): Observable<boolean> {
+    return this.isLogged.asObservable();
+  }
 
-    public get isRecoverPassValue(): Observable<boolean> {
-        return this.isRecoverPass.asObservable();
-    }
+  public get isResendEmailValue(): Observable<boolean> {
+    return this.isResendEmail.asObservable();
+  }
 
-    login(credenciales: LoginRequest) {
-        return this.http.post<any>(environment.urlHost + "auth/login", credenciales).pipe(
-            tap((userData) => {
-                sessionStorage.setItem("token", userData.token);
-                this.currentUser.next(userData.token);
-                this.isLogged.next(true);
-            }),
-            map((userData) => userData.token)
-        );
-    }
+  public get isRecoverPassValue(): Observable<boolean> {
+    return this.isRecoverPass.asObservable();
+  }
 
-    resendEmail(email: String) {
-        return this.http.post<any>(environment.urlHost + "auth/resend", {email: email}).pipe(
-          tap((userData) => {
-            this.isResendEmail.next(true);
-          }),
-          map((userData) => userData.message)
-        );
-    }
+  login(credenciales: LoginRequest) {
+    return this.http.post<any>(environment.urlHost + "auth/login", credenciales).pipe(
+      tap((userData) => {
+        sessionStorage.setItem("token", userData.token);
+        this.currentUser.next(userData.token);
+        this.isLogged.next(true);
+      }),
+      map((userData) => userData.token)
+    );
+  }
 
-    recoverPassword(email: String) {
-        return this.http.post<any>(environment.urlHost + "auth/recover", {email: email}).pipe(
-            tap((userData) => {
-                this.isRecoverPass.next(true);
-            }),
-            map((userData) => userData.message)
-        );
-    }
+  resendEmail(email: String) {
+    return this.http.post<any>(environment.urlHost + "auth/resend", {email: email}).pipe(
+      tap((userData) => {
+        this.isResendEmail.next(true);
+      }),
+      map((userData) => userData.message)
+    );
+  }
 
+  recoverPassword(email: String) {
+    return this.http.post<any>(environment.urlHost + "auth/recover", {email: email}).pipe(
+      tap((userData) => {
+        this.isRecoverPass.next(true);
+      }),
+      map((userData) => userData.message)
+    );
+  }
 
-    logout() {
-        sessionStorage.removeItem('token');
-        this.isLogged.next(false);
-    }
+  verifyCode(code: String) {
+    return this.http.patch<any>(environment.urlHost + "auth/verify", {"code": code}).pipe(
+      map((userData) => userData.message)
+    );
+  }
 
-    get userToken(): String {
-        return this.currentUser.value;
-    }
+  resetPassword(credentials: PasswordRequest) {
+    return this.http.patch<any>(environment.urlHost + "auth/reset", credentials).pipe(
+      map((userData) => userData.message)
+    );
+  }
+
+  logout() {
+    sessionStorage.removeItem('token');
+    this.isLogged.next(false);
+  }
+
+  get userToken(): String {
+    return this.currentUser.value;
+  }
 
 }

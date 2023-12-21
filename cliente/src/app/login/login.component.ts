@@ -132,7 +132,7 @@ export class LoginComponent implements OnInit {
                     this.recoverForm.reset();
                 },
                 error: (errorData) => {
-                  alert(errorData.message)
+
                     this.sweetAlertService.showAlert('error', '¡Error!', 'El usuario no se encuentra activo o no existe');
                     this.errorRecuperar = errorData.message;
                 },

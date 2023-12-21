@@ -3,6 +3,7 @@ import {LoginComponent} from "./login";
 import {HomeComponent} from "./home/home.component";
 import {RegisterComponent} from "./register/register.component";
 import {VerificarComponent} from "./verificar/verificar.component";
+import {RecuperarContraComponent} from "./recuperar-contra/recuperar-contra.component";
 
 export const routes: Routes = [
 
@@ -20,9 +21,14 @@ export const routes: Routes = [
     component: RegisterComponent
   },
   {
-    path:'verificar',
+    path: 'verify',
     component: VerificarComponent
+  },
+  {
+    path: 'reset',
+    component: RecuperarContraComponent
   }
+
 ];
 
 
