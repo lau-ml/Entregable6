@@ -16,15 +16,21 @@ import {RegisterComponent} from "./register/register.component";
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import {VerificarComponent} from "./verificar/verificar.component";
 import {RecuperarContraComponent} from "./recuperar-contra/recuperar-contra.component";
+import {GruposComponent} from "./grupos/grupos/grupos.component";
+import {AuthGuard} from "./_guards";
+import {NoAuthGuard} from "./_guards/noAuth.guard";
+import {BienvenidaComponent} from "./bienvenida/bienvenida/bienvenida.component";
+import {NgxPaginationModule} from "ngx-pagination";
 @NgModule({
-  imports: [
-    BrowserModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    NgbModule,
-    routing,
-    SweetAlert2Module.forRoot()
-  ],
+    imports: [
+        BrowserModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        NgbModule,
+        routing,
+        SweetAlert2Module.forRoot(),
+        NgxPaginationModule
+    ],
   declarations: [
     AppComponent,
     LoginComponent,
@@ -33,12 +39,15 @@ import {RecuperarContraComponent} from "./recuperar-contra/recuperar-contra.comp
     RegisterComponent,
     FooterComponent,
     VerificarComponent,
-    RecuperarContraComponent
-
+    RecuperarContraComponent,
+    GruposComponent,
+    BienvenidaComponent
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+    AuthGuard,
+    NoAuthGuard
   ],
   bootstrap: [AppComponent]
 })

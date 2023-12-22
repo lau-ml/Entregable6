@@ -2,6 +2,7 @@ package ttps.java.entregable6_v2.modelos;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -21,6 +22,12 @@ public class Grupo {
 
     @Column(name = "saldo")
     private double saldo;
+
+
+    @ManyToMany(mappedBy = "grupos")
+    private Set<Usuario> participantes = new HashSet<>();
+
+    // Otros atributos y métodos
 
 
     @OneToMany(mappedBy = "grupo")
@@ -65,6 +72,9 @@ public class Grupo {
         this.saldo = saldo;
     }
 
+    public Set<Usuario> getParticipantes() {
+        return participantes;
+    }
 
     public Long getId() {
         return id;

@@ -1,5 +1,6 @@
 package ttps.java.entregable6_v2.exceptionHandler;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import ttps.java.entregable6_v2.excepciones.UsuarioInvalidoException;
 
 import java.util.ArrayList;
@@ -17,6 +19,8 @@ import java.util.HashMap;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> notValid(MethodArgumentNotValidException ex) {
         List<String> errors = new ArrayList<>();
@@ -42,6 +46,8 @@ public class GlobalExceptionHandler {
             return new ResponseEntity<>("Credenciales inválidas.", HttpStatus.UNAUTHORIZED);
         }
     }
+
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleArgumentException(IllegalArgumentException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
@@ -56,4 +62,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleRuntimeException(RuntimeException ex) {
         return new ResponseEntity<>("Error interno de servidor", HttpStatus.BAD_GATEWAY);
     }
+
+
 }

@@ -99,8 +99,11 @@
         </button>
       </div>
       <div class="modal-body">
+        <label for="confirmacionMail">Correo electrónico</label>
         <input formControlName="email" [ngClass]="{ 'is-invalid': reenviarf['email'].invalid && (reenviarf['email'].dirty || reenviarf['email'].touched )}"
-               class="form-control form-control-user" type="email" name="correoConfirmacion">
+               class="form-control form-control-user" type="email" name="correoConfirmacion"
+          id="confirmacionMail"
+        >
         <div *ngIf="reenviarf['email'].invalid && (reenviarf['email'].dirty || reenviarf['email'].touched )"
              class="invalid-feedback">
           <div *ngIf="reenviarf['email'].errors?.['email']">El email es requerido</div>
@@ -109,7 +112,7 @@
 
       <div class="modal-footer">
         <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
-        <button [disabled]="reenviarf['email'].invalid && (reenviarf['email'].dirty || reenviarf['email'].touched )" class="btn btn-primary" data-bs-dismiss="modal" type="submit">Enviar</button>
+        <button [disabled]="reenviarf['email'].invalid && (recoverf['email'].untouched || reenviarf['email'].dirty || reenviarf['email'].touched )" class="btn btn-primary" data-bs-dismiss="modal" type="submit">Enviar</button>
       </div>
     </form>
   </div>
@@ -129,8 +132,12 @@
         </button>
       </div>
       <div class="modal-body">
+        <label for="emailCambio">Correo electrónico</label>
         <input formControlName="email" [ngClass]="{ 'is-invalid': recoverf['email'].invalid && (recoverf['email'].dirty || recoverf['email'].touched )}"
-               class="form-control form-control-user" type="email" name="correoConfirmacion">
+               class="form-control form-control-user" type="email" name="correoConfirmacion"
+                placeholder="Ingresa tu email"
+               id="emailCambio"
+        >
         <div *ngIf="recoverf['email'].invalid && (recoverf['email'].dirty || recoverf['email'].touched )"
              class="invalid-feedback">
           <div *ngIf="recoverf['email'].errors?.['email']">El email es requerido</div>
@@ -139,7 +146,7 @@
 
       <div class="modal-footer">
         <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
-        <button [disabled]="recoverf['email'].invalid && (recoverf['email'].dirty || recoverf['email'].touched )" class="btn btn-primary" data-bs-dismiss="modal" type="submit">Enviar</button>
+        <button [disabled]="recoverf['email'].invalid && (recoverf['email'].untouched || recoverf['email'].dirty || recoverf['email'].touched )" class="btn btn-primary" data-bs-dismiss="modal" type="submit">Enviar</button>
       </div>
     </form>
   </div>

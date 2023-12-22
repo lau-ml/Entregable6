@@ -25,6 +25,6 @@ export class TopnavComponent implements OnInit {
 
     logout() {
         this.loginService.logout();
-        this.router.navigate(['/']).then(r => console.log(r));
+        this.router.navigateByUrl("/").then(r => console.log(r));
     }
 }

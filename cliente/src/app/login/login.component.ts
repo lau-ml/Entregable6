@@ -85,7 +85,7 @@ export class LoginComponent implements OnInit {
                     this.error = errorData.message;
                 },
                 complete: () => {
-                    this.router.navigateByUrl('/').then(r => console.log(r));
+                    this.router.navigateByUrl('/home').then(r => console.log(r));
                     this.loginForm.reset();
                 }
             })

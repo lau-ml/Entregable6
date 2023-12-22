@@ -2,11 +2,13 @@ package ttps.java.entregable6_v2.controllers;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import ttps.java.entregable6_v2.dto.GrupoDTO;
 import ttps.java.entregable6_v2.excepciones.UsuarioInvalidoException;
 import ttps.java.entregable6_v2.helpers.requests.grupos.GrupoCreateRequest;
 import ttps.java.entregable6_v2.helpers.requests.grupos.GrupoUpdateRequest;
@@ -18,6 +20,9 @@ import ttps.java.entregable6_v2.servicios.GrupoService;
 import ttps.java.entregable6_v2.servicios.SolictudGrupoService;
 import ttps.java.entregable6_v2.servicios.UsuarioService;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -34,28 +39,60 @@ public class GrupoController {
     private Mapper mapper = new Mapper();
 
     @RequestMapping(value = "/crear", method = RequestMethod.POST)
-    public ResponseEntity<?> crearGrupo(HttpSession httpSession, @RequestBody GrupoCreateRequest grupoCreateRequest) throws UsuarioInvalidoException {
-        Long user_id = (Long) httpSession.getAttribute("connectedUser");
+    public ResponseEntity<?> crearGrupo(@RequestBody GrupoCreateRequest grupoCreateRequest) throws UsuarioInvalidoException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        // You can now access the username or other user details from the authentication object
         String username = authentication.getName();
-        System.out.println(username);
-
-        if (user_id == null) {
-            return new ResponseEntity<String>("No hay usuario conectado", HttpStatus.UNAUTHORIZED);
-        }
-        Usuario user = usuarioService.recuperar(user_id);
-        if (!grupoCreateRequest.isValid()) {
-            return new ResponseEntity<String>("Datos invalidos", HttpStatus.BAD_REQUEST);
-        }
-        Grupo grupo = new Grupo(grupoCreateRequest.getNombre(), grupoCreateRequest.getCategoria(), grupoCreateRequest.getSaldo());
-
+        Usuario user = usuarioService.findByUsername(username).orElse(null);
+        Grupo grupo = new Grupo(grupoCreateRequest.getNombre(), grupoCreateRequest.getCategoria(), .0);
         try {
             grupoService.crearGrupo(grupo, user);
             return new ResponseEntity<Grupo>(grupo, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<String>("Error al crear grupo", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/todos", method = RequestMethod.GET)
+    public ResponseEntity<?> getGrupos(@RequestParam(defaultValue = "1") int page,
+                                       @RequestParam(defaultValue = "10") int pageSize) throws UsuarioInvalidoException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Usuario user = usuarioService.findByUsername(username).orElse(null);
+
+        try {
+            assert user != null;
+
+            Page<Grupo> gruposPaginados = grupoService.recuperarGruposPaginados(user.getId(), page - 1, pageSize);
+
+            List<GrupoDTO> grupoDTOs = gruposPaginados.stream()
+                    .map(mapper::grupoDTO)
+                    .collect(Collectors.toList());
+            Map<String, Object> response = new HashMap<>();
+            response.put("totalItems", gruposPaginados.getTotalElements());
+            response.put("totalPages", gruposPaginados.getTotalPages());
+            response.put("currentPage", gruposPaginados.getNumber() + 1);
+            response.put("grupos", grupoDTOs);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<String>("Error al recuperar grupos paginados", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> verGrupo(@PathVariable("id") long id) throws UsuarioInvalidoException {
+           Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Usuario user = usuarioService.findByUsername(username).orElse(null);
+        try {
+            assert user != null;
+            Grupo grupo = grupoService.recuperar(id);
+            if (grupoService.usuarioPerteneciente(grupo, user) == null) {
+                return new ResponseEntity<String>("El usuario no pertenece al grupo", HttpStatus.UNAUTHORIZED);
+            }
+            return new ResponseEntity<Grupo>(grupo, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<String>("Error al recuperar grupo", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

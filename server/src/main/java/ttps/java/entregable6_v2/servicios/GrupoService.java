@@ -2,13 +2,17 @@ package ttps.java.entregable6_v2.servicios;
 
 import jakarta.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import ttps.java.entregable6_v2.modelos.Gasto;
 import ttps.java.entregable6_v2.modelos.Grupo;
 import ttps.java.entregable6_v2.modelos.Usuario;
 import ttps.java.entregable6_v2.repository.GrupoJPA;
 import ttps.java.entregable6_v2.repository.UsuarioJPA;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @org.springframework.stereotype.Service
 public class GrupoService {
@@ -65,5 +69,17 @@ public class GrupoService {
     public List<Gasto> recuperarTodosLosGastos(long id) throws Exception {
         return dao.recuperarTodosLosGastos(id);
     }
+
+
+    public Set<Grupo> recuperarTodos(Usuario usuario) {
+        return usuario.getGrupos();
+    }
+
+
+    public Page<Grupo> recuperarGruposPaginados(Long userId, int page, int pageSize) {
+        return dao.recuperarGruposPaginados(userId, PageRequest.of(page, pageSize));
+
+    }
+
 
 }

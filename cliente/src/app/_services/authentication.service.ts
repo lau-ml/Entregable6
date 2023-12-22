@@ -80,6 +80,8 @@ export class AuthenticationService {
   logout() {
     sessionStorage.removeItem('token');
     this.isLogged.next(false);
+    this.currentUser.next("");
+
   }
 
   get userToken(): String {

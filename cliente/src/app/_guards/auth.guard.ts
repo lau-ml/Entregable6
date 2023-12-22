@@ -2,6 +2,7 @@
 import {Router, ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
 
 import {AuthenticationService} from '../_services';
+import {map, Observable, take} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class AuthGuard {
@@ -11,12 +12,16 @@ export class AuthGuard {
   ) {
   }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const currentUser = this.authenticationService.currentUserValue;
-    if (currentUser) {
-      return true;
-    }
-    this.router.navigate(['/login'], {queryParams: {returnUrl: state.url}}).then(r => console.log(r));
-    return false;
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
+    return this.authenticationService.currentUserValue.pipe(
+      map(currentUser => {
+        if (currentUser) {
+          return true;
+        } else {
+          this.router.navigate(['/login'], {queryParams: {returnUrl: state.url}}).then(r => console.log(r));
+          return false;
+        }
+      })
+    );
   }
 }

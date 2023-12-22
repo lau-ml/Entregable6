@@ -10,7 +10,8 @@ import ttps.java.entregable6_v2.modelos.Grupo;
 import ttps.java.entregable6_v2.modelos.Usuario;
 
 import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 @Repository
 public interface GrupoJPA extends JpaRepository<Grupo, Long>  {
 
@@ -24,5 +25,14 @@ public interface GrupoJPA extends JpaRepository<Grupo, Long>  {
             "INNER JOIN g.grupo gr " +
             "WHERE gr.id = :id")
     public List<Gasto> recuperarTodosLosGastos(@Param("id") long id);
+
+    @Query("SELECT DISTINCT u FROM Usuario u " +
+            "LEFT JOIN FETCH u.grupos g " +
+            "WHERE g.id = :id")
+
+    public Usuario obtenerUsuariosGrupo(@Param("id") long id);
+
+    @Query("SELECT g FROM Grupo g JOIN g.participantes u WHERE u.id = :userId")
+    Page<Grupo> recuperarGruposPaginados(@Param("userId") Long userId, Pageable pageable);
 
 }

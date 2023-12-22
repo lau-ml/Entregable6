@@ -4,29 +4,54 @@ import {HomeComponent} from "./home/home.component";
 import {RegisterComponent} from "./register/register.component";
 import {VerificarComponent} from "./verificar/verificar.component";
 import {RecuperarContraComponent} from "./recuperar-contra/recuperar-contra.component";
+import {GruposComponent} from "./grupos/grupos/grupos.component";
+import {AuthGuard} from "./_guards";
+import {NoAuthGuard} from "./_guards/noAuth.guard";
+import {BienvenidaComponent} from "./bienvenida/bienvenida/bienvenida.component";
 
 export const routes: Routes = [
 
-
-  {
-    path: 'login',
-    component: LoginComponent
-  },
   {
     path: 'home',
-    component: HomeComponent
+    component: HomeComponent,
+    canActivate: [AuthGuard]
   },
   {
+    path: 'login',
+    component: LoginComponent,
+    canActivate: [NoAuthGuard]
+  }
+  ,
+  {
     path: 'register',
-    component: RegisterComponent
+    component: RegisterComponent,
+    canActivate: [NoAuthGuard]
+
   },
   {
     path: 'verify',
-    component: VerificarComponent
+    component: VerificarComponent,
+    canActivate: [NoAuthGuard]
+
   },
   {
     path: 'reset',
-    component: RecuperarContraComponent
+    component: RecuperarContraComponent,
+    canActivate: [NoAuthGuard]
+  },
+  {
+    path: 'grupos',
+    component: GruposComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: '',
+    component: BienvenidaComponent,
+    canActivate: [NoAuthGuard]
+  },
+  {
+    path: '**',
+    redirectTo: ''
   }
 
 ];

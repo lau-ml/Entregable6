@@ -30,24 +30,12 @@ public class AuthController {
     private UsuarioService userService;
 
 
-    //Recupero un usuario dado
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         return new ResponseEntity<AuthResponse>(userService.login(request), HttpStatus.OK);
     }
 
-
-    @RequestMapping(value = "/logout", method = RequestMethod.POST)
-    public ResponseEntity<String> logout(HttpSession httpSession) {
-        Long id = (Long) httpSession.getAttribute("connectedUser");
-        if (id != null) {
-            httpSession.removeAttribute("connectedUser");
-            return new ResponseEntity<String>("Sesión cerrada", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<String>("No hay sesión inciada", HttpStatus.NOT_ACCEPTABLE);
-        }
-    }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<MessageResponse> register(@Valid @RequestBody RegisterRequest request) throws MessagingException, UsuarioInvalidoException, UnsupportedEncodingException {

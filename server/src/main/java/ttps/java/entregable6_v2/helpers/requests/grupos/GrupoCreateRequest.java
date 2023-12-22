@@ -13,9 +13,4 @@ import ttps.java.entregable6_v2.modelos.Categoria;
 public class GrupoCreateRequest {
     private String nombre;
     private Categoria categoria;
-    private Double saldo;
-
-    public boolean isValid() {
-        return nombre != null && !nombre.isEmpty() && categoria != null && saldo != null && saldo >= 0;
-    }
 }
