@@ -90,7 +90,7 @@ public class GrupoController {
             if (grupoService.usuarioPerteneciente(grupo, user) == null) {
                 return new ResponseEntity<String>("El usuario no pertenece al grupo", HttpStatus.UNAUTHORIZED);
             }
-            return new ResponseEntity<Grupo>(grupo, HttpStatus.OK);
+            return new ResponseEntity<GrupoDTO>(mapper.grupoDTO(grupo), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<String>("Error al recuperar grupo", HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -98,25 +98,21 @@ public class GrupoController {
 
     @RequestMapping(value = "/{id}/actualizar", method = RequestMethod.PUT)
     public ResponseEntity<?> actulizarGrupo(@RequestBody GrupoUpdateRequest grupoUpdateRequest, HttpSession httpSession, @PathVariable("id") long id) throws UsuarioInvalidoException {
-        Long user_id = (Long) httpSession.getAttribute("connectedUser");
-        if (user_id == null) {
-            return new ResponseEntity<String>("No hay usuario conectado", HttpStatus.UNAUTHORIZED);
-        }
-        Usuario user = usuarioService.recuperar(user_id);
-        if (!grupoUpdateRequest.isValid()) {
-            return new ResponseEntity<String>("Datos invalidos", HttpStatus.BAD_REQUEST);
-        }
+
+
         try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+            Usuario user = usuarioService.findByUsername(username).orElse(null);
             Grupo grupo = grupoService.recuperar(id);
+            assert user != null;
             if (grupoService.usuarioPerteneciente(grupo, user) == null) {
                 return new ResponseEntity<String>("El usuario no pertenece al grupo", HttpStatus.UNAUTHORIZED);
             }
-
-            grupo.setNombre((grupoUpdateRequest.getNombre() != null && !grupoUpdateRequest.getNombre().isEmpty()) ? grupoUpdateRequest.getNombre() : grupo.getNombre());
-            grupo.setCategoria((grupoUpdateRequest.getCategoria() != null) ? grupoUpdateRequest.getCategoria() : grupo.getCategoria());
-            grupo.setSaldo((grupoUpdateRequest.getSaldo() != null) ? grupoUpdateRequest.getSaldo() : grupo.getSaldo());
+            grupo.setNombre(grupoUpdateRequest.getNombre());
+            grupo.setCategoria(grupoUpdateRequest.getCategoria());
             grupoService.actualizar(grupo);
-            return new ResponseEntity<Grupo>(grupo, HttpStatus.OK);
+            return new ResponseEntity<GrupoDTO>(mapper.grupoDTO(grupo), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<String>("Error al actualizar grupo", HttpStatus.INTERNAL_SERVER_ERROR);
         }

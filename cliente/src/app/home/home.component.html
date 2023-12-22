@@ -1,6 +1,4 @@
-<div class="d-flex justify-content-between mb-4">
-  <h1 class="h3 mb-0 text-gray-800"><span>SALDO ACTUAL: </span>250$ </h1>
-
+<div class="d-flex justify-content-end mb-4">
   <div class="d-flex">
     <a class="btn btn-sm btn-primary shadow-sm me-2" data-bs-target="#dataTableModal" data-bs-toggle="modal"
        href="#">
@@ -21,34 +19,16 @@
 
 <!-- Content Row -->
 <div class="row">
+  <app-saldo-card></app-saldo-card>
 
   <!-- Earnings (Monthly) Card Example -->
-  <div class="col-xl-3 col-md-6 mb-4">
-    <div class="card border-left-primary shadow h-100 py-2">
-      <div class="card-body">
-        <div class="row no-gutters align-items-center">
-          <div class="col me-2">
-            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-              Gastos (Mensuales)
-            </div>
-            <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
-          </div>
-          <div class="col-auto">
-            <i class="fas fa-calendar fa-2x text-gray-300"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Earnings (Monthly) Card Example -->
-  <div class="col-xl-3 col-md-6 mb-4">
+  <div class="col-xl-6 col-md-6 mb-4">
     <div class="card border-left-success shadow h-100 py-2">
       <div class="card-body">
         <div class="row no-gutters align-items-center">
           <div class="col me-2">
             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-              Gastos (Anuales)
+              Gastos
             </div>
             <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
           </div>
@@ -61,7 +41,7 @@
   </div>
 
   <!-- Earnings (Monthly) Card Example -->
-  <div class="col-xl-3 col-md-6 mb-4">
+  <div class="col-xl-6 col-md-6 mb-4">
     <div class="card border-left-danger shadow h-100 py-2">
       <div class="card-body">
         <div class="row no-gutters align-items-center">
@@ -89,318 +69,299 @@
     </div>
   </div>
 
-  <!-- Pending Requests Card Example -->
-  <div class="col-xl-3 col-md-6 mb-4">
-    <div class="card border-left-warning shadow h-100 py-2">
-      <div class="card-body">
-        <div class="row no-gutters align-items-center">
-          <div class="col me-2">
-            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-              Solicitudes pendientes
-            </div>
-            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+  <!-- Content Row -->
+
+  <div class="row">
+
+    <!-- Area Chart -->
+    <div class="col-xl-8 col-lg-7">
+      <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">GASTOS GENERALES</h6>
+          <div class="dropdown">
+            <button aria-expanded="false" class="btn btn-link dropdown-toggle" data-bs-toggle="dropdown"
+                    id="dropdownMenu" type="button">
+              <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+            </button>
+            <ul aria-labelledby="dropdownMenu" class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="#">Action</a></li>
+              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <div class="dropdown-divider"></div>
+              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
           </div>
-          <div class="col-auto">
-            <i class="fas fa-comments fa-2x text-gray-300"></i>
+        </div>
+        <!-- Card Body -->
+        <div class="card-body">
+          <div class="chart-area">
+            <canvas id="myAreaChart"></canvas>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- Content Row -->
-
-<div class="row">
-
-  <!-- Area Chart -->
-  <div class="col-xl-8 col-lg-7">
-    <div class="card shadow mb-4">
-      <!-- Card Header - Dropdown -->
-      <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-primary">GASTOS GENERALES</h6>
-        <div class="dropdown">
-          <button aria-expanded="false" class="btn btn-link dropdown-toggle" data-bs-toggle="dropdown"
-                  id="dropdownMenu" type="button">
-            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-          </button>
-          <ul aria-labelledby="dropdownMenu" class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <div class="dropdown-divider"></div>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
+    <!-- Pie Chart -->
+    <div class="col-xl-4 col-lg-5">
+      <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">FUENTES DE GASTOS</h6>
+          <div class="dropdown">
+            <button aria-expanded="false" class="btn btn-link dropdown-toggle" data-bs-toggle="dropdown"
+                    id="dropdownMenuLink" type="button">
+              <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+            </button>
+            <ul aria-labelledby="dropdownMenuLink" class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="#">Action</a></li>
+              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <div class="dropdown-divider"></div>
+              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+          </div>
         </div>
-      </div>
-      <!-- Card Body -->
-      <div class="card-body">
-        <div class="chart-area">
-          <canvas id="myAreaChart"></canvas>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Pie Chart -->
-  <div class="col-xl-4 col-lg-5">
-    <div class="card shadow mb-4">
-      <!-- Card Header - Dropdown -->
-      <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-primary">FUENTES DE GASTOS</h6>
-        <div class="dropdown">
-          <button aria-expanded="false" class="btn btn-link dropdown-toggle" data-bs-toggle="dropdown"
-                  id="dropdownMenuLink" type="button">
-            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-          </button>
-          <ul aria-labelledby="dropdownMenuLink" class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <div class="dropdown-divider"></div>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </div>
-      </div>
-      <!-- Card Body -->
-      <div class="card-body">
-        <div class="chart-pie pt-4 pb-2">
-          <canvas id="myPieChart"></canvas>
-        </div>
-        <div class="mt-4 text-center small">
+        <!-- Card Body -->
+        <div class="card-body">
+          <div class="chart-pie pt-4 pb-2">
+            <canvas id="myPieChart"></canvas>
+          </div>
+          <div class="mt-4 text-center small">
                     <span class="me-2">
                         <i class="fas fa-gas-pump" style="color: #4e73df;"></i> Combustible
                     </span>
-          <span class="me-2">
+            <span class="me-2">
                         <i class="fas fa-bed" style="color: #1cc88a;"></i> Alojamiento
                     </span>
-          <span class="me-2">
+            <span class="me-2">
                         <i class="fas fa-burger" style="color: #36b9cc;"></i> Comida
                     </span>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-<!-- Modal para una Persona Independiente con opción de select box -->
-<div aria-hidden="true" aria-labelledby="modalPagoPersonaLabel" class="modal fade" id="modalPagoPersona" role="dialog"
-     tabindex="-1">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalPagoPersonaLabel">Cargar Pago - Persona Independiente</h5>
-        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label for="personaDeuda">Seleccionar persona</label>
-          <select class="form-control" id="personaDeuda">
-            <option selected value="">Pedro</option>
-            <option value="diaria">Juana</option>
-            <option value="semanal">Pedro</option>
-            <!-- Agrega más opciones según sea necesario -->
-          </select>
+  <!-- Modal para una Persona Independiente con opción de select box -->
+  <div aria-hidden="true" aria-labelledby="modalPagoPersonaLabel" class="modal fade" id="modalPagoPersona" role="dialog"
+       tabindex="-1">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalPagoPersonaLabel">Cargar Pago - Persona Independiente</h5>
+          <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
         </div>
-        <div class="form-group">
-          <label for="deuda">Deuda:</label>
-          <input class="form-control" id="deuda" placeholder="Monto" readonly type="number" value="5">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="personaDeuda">Seleccionar persona</label>
+            <select class="form-control" id="personaDeuda">
+              <option selected value="">Pedro</option>
+              <option value="diaria">Juana</option>
+              <option value="semanal">Pedro</option>
+              <!-- Agrega más opciones según sea necesario -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="deuda">Deuda:</label>
+            <input class="form-control" id="deuda" placeholder="Monto" readonly type="number" value="5">
+          </div>
+          <div class="form-group">
+            <label for="monto">Monto del Pago:</label>
+            <input class="form-control" id="monto" placeholder="Monto" type="number">
+          </div>
         </div>
-        <div class="form-group">
-          <label for="monto">Monto del Pago:</label>
-          <input class="form-control" id="monto" placeholder="Monto" type="number">
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancelar</button>
+          <button class="btn btn-primary" type="button">Guardar Pago</button>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancelar</button>
-        <button class="btn btn-primary" type="button">Guardar Pago</button>
       </div>
     </div>
   </div>
-</div>
-<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="cargarRecibo" tabindex="-1">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Cargar Recibo</h4>
-        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label for="monto">Monto del gasto:</label>
-            <input class="form-control" id="montoRecibo" type="text">
-          </div>
-          <div class="form-group">
-            <label for="tienda">Tienda del gasto:</label>
-            <input class="form-control" id="tienda" type="text">
-          </div>
-          <div class="form-group">
-            <label for="fecha">Fecha del gasto:</label>
-            <input class="form-control" id="fecha" type="date">
-          </div>
-          <div class="form-group">
-            <label for="imagen">Imagen asociada:</label>
-            <input class="form-control" id="imagen" type="file">
-          </div>
-          <div class="form-group">
-            <label for="formaDividir">Forma de dividir el gasto entre integrantes:</label>
-            <select class="form-control" id="formaDividir">
-              <option value="igual">Igual monto/% para todos</option>
-              <option value="fijos">Montos fijos por integrante</option>
-              <option value="porcentaje">Porcentaje por integrante</option>
-            </select>
-          </div>
-          <div class="form-group" id="valorPorcentajeMonto" style="display: none;">
-            <label for="valor">Valor del porcentaje/monto por integrante:</label>
-            <input class="form-control" id="valor" type="text">
-          </div>
-          <div class="form-group">
-            <label for="categoria">Categoría del gasto:</label>
-            <select class="form-control" id="categoria">
-              <option value="comida">Comida</option>
-              <option value="transporte">Combustible</option>
-              <option value="entretenimiento">Alojamiento</option>
-              <option value="otros">Otros</option>
-            </select>
-          </div>
+  <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="cargarRecibo" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Cargar Recibo</h4>
+          <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="monto">Monto del gasto:</label>
+              <input class="form-control" id="montoRecibo" type="text">
+            </div>
+            <div class="form-group">
+              <label for="tienda">Tienda del gasto:</label>
+              <input class="form-control" id="tienda" type="text">
+            </div>
+            <div class="form-group">
+              <label for="fecha">Fecha del gasto:</label>
+              <input class="form-control" id="fecha" type="date">
+            </div>
+            <div class="form-group">
+              <label for="imagen">Imagen asociada:</label>
+              <input class="form-control" id="imagen" type="file">
+            </div>
+            <div class="form-group">
+              <label for="formaDividir">Forma de dividir el gasto entre integrantes:</label>
+              <select class="form-control" id="formaDividir">
+                <option value="igual">Igual monto/% para todos</option>
+                <option value="fijos">Montos fijos por integrante</option>
+                <option value="porcentaje">Porcentaje por integrante</option>
+              </select>
+            </div>
+            <div class="form-group" id="valorPorcentajeMonto" style="display: none;">
+              <label for="valor">Valor del porcentaje/monto por integrante:</label>
+              <input class="form-control" id="valor" type="text">
+            </div>
+            <div class="form-group">
+              <label for="categoria">Categoría del gasto:</label>
+              <select class="form-control" id="categoria">
+                <option value="comida">Comida</option>
+                <option value="transporte">Combustible</option>
+                <option value="entretenimiento">Alojamiento</option>
+                <option value="otros">Otros</option>
+              </select>
+            </div>
 
-          <div class="form-group">
-            <label for="quienHizoCompra">Quién hizo la compra:</label>
-            <input class="form-control" id="quienHizoCompra" type="text">
-          </div>
-          <div class="form-group">
-            <label for="personas">Personas involucradas:</label>
-            <div id="personas">
-              <div class="custom-control custom-checkbox">
-                <input class="custom-control-input" id="persona1" type="checkbox" value="persona1">
-                <label class="custom-control-label" for="persona1">Persona 1</label>
-              </div>
-              <div class="custom-control custom-checkbox">
-                <input class="custom-control-input" id="persona2" type="checkbox" value="persona2">
-                <label class="custom-control-label" for="persona2">Persona 2</label>
-              </div>
-              <div class="custom-control custom-checkbox">
-                <input class="custom-control-input" id="persona3" type="checkbox" value="persona3">
-                <label class="custom-control-label" for="persona3">Persona 3</label>
+            <div class="form-group">
+              <label for="quienHizoCompra">Quién hizo la compra:</label>
+              <input class="form-control" id="quienHizoCompra" type="text">
+            </div>
+            <div class="form-group">
+              <label for="personas">Personas involucradas:</label>
+              <div id="personas">
+                <div class="custom-control custom-checkbox">
+                  <input class="custom-control-input" id="persona1" type="checkbox" value="persona1">
+                  <label class="custom-control-label" for="persona1">Persona 1</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                  <input class="custom-control-input" id="persona2" type="checkbox" value="persona2">
+                  <label class="custom-control-label" for="persona2">Persona 2</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                  <input class="custom-control-input" id="persona3" type="checkbox" value="persona3">
+                  <label class="custom-control-label" for="persona3">Persona 3</label>
+                </div>
               </div>
             </div>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary" onclick="guardarRecibo()" type="button">Guardar Recibo</button>
-        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cerrar</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" onclick="guardarRecibo()" type="button">Guardar Recibo</button>
+          <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cerrar</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
-<div aria-hidden="true" aria-labelledby="dataTableModalLabel" class="modal fade" id="dataTableModal" tabindex="-1">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="dataTableModalLabel">Gastos</h5>
-        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
-      </div>
-      <div class="modal-body">
-        <div class="table-responsive">
-          <table class="w-100"  border="1">
-            <thead>
-            <tr>
-              <th>Compartido con</th>
-              <th>Lugar</th>
-              <th>Monto</th>
-              <th>Día compra</th>
-              <th>Categoría</th>
-              <th>Ver detalle</th>
-
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td>Persona A, Persona B</td>
-              <td>Tienda A</td>
-              <td>$30.00</td>
-              <td>2023-09-15</td>
-              <td><i class="fa-solid fa-gas-pump"></i>Combustible</td>
-              <td><a href="detalle.html"> Ver detalle </a></td>
-            </tr>
-            <tr>
-              <td>Persona B, Persona C</td>
-              <td>Tienda B</td>
-              <td>$30.50</td>
-              <td>2023-09-16</td>
-              <td><i class="fa-solid fa-bed"></i>Alojamiento</td>
-              <td><a href="detalle.html"> Ver detalle </a></td>
-            </tr>
-            <tr>
-              <td>Persona A, Persona D</td>
-              <td>Tienda C</td>
-              <td>$70.20</td>
-              <td>2023-09-17</td>
-              <td><i class="fa-solid fa-gas-pump"></i>Combustible</td>
-              <td><a href="detalle.html"> Ver detalle </a></td>
-            </tr>
-            <tr>
-              <td>Persona C</td>
-              <td>Tienda D</td>
-              <td>$45.70</td>
-              <td>2023-09-18</td>
-              <td><i class="fa-solid fa-gas-pump"></i>Combustible</td>
-              <td><a href="detalle.html"> Ver detalle </a></td>
-            </tr>
-            <tr>
-              <td>Persona D, Persona E</td>
-              <td>Tienda E</td>
-              <td>$20.00</td>
-              <td>2023-09-19</td>
-              <td><i class="fa-solid fa-bed"></i>Alojamiento</td>
-              <td><a href="detalle.html"> Ver detalle </a></td>
-            </tr>
-            <tr>
-              <td>Persona F</td>
-              <td>Tienda F</td>
-              <td>$65.80</td>
-              <td>2023-09-20</td>
-              <td><i class="fa-solid fa-bed"></i>Alojamiento</td>
-              <td><a href="detalle.html"> Ver detalle </a></td>
-            </tr>
-            <tr>
-              <td>Persona E, Persona G</td>
-              <td>Tienda G</td>
-              <td>$55.00</td>
-              <td>2023-09-21</td>
-              <td><i class="fa-solid fa-burger"></i>Comida</td>
-              <td><a href="detalle.html"> Ver detalle </a></td>
-            </tr>
-            <tr>
-              <td>Persona F, Persona H</td>
-              <td>Tienda H</td>
-              <td>$40.25</td>
-              <td>2023-09-22</td>
-              <td><i class="fa-solid fa-burger"></i>Comida</td>
-              <td><a href="detalle.html"> Ver detalle </a></td>
-            </tr>
-            <tr>
-              <td>Persona A, Persona I</td>
-              <td>Tienda I</td>
-              <td>$60.90</td>
-              <td>2023-09-23</td>
-              <td><i class="fa-solid fa-burger"></i>Comida</td>
-              <td><a href="detalle.html"> Ver detalle </a></td>
-            </tr>
-            <tr>
-              <td>Persona J</td>
-              <td>Tienda J</td>
-              <td>$35.70</td>
-              <td>2023-09-24</td>
-              <td><i class="fa-solid fa-gas-pump"></i>Combustible</td>
-              <td><a href="detalle.html"> Ver detalle </a></td>
-            </tr>
-            </tbody>
-          </table>
+  <div aria-hidden="true" aria-labelledby="dataTableModalLabel" class="modal fade" id="dataTableModal" tabindex="-1">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="dataTableModalLabel">Gastos</h5>
+          <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cerrar</button>
-        <button class="btn btn-primary" type="button">Guardar cambios</button>
+        <div class="modal-body">
+          <div class="table-responsive">
+            <table border="1" class="w-100">
+              <thead>
+              <tr>
+                <th>Compartido con</th>
+                <th>Lugar</th>
+                <th>Monto</th>
+                <th>Día compra</th>
+                <th>Categoría</th>
+                <th>Ver detalle</th>
+
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td>Persona A, Persona B</td>
+                <td>Tienda A</td>
+                <td>$30.00</td>
+                <td>2023-09-15</td>
+                <td><i class="fa-solid fa-gas-pump"></i>Combustible</td>
+                <td><a href="detalle.html"> Ver detalle </a></td>
+              </tr>
+              <tr>
+                <td>Persona B, Persona C</td>
+                <td>Tienda B</td>
+                <td>$30.50</td>
+                <td>2023-09-16</td>
+                <td><i class="fa-solid fa-bed"></i>Alojamiento</td>
+                <td><a href="detalle.html"> Ver detalle </a></td>
+              </tr>
+              <tr>
+                <td>Persona A, Persona D</td>
+                <td>Tienda C</td>
+                <td>$70.20</td>
+                <td>2023-09-17</td>
+                <td><i class="fa-solid fa-gas-pump"></i>Combustible</td>
+                <td><a href="detalle.html"> Ver detalle </a></td>
+              </tr>
+              <tr>
+                <td>Persona C</td>
+                <td>Tienda D</td>
+                <td>$45.70</td>
+                <td>2023-09-18</td>
+                <td><i class="fa-solid fa-gas-pump"></i>Combustible</td>
+                <td><a href="detalle.html"> Ver detalle </a></td>
+              </tr>
+              <tr>
+                <td>Persona D, Persona E</td>
+                <td>Tienda E</td>
+                <td>$20.00</td>
+                <td>2023-09-19</td>
+                <td><i class="fa-solid fa-bed"></i>Alojamiento</td>
+                <td><a href="detalle.html"> Ver detalle </a></td>
+              </tr>
+              <tr>
+                <td>Persona F</td>
+                <td>Tienda F</td>
+                <td>$65.80</td>
+                <td>2023-09-20</td>
+                <td><i class="fa-solid fa-bed"></i>Alojamiento</td>
+                <td><a href="detalle.html"> Ver detalle </a></td>
+              </tr>
+              <tr>
+                <td>Persona E, Persona G</td>
+                <td>Tienda G</td>
+                <td>$55.00</td>
+                <td>2023-09-21</td>
+                <td><i class="fa-solid fa-burger"></i>Comida</td>
+                <td><a href="detalle.html"> Ver detalle </a></td>
+              </tr>
+              <tr>
+                <td>Persona F, Persona H</td>
+                <td>Tienda H</td>
+                <td>$40.25</td>
+                <td>2023-09-22</td>
+                <td><i class="fa-solid fa-burger"></i>Comida</td>
+                <td><a href="detalle.html"> Ver detalle </a></td>
+              </tr>
+              <tr>
+                <td>Persona A, Persona I</td>
+                <td>Tienda I</td>
+                <td>$60.90</td>
+                <td>2023-09-23</td>
+                <td><i class="fa-solid fa-burger"></i>Comida</td>
+                <td><a href="detalle.html"> Ver detalle </a></td>
+              </tr>
+              <tr>
+                <td>Persona J</td>
+                <td>Tienda J</td>
+                <td>$35.70</td>
+                <td>2023-09-24</td>
+                <td><i class="fa-solid fa-gas-pump"></i>Combustible</td>
+                <td><a href="detalle.html"> Ver detalle </a></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cerrar</button>
+          <button class="btn btn-primary" type="button">Guardar cambios</button>
+        </div>
       </div>
     </div>
   </div>

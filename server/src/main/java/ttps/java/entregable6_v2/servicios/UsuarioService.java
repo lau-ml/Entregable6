@@ -60,6 +60,7 @@ public class UsuarioService {
                 .email(request.getEmail())
                 .contrasena(passwordEncoder.encode(request.getPassword()))
                 .activo(false)
+                .saldo(0.0)
                 .verificationCode(randomCode)
                 .build();
 

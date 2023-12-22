@@ -1,0 +1,253 @@
+<div class="d-flex justify-content-between flex-wrap mb-4">
+  <h4 class="m-2">Grupo: {{ nombre }}. Categoría: {{ categoria }}</h4>
+  <div class="d-flex flex-wrap">
+    <a class="btn btn-sm btn-primary shadow-sm m-2" data-bs-target="#grupoModal" data-bs-toggle="modal"
+       data-target="#historialModal"
+       href="#">
+      <i class="fa-regular fa-file"></i>Modificar grupo
+    </a>
+
+    <a class="btn btn-sm btn-primary shadow-sm m-2" data-target="#historialModal" data-toggle="modal"
+       href="#">
+      <i class="fa-regular fa-file"></i>Eventos
+    </a>
+    <a class="btn btn-sm btn-primary shadow-sm m-2" data-target="#dataTableModal" data-toggle="modal"
+       href="#">
+      <i class="fa-regular fa-file"></i>Gastos
+    </a>
+    <a class="btn btn-sm btn-primary shadow-sm m-2" data-target="#modalPagoPersona" data-toggle="modal"
+       href="#">
+      <i class="fa-solid fa-money-bill"></i>Saldar pago
+    </a>
+
+    <a class="btn btn-sm btn-primary shadow-sm m-2" data-target="#cargarRecibo" data-toggle="modal"
+       href="#">
+      <i class="fa-solid fa-receipt"></i> Cargar recibo
+    </a>
+  </div>
+</div>
+
+<!-- Content Row -->
+<div class="row">
+  <app-saldo-card></app-saldo-card>
+
+
+  <!-- Earnings (Monthly) Card Example -->
+  <div class="col-xl-6 col-md-6 mb-4">
+    <div class="card border-left-success shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col me-2">
+            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+              Gastos grupales
+            </div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Earnings (Monthly) Card Example -->
+  <div class="col-xl-6 col-md-6 mb-4">
+    <div class="card border-left-danger shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col me-2">
+            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Deuda saldada
+            </div>
+            <div class="row no-gutters align-items-center">
+              <div class="col-auto">
+                <div class="h5 mb-0 me-3 font-weight-bold text-gray-800">50%</div>
+              </div>
+              <div class="col">
+                <div class="progress progress-sm">
+                  <div aria-valuemax="100" aria-valuemin="0"
+                       aria-valuenow="50" class="progress-bar bg-danger" role="progressbar"
+                       style="width: 50%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<!-- Content Row -->
+
+<div class="row">
+
+  <!-- Area Chart -->
+  <div class="col-xl-8 col-lg-7">
+    <div class="card shadow mb-4">
+      <!-- Card Header - Dropdown -->
+      <div
+        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">GASTOS GENERALES</h6>
+        <div class="dropdown no-arrow">
+          <a aria-expanded="false" aria-haspopup="true" class="dropdown-toggle" data-toggle="dropdown"
+             href="#" id="dropdownMenuLink" role="button">
+            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+          </a>
+          <div aria-labelledby="dropdownMenuLink"
+               class="dropdown-menu dropdown-menu-right shadow animated--fade-in">
+            <div class="dropdown-header">Dropdown Header:</div>
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </div>
+      </div>
+      <!-- Card Body -->
+      <div class="card-body">
+        <div class="chart-area">
+          <canvas id="myAreaChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pie Chart -->
+  <div class="col-xl-4 col-lg-5">
+    <div class="card shadow mb-4">
+      <!-- Card Header - Dropdown -->
+      <div
+        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary"> FUENTES DE GASTOS</h6>
+        <div class="dropdown no-arrow">
+          <a aria-expanded="false" aria-haspopup="true" class="dropdown-toggle" data-toggle="dropdown"
+             href="#" id="dropdownMenu" role="button">
+            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+          </a>
+          <div aria-labelledby="dropdownMenuLink"
+               class="dropdown-menu dropdown-menu-right shadow animated--fade-in">
+            <div class="dropdown-header">Dropdown Header:</div>
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </div>
+      </div>
+      <!-- Card Body -->
+      <div class="card-body">
+        <div class="chart-pie pt-4 pb-2">
+          <canvas id="myPieChart"></canvas>
+        </div>
+        <div class="mt-4 text-center small">
+                                        <span class="mr-2">
+                                            <i class="fa-solid fa-gas-pump" style="color: #4e73df;"></i> Combustible
+                                        </span>
+          <span class="mr-2">
+                                            <i class="fa-solid fa-bed" style="color: #1cc88a;"></i> Alojamiento
+                                        </span>
+          <span class="mr-2">
+                                            <i class="fa-solid fa-burger" style="color: #36b9cc;"></i> Comida
+                                        </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Content Row -->
+<div class="row">
+
+  <!-- Content Column -->
+  <div class="col-lg-12 mb-4">
+
+
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">GASTOS POR PERSONA (ANUAL)</h6>
+      </div>
+      <div class="card-body">
+        <h4 class="small font-weight-bold">Tú<span
+          class="float-right">20%</span></h4>
+        <div class="progress mb-4">
+          <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="20"
+               class="progress-bar bg-danger" role="progressbar" style="width: 20%"></div>
+        </div>
+        <h4 class="small font-weight-bold">Juana<span
+          class="float-right">20%</span></h4>
+        <div class="progress mb-4">
+          <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="20"
+               class="progress-bar bg-warning" role="progressbar" style="width: 20%"></div>
+        </div>
+        <h4 class="small font-weight-bold">Pedro<span
+          class="float-right">30%</span></h4>
+        <div class="progress mb-4">
+          <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="30"
+               class="progress-bar" role="progressbar" style="width: 60%"></div>
+        </div>
+        <h4 class="small font-weight-bold">Lucas<span
+          class="float-right">10%</span></h4>
+        <div class="progress mb-4">
+          <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="10"
+               class="progress-bar bg-info" role="progressbar" style="width: 10%"></div>
+        </div>
+        <h4 class="small font-weight-bold">Tomás<span
+          class="float-right">20%</span></h4>
+        <div class="progress">
+          <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="20"
+               class="progress-bar bg-success" role="progressbar" style="width: 20%"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div aria-hidden="true" aria-labelledby="grupoModalLabel" class="modal fade" id="grupoModal" role="dialog"
+     tabindex="-1">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="grupoModalLabel">Crear Nuevo Grupo</h5>
+        <button aria-label="Cerrar" class="close" data-bs-dismiss="modal" type="button">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="onSubmit()" [formGroup]="groupForm">
+          <div class="form-group">
+            <label for="nombreGrupo">Nombre del Grupo</label>
+            <input class="form-control" formControlName="nombre" id="nombreGrupo"
+                   placeholder="Ingrese el nombre del grupo"
+                   type="text">
+          </div>
+
+          <div class="form-group">
+            <label for="categoria">Categoría del Grupo</label>
+            <select class="form-control" formControlName="categoria" id="categoria">
+              <option value="FAMILIAR">Familia</option>
+              <option value="VIAJE">Viaje</option>
+              <option value="SALIDA">Salida</option>
+              <option value="OCIO">Ocio</option>
+            </select>
+          </div>
+
+          <div class="modal-footer">
+            <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cerrar</button>
+            <button [disabled]="!groupForm.valid" class="btn btn-primary" data-bs-dismiss="modal" type="submit">
+              Actualizar
+              Grupo
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>

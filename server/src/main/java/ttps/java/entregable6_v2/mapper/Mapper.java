@@ -3,6 +3,7 @@ package ttps.java.entregable6_v2.mapper;
 import org.springframework.stereotype.Component;
 import ttps.java.entregable6_v2.dto.GastoGrupoDTO;
 import ttps.java.entregable6_v2.dto.GrupoDTO;
+import ttps.java.entregable6_v2.dto.UsuarioDTO;
 import ttps.java.entregable6_v2.modelos.Gasto;
 import ttps.java.entregable6_v2.modelos.Grupo;
 import ttps.java.entregable6_v2.modelos.Usuario;
@@ -42,9 +43,20 @@ public class Mapper {
                 .id(grupo.getId())
                 .nombre(grupo.getNombre())
                 .categoria(grupo.getCategoria().toString())
+                .saldo(grupo.getSaldo())
                 .participantes(grupo.getParticipantes().stream().map(Usuario::getUsuario).collect(Collectors.toSet()))
                 .build();
     }
 
+    public UsuarioDTO usuarioDTO(Usuario usuario) {
+        return UsuarioDTO.builder()
+                .id(usuario.getId())
+                .username(usuario.getUsuario())
+                .nombre(usuario.getNombre())
+                .apellido(usuario.getApellido())
+                .email(usuario.getEmail())
+                .saldo(usuario.getSaldo())
+                .build();
+    }
 
 }

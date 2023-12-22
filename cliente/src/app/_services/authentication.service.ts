@@ -87,5 +87,4 @@ export class AuthenticationService {
   get userToken(): String {
     return this.currentUser.value;
   }
-
 }

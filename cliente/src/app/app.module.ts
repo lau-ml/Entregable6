@@ -16,38 +16,50 @@ import {RegisterComponent} from "./register/register.component";
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import {VerificarComponent} from "./verificar/verificar.component";
 import {RecuperarContraComponent} from "./recuperar-contra/recuperar-contra.component";
-import {GruposComponent} from "./grupos/grupos/grupos.component";
+import {GruposComponent} from "./grupos/grupos.component";
 import {AuthGuard} from "./_guards";
 import {NoAuthGuard} from "./_guards/noAuth.guard";
 import {BienvenidaComponent} from "./bienvenida/bienvenida/bienvenida.component";
 import {NgxPaginationModule} from "ngx-pagination";
+import {GrupoComponent} from "./grupos/grupo.component";
+import {SaldoCardComponent} from "./saldo/saldo-card.component";
+import {HomeComponent} from "./home/home.component";
+import {GastosComponent} from "./gastos/gastos.component";
 @NgModule({
-    imports: [
-        BrowserModule,
-        ReactiveFormsModule,
-        HttpClientModule,
-        NgbModule,
-        routing,
-        SweetAlert2Module.forRoot(),
-        NgxPaginationModule
-    ],
+  imports: [
+    BrowserModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    NgbModule,
+    routing,
+    SweetAlert2Module.forRoot(),
+    NgxPaginationModule
+  ],
   declarations: [
     AppComponent,
     LoginComponent,
     NavComponent,
     TopnavComponent,
     RegisterComponent,
+    SaldoCardComponent,
+    HomeComponent,
+    GastosComponent,
     FooterComponent,
     VerificarComponent,
     RecuperarContraComponent,
     GruposComponent,
-    BienvenidaComponent
+    BienvenidaComponent,
+    GrupoComponent
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
     AuthGuard,
     NoAuthGuard
+  ],
+  exports: [
+    SaldoCardComponent,
+    SaldoCardComponent
   ],
   bootstrap: [AppComponent]
 })

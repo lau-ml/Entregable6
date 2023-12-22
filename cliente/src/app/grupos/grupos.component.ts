@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {FormBuilder, Validators} from "@angular/forms";
-import {GrupoService} from "../../_services/grupo.service";
-import {GrupoCreateRequest} from "../../_requests/grupoCreateRequest";
-import {SweetalertService} from "../../_services/sweetalert.service";
+import {GrupoService} from "../_services/grupo.service";
+import {GrupoCreateRequest} from "../_requests/grupoCreateRequest";
+import {SweetalertService} from "../_services/sweetalert.service";
 import {tap} from "rxjs/operators";
-import {GrupoResponse} from "../../_responses/grupoResponse";
+import {GrupoResponse} from "../_responses/grupoResponse";
 
 @Component({
   selector: 'app-grupos',

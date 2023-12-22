@@ -5,16 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GrupoDTO {
+public class UsuarioDTO {
     private Long id;
+    private String username;
+    private String email;
     private String nombre;
-    private String categoria;
-    private Set<String> participantes;
     private Double saldo;
+    private String apellido;
 }

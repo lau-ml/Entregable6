@@ -31,4 +31,16 @@ export class GrupoService {
       }
     ));
   }
+
+  getGroup(id: number) {
+    return this.http.get<any>(`http://localhost:8080/grupo/${id}`).pipe(
+      map((grupoData) => grupoData)
+    );
+  }
+
+  updateGroup(id: number, grupo: GrupoCreateRequest) {
+    return this.http.put<any>(`http://localhost:8080/grupo/${id}/actualizar`, grupo).pipe(
+      map((grupoData) => grupoData)
+    );
+  }
 }

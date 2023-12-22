@@ -4,10 +4,12 @@ import {HomeComponent} from "./home/home.component";
 import {RegisterComponent} from "./register/register.component";
 import {VerificarComponent} from "./verificar/verificar.component";
 import {RecuperarContraComponent} from "./recuperar-contra/recuperar-contra.component";
-import {GruposComponent} from "./grupos/grupos/grupos.component";
+import {GruposComponent} from "./grupos/grupos.component";
 import {AuthGuard} from "./_guards";
 import {NoAuthGuard} from "./_guards/noAuth.guard";
 import {BienvenidaComponent} from "./bienvenida/bienvenida/bienvenida.component";
+import {GrupoComponent} from "./grupos/grupo.component";
+import {GastosComponent} from "./gastos/gastos.component";
 
 export const routes: Routes = [
 
@@ -48,6 +50,16 @@ export const routes: Routes = [
     path: '',
     component: BienvenidaComponent,
     canActivate: [NoAuthGuard]
+  },
+  {
+    component: GrupoComponent,
+    path: 'grupo/:id',
+    canActivate: [AuthGuard]
+  },
+  {
+    path:'gastos',
+    component:GastosComponent,
+    canActivate:[AuthGuard]
   },
   {
     path: '**',

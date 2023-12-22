@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Router, ActivatedRoute} from '@angular/router';
+import {Router} from '@angular/router';
 import {FormBuilder, Validators} from '@angular/forms';
 
 
@@ -7,136 +7,138 @@ import {AuthenticationService} from '../_services';
 
 import {LoginRequest} from "../_requests/loginRequest";
 import {SweetalertService} from "../_services/sweetalert.service";
+import {UsuarioService} from "../_services/usuario.service";
 
 @Component({templateUrl: 'login.component.html', styleUrl: "./login.css"})
 export class LoginComponent implements OnInit {
-    loading = false;
-    submitted = false;
-    error = '';
-    errorReenviar = '';
+  loading = false;
+  submitted = false;
+  error = '';
+  errorReenviar = '';
 
-    isResendEmail: boolean = false;
-    isRecoverPass: boolean = false;
-    loginForm = this.formBuilder.group({
-        username: ['', Validators.required],
-        password: ['', Validators.required]
-    })
+  isResendEmail: boolean = false;
+  isRecoverPass: boolean = false;
+  loginForm = this.formBuilder.group({
+    username: ['', Validators.required],
+    password: ['', Validators.required]
+  })
 
-    reenviarForm = this.formBuilder.group({
-        email: ['', [Validators.required, Validators.email]],
-    })
+  reenviarForm = this.formBuilder.group({
+    email: ['', [Validators.required, Validators.email]],
+  })
 
-    recoverForm = this.formBuilder.group({
-        email: ['', [Validators.required, Validators.email]],
-    })
-    errorRecuperar: boolean = false;
-
-
-    constructor(
-        private formBuilder: FormBuilder,
-        private router: Router,
-        private authenticationService: AuthenticationService,
-        private sweetAlertService: SweetalertService
-    ) {
-    }
-
-    ngOnInit() {
-        this.authenticationService.isResendEmailValue.subscribe(
-            {
-                next: (isResendEmail) => {
-                    this.isResendEmail = isResendEmail;
-                }
-            }
-        )
-        this.authenticationService.isRecoverPassValue.subscribe(
-            {
-                next: (isRecoverPass) => {
-                    this.isRecoverPass = isRecoverPass;
-                }
-            }
-        )
-    }
+  recoverForm = this.formBuilder.group({
+    email: ['', [Validators.required, Validators.email]],
+  })
+  errorRecuperar: boolean = false;
 
 
-    get f() {
-        return this.loginForm.controls;
-    }
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private authenticationService: AuthenticationService,
+    private sweetAlertService: SweetalertService,
+    private userService: UsuarioService
+  ) {
+  }
 
-    get reenviarf() {
-        return this.reenviarForm.controls;
-    }
-
-    get recoverf() {
-        return this.recoverForm.controls;
-    }
-
-    onSubmit() {
-        this.submitted = true;
-        this.loading = true;
-        if (this.loginForm.invalid) {
-            this.loginForm.markAllAsTouched();
-
-        } else {
-
-            this.authenticationService.login(this.loginForm.value as LoginRequest).subscribe({
-                next: (userData) => {
-                },
-                error: (errorData) => {
-                    this.error = errorData.message;
-                },
-                complete: () => {
-                    this.router.navigateByUrl('/home').then(r => console.log(r));
-                    this.loginForm.reset();
-                }
-            })
+  ngOnInit() {
+    this.authenticationService.isResendEmailValue.subscribe(
+      {
+        next: (isResendEmail) => {
+          this.isResendEmail = isResendEmail;
         }
-        this.loading = false;
-    }
-
-
-
-    onSubmitReenviar() {
-        if (this.reenviarForm.invalid) {
-            this.reenviarForm.markAllAsTouched();
-        } else {
-            this.sweetAlertService.showLoadingAlert();
-
-            this.authenticationService.resendEmail(this.reenviarForm.value.email as string).subscribe({
-                next: () => this.sweetAlertService.showAlert('success', '¡Éxito!', 'Envío de correo exitoso.'),
-                error: (errorData) => {
-                    this.sweetAlertService.showAlert('error', '¡Error!', 'El usuario ya se encuentra activo o no existe');
-                    this.errorReenviar = errorData.message;
-                },
-                complete: () => {
-                    this.router.navigateByUrl('/login').then(r => console.log(r));
-                    this.reenviarForm.reset();
-                },
-            });
+      }
+    )
+    this.authenticationService.isRecoverPassValue.subscribe(
+      {
+        next: (isRecoverPass) => {
+          this.isRecoverPass = isRecoverPass;
         }
-    }
+      }
+    )
+  }
 
-    onSubmitRecover() {
-        if (this.recoverForm.invalid) {
-            this.recoverForm.markAllAsTouched();
-        } else {
-            this.sweetAlertService.showLoadingAlert();
 
-            this.authenticationService.recoverPassword(this.recoverForm.value.email as string).subscribe({
-                next: () => {
-                    this.sweetAlertService.showAlert('success', '¡Éxito!', 'Envio de correo exitoso.');
+  get f() {
+    return this.loginForm.controls;
+  }
 
-                    // Navigate to login on success
-                    this.router.navigateByUrl('/login').then(r => console.log(r));
+  get reenviarf() {
+    return this.reenviarForm.controls;
+  }
 
-                    // Reset the form
-                    this.recoverForm.reset();
-                },
-                error: (errorData) => {
+  get recoverf() {
+    return this.recoverForm.controls;
+  }
 
-                    this.sweetAlertService.showAlert('error', '¡Error!', 'El usuario no se encuentra activo o no existe');
-                    this.errorRecuperar = errorData.message;
-                },
-            });
+  onSubmit() {
+    this.submitted = true;
+    this.loading = true;
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+
+    } else {
+
+      this.authenticationService.login(this.loginForm.value as LoginRequest).subscribe({
+        next: (userData) => {
+          this.userService.getUsuario().subscribe();
+        },
+        error: (errorData) => {
+          this.error = errorData.message;
+        },
+        complete: () => {
+          this.router.navigateByUrl('/home').then(r => console.log(r));
+          this.loginForm.reset();
         }
+      })
     }
+    this.loading = false;
+  }
+
+
+  onSubmitReenviar() {
+    if (this.reenviarForm.invalid) {
+      this.reenviarForm.markAllAsTouched();
+    } else {
+      this.sweetAlertService.showLoadingAlert();
+
+      this.authenticationService.resendEmail(this.reenviarForm.value.email as string).subscribe({
+        next: () => this.sweetAlertService.showAlert('success', '¡Éxito!', 'Envío de correo exitoso.'),
+        error: (errorData) => {
+          this.sweetAlertService.showAlert('error', '¡Error!', 'El usuario ya se encuentra activo o no existe');
+          this.errorReenviar = errorData.message;
+        },
+        complete: () => {
+          this.router.navigateByUrl('/login').then(r => console.log(r));
+          this.reenviarForm.reset();
+        },
+      });
+    }
+  }
+
+  onSubmitRecover() {
+    if (this.recoverForm.invalid) {
+      this.recoverForm.markAllAsTouched();
+    } else {
+      this.sweetAlertService.showLoadingAlert();
+
+      this.authenticationService.recoverPassword(this.recoverForm.value.email as string).subscribe({
+        next: () => {
+          this.sweetAlertService.showAlert('success', '¡Éxito!', 'Envio de correo exitoso.');
+
+          // Navigate to login on success
+          this.router.navigateByUrl('/login').then(r => console.log(r));
+
+          // Reset the form
+          this.recoverForm.reset();
+        },
+        error: (errorData) => {
+
+          this.sweetAlertService.showAlert('error', '¡Error!', 'El usuario no se encuentra activo o no existe');
+          this.errorRecuperar = errorData.message;
+        },
+      });
+    }
+  }
 }
