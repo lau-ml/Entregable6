@@ -1,0 +1,78 @@
+<button class="btn btn-primary mb-4" data-bs-target="#grupoModal" data-bs-toggle="modal" type="button">
+  Crear Grupo
+</button>
+<div class="row mt-4">
+  <div
+    *ngFor="let grupo of grupos | paginate: { id: 'server', itemsPerPage: 3, currentPage: currentPage, totalItems: totalItems }"
+    class="d-flex justify-content-center align-items-center col-lg-4 mb-4">
+    <div class="card shadow w-100" style="max-width: 300px;">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Información de grupo</h6>
+      </div>
+      <div class="card-body">
+
+        <div class="text-center mb-4">
+          <i *ngIf="grupo.categoria == 'SALIDA'" class="fa-solid fa-door-open"></i>
+          <i *ngIf="grupo.categoria == 'OCIO'" class="fa-solid fa-face-laugh-wink"></i>
+          <i *ngIf="grupo.categoria == 'VIAJE'" class="fa-solid fa-car-side"></i>
+          <i *ngIf="grupo.categoria == 'FAMILIAR'" class="fa-solid fa-users"></i>
+        </div>
+        <h5 class="text-center">{{grupo.nombre}}</h5>
+        <div class="mt-3">
+          <p><strong>Categoría: </strong>{{ grupo.categoria }}</p>
+          <p><strong>Integrantes</strong></p>
+          <ul>
+            <li *ngFor="let integrante of grupo.participantes">{{ integrante }}</li>
+          </ul>
+        </div>
+
+        <button class="btn btn-primary float-right" routerLink="">Ver grupo</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="has-text-centered">
+    <div [ngClass]="{ 'hidden': !loading }" class="spinner"></div>
+    <pagination-controls (pageChange)="getPage($event)" id="server"></pagination-controls>
+  </div>
+</div>
+<div aria-hidden="true" aria-labelledby="grupoModalLabel" class="modal fade" id="grupoModal" role="dialog"
+     tabindex="-1">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="grupoModalLabel">Crear Nuevo Grupo</h5>
+        <button aria-label="Cerrar" class="close" data-bs-dismiss="modal" type="button">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="onSubmit()" [formGroup]="groupForm">
+          <div class="form-group">
+            <label for="nombreGrupo">Nombre del Grupo</label>
+            <input class="form-control" formControlName="nombre" id="nombreGrupo"
+                   placeholder="Ingrese el nombre del grupo"
+                   type="text">
+          </div>
+
+          <div class="form-group">
+            <label for="categoria">Categoría del Grupo</label>
+            <select class="form-control" formControlName="categoria" id="categoria">
+              <option value="FAMILIAR">Familia</option>
+              <option value="VIAJE">Viaje</option>
+              <option value="SALIDA">Salida</option>
+              <option value="OCIO">Ocio</option>
+            </select>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cerrar</button>
+            <button [disabled]="!groupForm.valid" class="btn btn-primary" data-bs-dismiss="modal" type="submit">Crear
+              Grupo
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
