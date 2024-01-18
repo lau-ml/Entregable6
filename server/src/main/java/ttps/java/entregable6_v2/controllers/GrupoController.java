@@ -5,14 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ttps.java.entregable6_v2.dto.GrupoDTO;
 import ttps.java.entregable6_v2.excepciones.UsuarioInvalidoException;
+import ttps.java.entregable6_v2.helpers.Pagination.PaginationUtils;
 import ttps.java.entregable6_v2.helpers.requests.grupos.GrupoCreateRequest;
 import ttps.java.entregable6_v2.helpers.requests.grupos.GrupoUpdateRequest;
 import ttps.java.entregable6_v2.mapper.Mapper;
+import ttps.java.entregable6_v2.modelos.Gasto;
 import ttps.java.entregable6_v2.modelos.Grupo;
 import ttps.java.entregable6_v2.modelos.SolicitudGrupo;
 import ttps.java.entregable6_v2.modelos.Usuario;
@@ -20,7 +20,6 @@ import ttps.java.entregable6_v2.servicios.GrupoService;
 import ttps.java.entregable6_v2.servicios.SolictudGrupoService;
 import ttps.java.entregable6_v2.servicios.UsuarioService;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -40,9 +39,7 @@ public class GrupoController {
 
     @RequestMapping(value = "/crear", method = RequestMethod.POST)
     public ResponseEntity<?> crearGrupo(@RequestBody GrupoCreateRequest grupoCreateRequest) throws UsuarioInvalidoException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        Usuario user = usuarioService.findByUsername(username).orElse(null);
+        Usuario user = usuarioService.recuperarUsuario();
         Grupo grupo = new Grupo(grupoCreateRequest.getNombre(), grupoCreateRequest.getCategoria(), .0);
         try {
             grupoService.crearGrupo(grupo, user);
@@ -55,9 +52,7 @@ public class GrupoController {
     @RequestMapping(value = "/todos", method = RequestMethod.GET)
     public ResponseEntity<?> getGrupos(@RequestParam(defaultValue = "1") int page,
                                        @RequestParam(defaultValue = "10") int pageSize) throws UsuarioInvalidoException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        Usuario user = usuarioService.findByUsername(username).orElse(null);
+        Usuario user = usuarioService.recuperarUsuario();
 
         try {
             assert user != null;
@@ -67,10 +62,8 @@ public class GrupoController {
             List<GrupoDTO> grupoDTOs = gruposPaginados.stream()
                     .map(mapper::grupoDTO)
                     .collect(Collectors.toList());
-            Map<String, Object> response = new HashMap<>();
-            response.put("totalItems", gruposPaginados.getTotalElements());
-            response.put("totalPages", gruposPaginados.getTotalPages());
-            response.put("currentPage", gruposPaginados.getNumber() + 1);
+            PaginationUtils<Grupo> paginationUtils = new PaginationUtils<>();
+            Map<String, Object> response = paginationUtils.createPaginationResponse(gruposPaginados);
             response.put("grupos", grupoDTOs);
             return new ResponseEntity<>(response, HttpStatus.OK);
 
@@ -81,9 +74,7 @@ public class GrupoController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> verGrupo(@PathVariable("id") long id) throws UsuarioInvalidoException {
-           Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        Usuario user = usuarioService.findByUsername(username).orElse(null);
+        Usuario user = usuarioService.recuperarUsuario();
         try {
             assert user != null;
             Grupo grupo = grupoService.recuperar(id);
@@ -98,12 +89,8 @@ public class GrupoController {
 
     @RequestMapping(value = "/{id}/actualizar", method = RequestMethod.PUT)
     public ResponseEntity<?> actulizarGrupo(@RequestBody GrupoUpdateRequest grupoUpdateRequest, HttpSession httpSession, @PathVariable("id") long id) throws UsuarioInvalidoException {
-
-
+        Usuario user = usuarioService.recuperarUsuario();
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String username = authentication.getName();
-            Usuario user = usuarioService.findByUsername(username).orElse(null);
             Grupo grupo = grupoService.recuperar(id);
             assert user != null;
             if (grupoService.usuarioPerteneciente(grupo, user) == null) {
@@ -116,7 +103,6 @@ public class GrupoController {
         } catch (Exception e) {
             return new ResponseEntity<String>("Error al actualizar grupo", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
 
     @RequestMapping(value = "/{id}/enviarSolicitud/{id_usuario}", method = RequestMethod.POST)
@@ -168,14 +154,12 @@ public class GrupoController {
     }
 
     @RequestMapping(value = "/{id}/gastos", method = RequestMethod.GET)
-    public ResponseEntity<?> getGastos(HttpSession httpSession, @PathVariable("id") long id) throws UsuarioInvalidoException {
-        Long user_id = (Long) httpSession.getAttribute("connectedUser");
-        if (user_id == null) {
-            return new ResponseEntity<String>("No hay usuario conectado", HttpStatus.UNAUTHORIZED);
-        }
-        Usuario user = usuarioService.recuperar(user_id);
+    public ResponseEntity<?> getGastos(@PathVariable("id") long id) throws UsuarioInvalidoException {
+
+        Usuario user = usuarioService.recuperarUsuario();
         try {
             Grupo grupo = grupoService.recuperar(id);
+            assert user != null;
             if (grupoService.usuarioPerteneciente(grupo, user) == null) {
                 return new ResponseEntity<String>("El usuario no pertenece al grupo", HttpStatus.UNAUTHORIZED);
             }

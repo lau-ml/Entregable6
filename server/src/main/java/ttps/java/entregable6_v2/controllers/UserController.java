@@ -24,9 +24,7 @@ public class UserController {
     @GetMapping(value = "/")
     public ResponseEntity<?> getUser() {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        Usuario user = userService.findByUsername(username).orElse(null);
+        Usuario user = userService.recuperarUsuario();
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

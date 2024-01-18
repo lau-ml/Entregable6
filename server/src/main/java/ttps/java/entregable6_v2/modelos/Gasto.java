@@ -11,6 +11,19 @@ import java.util.Set;
 @Table(name = "gastos")
 public class Gasto {
 
+    public Gasto(double monto, java.sql.Date fecha, String imagen, Set<Usuario> usuarios, Usuario user, Grupo grupo, TipoGasto tipo, Map<Usuario, Double> valores, Division division) {
+
+        this.monto = monto;
+        this.fecha = fecha;
+        this.imagen = imagen;
+        this.participantes = usuarios;
+        this.responsable = user;
+        this.grupo = grupo;
+        this.tipo = tipo;
+        this.valores = valores;
+        this.division = division;
+    }
+
     public Long getId() {
         return id;
     }

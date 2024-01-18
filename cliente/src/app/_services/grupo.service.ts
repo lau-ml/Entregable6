@@ -7,6 +7,7 @@ import {map} from "rxjs";
   providedIn: 'root'
 })
 export class GrupoService {
+  private perPage: number = 6;
 
   constructor(private http: HttpClient) { }
 
@@ -16,9 +17,14 @@ export class GrupoService {
     );
 
   }
+
+  getPerPages() {
+    return this.perPage;
+  }
+
   getGroups(page: number) {
-    const perPage = 3;
-    const url = `http://localhost:8080/grupo/todos?page=${page}&pageSize=${perPage}`;
+
+    const url = `http://localhost:8080/grupo/todos?page=${page}&pageSize=${this.perPage}`;
 
     return this.http.get<any>(url).pipe(
       map((grupoData) => {

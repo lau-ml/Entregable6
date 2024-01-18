@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -86,14 +89,17 @@ public class UsuarioService {
     }
 
 
-    public AuthResponse login(LoginRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        UserDetails user = dao.findByUsuario(request.getUsername()).orElseThrow();
-        String token = jwtService.getToken(user);
-        return AuthResponse.builder()
-                .token(token)
-                .build();
-
+    public AuthResponse login(LoginRequest request) throws UsuarioInvalidoException {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+            UserDetails user = dao.findByUsuario(request.getUsername()).orElseThrow();
+            String token = jwtService.getToken(user);
+            return AuthResponse.builder()
+                    .token(token)
+                    .build();
+        } catch (AuthenticationException e) {
+            throw new UsuarioInvalidoException("Usuario o contraseña incorrectos");
+        }
     }
 
     public boolean verify(VerificacionRequest verificacionRequest) {
@@ -162,5 +168,21 @@ public class UsuarioService {
             }
             return true;
         }
+    }
+
+    public void actualizar(Usuario usuario) throws Exception {
+        Usuario usuarioPersistido = dao.findById(usuario.getId()).orElse(null);
+        if (usuarioPersistido != null) {
+            dao.save(usuarioPersistido);
+        } else {
+            throw new Exception("Error al actualizar usuario");
+        }
+    }
+
+    public Usuario recuperarUsuario(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Usuario user = findByUsername(username).orElse(null);
+        return user;
     }
 }

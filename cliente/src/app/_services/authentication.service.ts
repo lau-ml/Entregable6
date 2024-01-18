@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {map, tap} from 'rxjs/operators';
+import {catchError, map, tap} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
 import {LoginRequest} from "../_requests/loginRequest";
 import {RegisterRequest} from "../_requests/registerRequest";
@@ -43,7 +43,8 @@ export class AuthenticationService {
         this.currentUser.next(userData.token);
         this.isLogged.next(true);
       }),
-      map((userData) => userData.token)
+      map((userData) => userData.token),
+
     );
   }
 

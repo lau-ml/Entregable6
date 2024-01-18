@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import ttps.java.entregable6_v2.excepciones.UsuarioInvalidoException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -60,7 +57,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handleRuntimeException(RuntimeException ex) {
-        return new ResponseEntity<>("Error interno de servidor", HttpStatus.BAD_GATEWAY);
+
+        return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_GATEWAY);
     }
 
 

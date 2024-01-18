@@ -50,7 +50,7 @@ public class SecurityConfig {
                         CorsConfiguration corsConfiguration = new CorsConfiguration();
                         corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
                         corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-                        corsConfiguration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+                        corsConfiguration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type","enctype"));
                         corsConfiguration.setExposedHeaders(Arrays.asList("Authorization"));
                         corsConfiguration.setAllowCredentials(true);
                         return corsConfiguration;

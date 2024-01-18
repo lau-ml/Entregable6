@@ -4,7 +4,6 @@ import {FormBuilder, Validators} from "@angular/forms";
 import {GrupoService} from "../_services/grupo.service";
 import {GrupoCreateRequest} from "../_requests/grupoCreateRequest";
 import {SweetalertService} from "../_services/sweetalert.service";
-import {tap} from "rxjs/operators";
 import {GrupoResponse} from "../_responses/grupoResponse";
 
 @Component({
@@ -19,11 +18,11 @@ export class GruposComponent implements OnInit {
     categoria: ['', Validators.required],
   })
   grupos: GrupoResponse[] = [];
-  loading: boolean=false;
-   totalPages: number= 0;
-   currentPage: number=0;
-  totalItems: number=0;
-
+  loading: boolean = false;
+  totalPages: number = 0;
+  currentPage: number = 0;
+  totalItems: number = 0;
+  perPage: number = this.grupoService.getPerPages();
   constructor(private formBuilder: FormBuilder, private router: Router, private grupoService: GrupoService, private sweetAlertService: SweetalertService
   ) {
   }
@@ -43,13 +42,18 @@ export class GruposComponent implements OnInit {
         },
         complete: () => {
           this.groupForm.reset();
-          this.getPage(1);
+          if (this.grupoService.getPerPages() % this.totalItems == 0) {
+            this.getPage(this.currentPage + 1);
+          } else {
+            this.getPage(this.currentPage);
+          }
         }
       }
     )
 
 
   }
+
   getPage(page: number) {
     this.loading = true;
     this.grupoService.getGroups(page).subscribe(
@@ -68,6 +72,7 @@ export class GruposComponent implements OnInit {
       }
     )
   }
+
   ngOnInit(): void {
     this.getPage(1);
   }

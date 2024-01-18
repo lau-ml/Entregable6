@@ -3,7 +3,7 @@
 </button>
 <div class="row mt-4">
   <div
-    *ngFor="let grupo of grupos | paginate: { id: 'server', itemsPerPage: 3, currentPage: currentPage, totalItems: totalItems }"
+    *ngFor="let grupo of grupos | paginate: { id: 'server', itemsPerPage: perPage, currentPage: currentPage, totalItems: totalItems }"
     class="d-flex justify-content-center align-items-center col-lg-4 mb-4">
     <div class="card shadow w-100" style="max-width: 300px;">
       <div class="card-header py-3">

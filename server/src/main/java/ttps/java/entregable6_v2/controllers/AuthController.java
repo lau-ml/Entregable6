@@ -32,8 +32,13 @@ public class AuthController {
 
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
-        return new ResponseEntity<AuthResponse>(userService.login(request), HttpStatus.OK);
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request){
+
+        try {
+            return new ResponseEntity<AuthResponse>(userService.login(request), HttpStatus.OK);
+        } catch (UsuarioInvalidoException e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
     }
 
 

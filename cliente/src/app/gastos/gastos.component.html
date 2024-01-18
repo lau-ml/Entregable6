@@ -1,7 +1,14 @@
-<div class="d-flex w-100 align-content-end justify-content-end">
-  <form
-    class="m-2 d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-    <div class="input-group">
+<div class="d-flex w-100 align-content-end justify-content-end flex-wrap">
+  <form class="m-2 form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+
+    <div class="input-group d-flex align-items-center">
+      <div class="mr-2">
+        <select required>
+          <option value="0">Persona</option>
+          <option value="1">Grupo</option>
+
+        </select>
+      </div>
       <input aria-describedby="basic-addon2" aria-label="Buscar" class="form-control bg-light border-0 small"
              placeholder="Buscar..." type="text">
       <div class="input-group-append">
@@ -12,38 +19,68 @@
     </div>
   </form>
   <a class="btn btn-sm btn-primary shadow-sm" data-bs-target="#cargarRecibo" data-bs-toggle="modal"
-     href="#">
+     data-bs-dismiss="modal" href="#">
     <i class="fas fa-receipt"></i> Cargar recibo
   </a>
 </div>
+
 <div class="card mt-3">
 
 
   <div class="card-body">
-    <h5 class="card-title">Detalles de Gastos</h5>
     <div class="table-responsive">
       <table class="table table-bordered w-100">
         <thead>
         <tr>
           <th>Compartido por</th>
+          <th>Grupo</th>
           <th>Monto</th>
           <th>Día compra</th>
           <th>Categoría</th>
           <th>Ver detalle</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody
+          *ngFor="let gasto of gastos | paginate: { id: 'server', itemsPerPage: perPage, currentPage: currentPage, totalItems: totalItems }">
         <tr>
-          <td>Persona A, Persona B</td>
-          <td>$30.00</td>
-          <td>2023-09-15</td>
-          <td><i class="fa-solid fa-gas-pump"></i> Combustible</td>
-          <td><a href="detalle.html"> Ver detalle </a></td>
+          <td *ngFor="let integrante of gasto.participantes"
+              style="max-width: 100px; overflow: hidden; text-overflow: ellipsis;">
+            <div class="text-truncate" ngbTooltip="{{integrante}}">{{ integrante }}</div>
+          </td>
+
+          <td *ngIf="!gasto.id_grupo">-</td>
+          <td *ngIf="gasto.id_grupo">{{ gasto.id_grupo }}</td>
+          <td>{{ gasto.monto }}</td>
+          <td>{{ gasto.fecha | date:'dd/MM/yyyy' }}</td>
+
+          <td>
+
+            <i *ngIf="gasto.tipo=='COMBUSTIBLE'" class="fa-solid fa-gas-pump"></i>
+
+
+            <i *ngIf="gasto.tipo=='ENTRADAS'" class="fa-solid fa-ticket"></i>
+
+
+            <i *ngIf="gasto.tipo=='COMIDA'" class="fa-solid fa-pizza-slice"></i>
+
+
+            <i *ngIf="gasto.tipo=='ALOJAMIENTO'" class="fa-solid fa-hotel"></i>
+            {{ gasto.tipo }}
+
+
+          </td>
+          <td><a download href="/assets/{{gasto.imagen}}"> <i class="fa-regular fa-file"></i> </a> <i
+            class="fa-solid fa-pen-to-square"></i></td>
         </tr>
 
         </tbody>
       </table>
     </div>
+
+  </div>
+  <div class="has-text-centered">
+    <div [ngClass]="{ 'hidden': !loading }" class="spinner"></div>
+    <pagination-controls (pageChange)="getPage($event)" id="server"></pagination-controls>
   </div>
 </div>
 
@@ -55,10 +92,10 @@
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="tuFormulario">
+        <form [formGroup]="tuFormulario" enctype="multipart/form-data">
           <div class="form-group">
             <label for="monto">Monto del gasto:</label>
-            <input class="form-control" formControlName="monto" id="monto" type="text">
+            <input class="form-control" formControlName="monto" id="monto" type="number">
           </div>
           <div class="form-group">
             <label for="fecha">Fecha del gasto:</label>
@@ -66,61 +103,73 @@
           </div>
           <div class="form-group">
             <label for="imagen">Imagen asociada:</label>
-            <input class="form-control" formControlName="imagen" id="imagen" type="file">
+            <input (change)="onChange($event)" class="form-control" formControlName="imagen" id="imagen" type="file"
+                   accept="image/*">
           </div>
           <div class="form-group">
-            <label for="grupoBool">¿Gasto grupal?:</label>
-            <input class="form-control" formControlName="grupoBool" id="grupoBool" type="checkbox">
+            <label for="grupoBool">¿Es un gasto grupal?</label>
+            <input formControlName="grupoBool" id="grupoBool" type="checkbox">
+
           </div>
+          <div class="form-group" *ngIf="tuFormulario.get('grupoBool')?.value">
+            <label for="id_grupo">Nombre del grupo</label>
+            <input class="form-control" formControlName="id_grupo" id="id_grupo" type="text">
+
+          </div>
+
+
           <div class="form-group">
-            <label for="formaDividir">Forma de dividir el gasto entre integrantes:</label>
-            <select class="form-control" formControlName="formaDividir" id="formaDividir">
-              <option value="igual">Igual monto/% para todos</option>
-              <option value="fijos">Montos fijos por integrante</option>
-              <option value="porcentaje">Porcentaje por integrante</option>
+            <label for="division">Forma de dividir el gasto entre integrantes:</label>
+            <select class="form-control" formControlName="division" id="division">
+              <option value="PORCENTAJE">Porcentaje por integrante</option>
+              <option value="MONTOIGUAL">Igual monto para todos</option>
+              <option value="MONTO">Montos fijos por integrante</option>
+              <option value="PORCENTAJEIGUAL">Igual % para todos</option>
             </select>
           </div>
 
           <div class="form-group">
-            <label for="categoria">Categoría del gasto:</label>
-            <select class="form-control" formControlName="categoria" id="categoria">
-              <option value="comida">Comida</option>
-              <option value="transporte">Combustible</option>
-              <option value="entretenimiento">Alojamiento</option>
-              <option value="otros">Otros</option>
+            <label for="tipo">Tipo de gasto:</label>
+            <select class="form-control" formControlName="tipo" id="tipo">
+              <option value="COMIDA">Comida</option>
+              <option value="COMBUSTIBLE">Combustible</option>
+              <option value="ALOJAMIENTO">Alojamiento</option>
+              <option value="ENTRADAS">Entradas</option>
             </select>
           </div>
 
-          <div class="form-group">
-            <label for="quienHizoCompra">Quién hizo la compra:</label>
-            <input class="form-control" formControlName="quienHizoCompra" id="quienHizoCompra" type="text">
-          </div>
+
           <div class="form-group">
             <button (click)="agregarUsuario()" class="btn btn-primary" type="button">Agregar Usuario</button>
           </div>
           <div *ngFor="let usuario of personasFormArray.controls; let i = index"
                formArrayName="personas">
-            <div [formGroupName]="i">
-              <div class="form-group-row">
+            <div [formGroupName]="i" class="d-flex flex-row">
+              <div class="col-4">
                 <label [attr.for]="'nombre' + i">Nombre:</label>
-              </div>
-              <div>
+
                 <input [attr.id]="'nombre' + i" class="form-control" formControlName="nombre" type="text">
               </div>
-              <label [attr.for]="'monto' + i">Monto:</label>
-              <div>
+              <div
+                *ngIf="tuFormulario.get('division')?.value != 'MONTOIGUAL' && tuFormulario.get('division')?.value !='PORCENTAJEIGUAL' "
+                class="col-4">
+                <label [attr.for]="'monto' + i">Monto:</label>
+
                 <input [attr.id]="'monto' + i" class="form-control" formControlName="monto" type="text">
               </div>
-              <div class="form-group">
-                <button (click)="eliminarUsuario(i)" class="btn btn-primary" type="button">Eliminar Usuario</button>
+              <div class="col-2">
+                <button (click)="eliminarUsuario(i)" class="btn btn-primary" type="button">Eliminar integrante</button>
               </div>
+
             </div>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button (click)="guardarRecibo()" class="btn btn-primary" type="button">Guardar Recibo</button>
-        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cerrar</button>
+        <button (click)="resetearForm()" class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cerrar</button>
+        <button (click)="guardarRecibo()" class="btn btn-primary" data-bs-dismiss="modal" type="button">Guardar Recibo
+        </button>
+
       </div>
     </div>
   </div>

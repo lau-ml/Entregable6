@@ -10,7 +10,7 @@ import java.util.Set;
 public class Gasto {
 
     public static void actualizarGasto(ttps.java.entregable6_v2.modelos.Gasto gasto, GastoRequest gastoUpdateRequest, Grupo grupo, Set<Usuario> usuarios, Map<Usuario, Double> valores) {
-        gasto.setNombre(gastoUpdateRequest.getNombre());
+
         gasto.setMonto(gastoUpdateRequest.getMonto());
         gasto.setFecha(gastoUpdateRequest.getFecha());
         gasto.setImagen(gastoUpdateRequest.getImagen());

@@ -5,18 +5,20 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ttps.java.entregable6_v2.helpers.requests.PersonaGasto;
 import ttps.java.entregable6_v2.modelos.Division;
 import ttps.java.entregable6_v2.modelos.TipoGasto;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class GastoRequest {
-    private String nombre;
+
     private double monto;
     private Long id_grupo;
     private TipoGasto tipo;
@@ -24,21 +26,17 @@ public class GastoRequest {
     private Date fecha;
     private String imagen;
     private Division division;
-    private List<Long> participantes;
-    private List<Double> valores;
+    private List<PersonaGasto> personas;
 
     public boolean isValid() {
-        if (getParticipantes() == null || getParticipantes().isEmpty()) {
+        if (getPersonas() == null || getPersonas().isEmpty()) {
             return false;
         }
-        System.out.println(getFecha());
-        if (getValores() == null || getValores().isEmpty()) {
+        if(getPersonas().stream().map(PersonaGasto::getNombre).collect(Collectors.toUnmodifiableSet()).size() != getPersonas().size()){
             return false;
         }
-        if (getNombre() == null || getNombre().isEmpty()) {
-            return false;
-        }
-        if (getFecha() == null || getFecha().toString().isEmpty()) {
+
+        if (getFecha() == null ) {
             return false;
         }
         if (getTipo() == null) {
@@ -49,17 +47,12 @@ public class GastoRequest {
         }
         if (getDivision() == null)
             return false;
-        if (getImagen() == null) {
-            return false;
-        }
 
-        if (getParticipantes().size() != getValores().size()) {
-            return false;
-        }
+
         if (getDivision() == Division.MONTO) {
-            return getMonto() == getValores().stream().reduce(0.0, Double::sum);
+            return getMonto() == getPersonas().stream().map(PersonaGasto::getMonto).reduce(0.0, Double::sum);
         } else {
-            return getValores().stream().reduce(0.0, Double::sum) == 100;
+            return getPersonas().stream().map(PersonaGasto::getMonto).reduce(0.0, Double::sum) == 100;
         }
 
 

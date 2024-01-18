@@ -81,15 +81,14 @@ export class LoginComponent implements OnInit {
     } else {
 
       this.authenticationService.login(this.loginForm.value as LoginRequest).subscribe({
-        next: (userData) => {
-          this.userService.getUsuario().subscribe();
-        },
-        error: (errorData) => {
-          this.error = errorData.message;
-        },
-        complete: () => {
+        next: () => {
           this.router.navigateByUrl('/home').then(r => console.log(r));
           this.loginForm.reset();
+        },
+        error: (errorData) => {
+          this.error = "Usuario o contraseña incorrectos";
+        },
+        complete: () => {
         }
       })
     }
