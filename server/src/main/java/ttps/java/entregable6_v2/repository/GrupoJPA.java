@@ -35,7 +35,7 @@ public interface GrupoJPA extends JpaRepository<Grupo, Long>  {
 
     @Query("SELECT g FROM Grupo g JOIN g.participantes u " +
             "WHERE u.id = :userId " +
-            "AND (:nombre IS NULL OR g.nombre LIKE %:nombre%) " +
+            "AND (:nombre IS NULL OR g.nombre ilike %:nombre%) " +
             "AND (:categoria IS NULL OR g.categoria = :categoria)")
     Page<Grupo> recuperarGruposPaginados(
             @Param("userId") Long userId,

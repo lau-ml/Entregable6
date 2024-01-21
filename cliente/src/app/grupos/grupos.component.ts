@@ -78,10 +78,10 @@ export class GruposComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
+    this.route.queryParams.subscribe(params => {
       this.groupForm.patchValue({
-        categoria: params['categoria'],
-        nombre: params['nombre']
+        categoria: params['categoria'] || '',
+        nombre: params['nombre']|| ''
       });
     });
     this.getPage(1);

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {GrupoCreateRequest} from "../_requests/grupoCreateRequest";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {map} from "rxjs";
@@ -9,9 +9,10 @@ import {map} from "rxjs";
 export class GrupoService {
   private url: string = "http://localhost:8080/grupos";
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
-  createGroup(grupo:GrupoCreateRequest) {
+  createGroup(grupo: GrupoCreateRequest) {
     return this.http.post<any>(this.url + "/crear", grupo).pipe(
       map((grupoData) => grupoData)
     );
@@ -28,27 +29,27 @@ export class GrupoService {
     };
 
 
-    return this.http.get<any>(this.url,options).pipe(
+    return this.http.get<any>(this.url, options).pipe(
       map((grupoData) => {
-        return {
-          grupos: grupoData.grupos, // Ajusta según la estructura real de tu respuesta
-          totalItems: grupoData.totalItems,
-          totalPages: grupoData.totalPages,
-          currentPage: grupoData.currentPage,
-          itemsPerPage: grupoData.itemsPerPage
-        };
-      }
-    ));
+          return {
+            grupos: grupoData.grupos, // Ajusta según la estructura real de tu respuesta
+            totalItems: grupoData.totalItems,
+            totalPages: grupoData.totalPages,
+            currentPage: grupoData.currentPage,
+            itemsPerPage: grupoData.itemsPerPage
+          };
+        }
+      ));
   }
 
   getGroup(id: number) {
-    return this.http.get<any>(`http://localhost:8080/grupo/${id}`).pipe(
+    return this.http.get<any>(this.url + "/" + id).pipe(
       map((grupoData) => grupoData)
     );
   }
 
   updateGroup(id: number, grupo: GrupoCreateRequest) {
-    return this.http.put<any>(`http://localhost:8080/grupo/${id}/actualizar`, grupo).pipe(
+    return this.http.put<any>(this.url + "/" + id + "/actualizar", grupo).pipe(
       map((grupoData) => grupoData)
     );
   }
