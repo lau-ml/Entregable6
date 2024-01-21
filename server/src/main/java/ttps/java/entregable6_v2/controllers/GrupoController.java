@@ -12,7 +12,7 @@ import ttps.java.entregable6_v2.helpers.Pagination.PaginationUtils;
 import ttps.java.entregable6_v2.helpers.requests.grupos.GrupoCreateRequest;
 import ttps.java.entregable6_v2.helpers.requests.grupos.GrupoUpdateRequest;
 import ttps.java.entregable6_v2.mapper.Mapper;
-import ttps.java.entregable6_v2.modelos.Gasto;
+import ttps.java.entregable6_v2.modelos.Categoria;
 import ttps.java.entregable6_v2.modelos.Grupo;
 import ttps.java.entregable6_v2.modelos.SolicitudGrupo;
 import ttps.java.entregable6_v2.modelos.Usuario;
@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/grupo")
+@RequestMapping("/grupos")
 public class GrupoController {
     @Autowired
     GrupoService grupoService;
@@ -50,13 +50,15 @@ public class GrupoController {
         }
     }
 
-    @RequestMapping(value = "/todos", method = RequestMethod.GET)
+    @RequestMapping(value = "", method = RequestMethod.GET)
     public ResponseEntity<?> getGrupos(@RequestParam(defaultValue = "1") int page,
-                                       @RequestParam(defaultValue = "10") int pageSize) throws UsuarioInvalidoException {
+                                       @RequestParam(defaultValue = "6") int pageSize,
+                                       @RequestParam(defaultValue = "") String nombre,
+                                       @RequestParam(defaultValue = "") Categoria categoria) throws UsuarioInvalidoException {
 
         try {
             Usuario user = usuarioService.recuperarUsuario();
-            Page<Grupo> gruposPaginados = grupoService.recuperarGruposPaginados(user.getId(), page - 1, pageSize);
+            Page<Grupo> gruposPaginados = grupoService.recuperarGruposPaginados(user.getId(), page - 1, pageSize, nombre, categoria);
 
             List<GrupoDTO> grupoDTOs = gruposPaginados.stream()
                     .map(mapper::grupoDTO)
@@ -72,7 +74,7 @@ public class GrupoController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<?> verGrupo(@PathVariable("id") long id) throws UsuarioInvalidoException {
+    public ResponseEntity<?> verGrupo(@PathVariable("id") long id) {
 
         try {
             Usuario user = usuarioService.recuperarUsuario();
@@ -85,7 +87,7 @@ public class GrupoController {
     }
 
     @RequestMapping(value = "/{id}/actualizar", method = RequestMethod.PUT)
-    public ResponseEntity<?> actulizarGrupo(@RequestBody GrupoUpdateRequest grupoUpdateRequest, HttpSession httpSession, @PathVariable("id") long id) throws UsuarioInvalidoException {
+    public ResponseEntity<?> actulizarGrupo(@RequestBody GrupoUpdateRequest grupoUpdateRequest, HttpSession httpSession, @PathVariable("id") long id) {
 
         try {
             Grupo grupo = grupoService.recuperar(id);

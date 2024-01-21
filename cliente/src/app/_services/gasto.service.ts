@@ -6,8 +6,7 @@ import {map} from "rxjs";
   providedIn: 'root'
 })
 export class GastoService {
-  private perPage: number = 10;
-
+  private url: string = "http://localhost:8080/gastos";
   constructor(private httpClient: HttpClient,
   ) {
   }
@@ -15,24 +14,24 @@ export class GastoService {
   crearGasto(gasto: any) {
 
 
-    return this.httpClient.post("http://localhost:8080/gastos/crear", gasto);
+    return this.httpClient.post(this.url+"/crear", gasto);
   }
 
-  getPerPages() {
-    return this.perPage;
-  }
 
   getGastos(page: number) {
 
-    const url = `http://localhost:8080/gastos?page=${page}&pageSize=${this.perPage}`;
+    const url = `http://localhost:8080/gastos?page=${page}`;
+    const options={
 
+    }
     return this.httpClient.get<any>(url).pipe(
       map((grupoData) => {
           return {
             gastos: grupoData.gastos,
             totalItems: grupoData.totalItems,
             totalPages: grupoData.totalPages,
-            currentPage: grupoData.currentPage
+            currentPage: grupoData.currentPage,
+            itemsPerPage: grupoData.itemsPerPage
           };
         }
       ));

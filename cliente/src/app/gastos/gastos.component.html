@@ -41,7 +41,7 @@
         </tr>
         </thead>
         <tbody
-          *ngFor="let gasto of gastos | paginate: { id: 'server', itemsPerPage: perPage, currentPage: currentPage, totalItems: totalItems }">
+          *ngFor="let gasto of gastos | paginate: { id: 'server', itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }">
         <tr>
           <td *ngFor="let integrante of gasto.participantes"
               style="max-width: 100px; overflow: hidden; text-overflow: ellipsis;">

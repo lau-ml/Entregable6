@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import ttps.java.entregable6_v2.modelos.Categoria;
 import ttps.java.entregable6_v2.modelos.Gasto;
 import ttps.java.entregable6_v2.modelos.Grupo;
 import ttps.java.entregable6_v2.modelos.Usuario;
@@ -32,7 +33,16 @@ public interface GrupoJPA extends JpaRepository<Grupo, Long>  {
 
     public Usuario obtenerUsuariosGrupo(@Param("id") long id);
 
-    @Query("SELECT g FROM Grupo g JOIN g.participantes u WHERE u.id = :userId")
-    Page<Grupo> recuperarGruposPaginados(@Param("userId") Long userId, Pageable pageable);
+    @Query("SELECT g FROM Grupo g JOIN g.participantes u " +
+            "WHERE u.id = :userId " +
+            "AND (:nombre IS NULL OR g.nombre LIKE %:nombre%) " +
+            "AND (:categoria IS NULL OR g.categoria = :categoria)")
+    Page<Grupo> recuperarGruposPaginados(
+            @Param("userId") Long userId,
+            @Param("nombre") String nombre,
+            @Param("categoria") Categoria categoria,
+            Pageable pageable
+    );
+
 
 }

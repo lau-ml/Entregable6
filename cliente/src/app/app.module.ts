@@ -3,6 +3,10 @@ import {BrowserModule} from '@angular/platform-browser';
 import {ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 
+
+import {HttpParams} from "@angular/common/http";
+
+
 import {AppComponent} from './app.component';
 import {routing} from './app.routes';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -30,6 +34,7 @@ import {GastosComponent} from "./gastos/gastos.component";
     BrowserModule,
     ReactiveFormsModule,
     HttpClientModule,
+
     NgbModule,
     routing,
     SweetAlert2Module.forRoot(),
@@ -50,7 +55,7 @@ import {GastosComponent} from "./gastos/gastos.component";
     GruposComponent,
     BienvenidaComponent,
     GrupoComponent,
-    AmigosComponent
+    AmigosComponent,
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},

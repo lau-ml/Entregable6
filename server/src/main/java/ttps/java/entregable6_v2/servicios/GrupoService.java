@@ -2,19 +2,19 @@ package ttps.java.entregable6_v2.servicios;
 
 import jakarta.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import ttps.java.entregable6_v2.excepciones.GrupoException;
 import ttps.java.entregable6_v2.helpers.requests.grupos.GrupoUpdateRequest;
+import ttps.java.entregable6_v2.modelos.Categoria;
 import ttps.java.entregable6_v2.modelos.Gasto;
 import ttps.java.entregable6_v2.modelos.Grupo;
 import ttps.java.entregable6_v2.modelos.Usuario;
 import ttps.java.entregable6_v2.repository.GrupoJPA;
 import ttps.java.entregable6_v2.repository.UsuarioJPA;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.Set;
 
 @org.springframework.stereotype.Service
 public class GrupoService {
@@ -39,7 +39,6 @@ public class GrupoService {
         Grupo grupo = this.recuperar(entity.getId());
         dao.save(entity);
     }
-
 
 
     public Usuario usuarioPerteneciente(Grupo grupo, Usuario usuario) throws GrupoException {
@@ -71,7 +70,7 @@ public class GrupoService {
         }
     }
 
-    public List<Gasto> recuperarTodosLosGastos(long id)  {
+    public List<Gasto> recuperarTodosLosGastos(long id) {
         return dao.recuperarTodosLosGastos(id);
     }
 
@@ -81,8 +80,8 @@ public class GrupoService {
     }
 
 
-    public Page<Grupo> recuperarGruposPaginados(Long userId, int page, int pageSize) {
-        return dao.recuperarGruposPaginados(userId, PageRequest.of(page, pageSize));
+    public Page<Grupo> recuperarGruposPaginados(Long userId, int page, int pageSize, String nombre, Categoria categoria) {
+        return dao.recuperarGruposPaginados(userId, nombre, categoria, PageRequest.of(page, pageSize));
 
     }
 

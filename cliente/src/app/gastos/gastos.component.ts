@@ -18,7 +18,7 @@ export class GastosComponent {
   totalPages: number = 0;
   currentPage: number = 0;
   loading: boolean = true;
-  perPage: number = this.gastoService.getPerPages();
+  itemsPerPage: number = 0;
 
   constructor(private formBuilder: FormBuilder, private gastoService: GastoService,
               private usuarioService: UsuarioService) {
@@ -65,6 +65,7 @@ export class GastosComponent {
           this.totalItems = data.totalItems;
           this.totalPages = data.totalPages;
           this.currentPage = data.currentPage;
+          this.itemsPerPage = data.itemsPerPage;
 
         },
         error: (error) => {
@@ -132,7 +133,7 @@ export class GastosComponent {
     if (formulario.value.division === 'MONTO') {
       formulario.value.personas.push({id: this.id, monto: formulario.value.monto - suma});
     } else {
-      formulario.value.personas.push({nombre: this.id, monto: 100 - suma});
+      formulario.value.personas.push({id: this.id, monto: 100 - suma});
     }
 
 

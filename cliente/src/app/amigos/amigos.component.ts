@@ -18,7 +18,7 @@ export class AmigosComponent {
   totalPages: number = 0;
   currentPage: number = 0;
   loading: boolean = true;
-  perPage: number = this.gastoService.getPerPages();
+  perPage: number = 0;
 
   constructor(private formBuilder: FormBuilder, private gastoService: GastoService,
               private usuarioService: UsuarioService) {
@@ -65,6 +65,7 @@ export class AmigosComponent {
           this.totalItems = data.totalItems;
           this.totalPages = data.totalPages;
           this.currentPage = data.currentPage;
+          this.perPage = data.itemsPerPage;
 
         },
         error: (error) => {

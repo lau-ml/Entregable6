@@ -11,6 +11,7 @@ public class PaginationUtils<T> {
         response.put("totalItems", paginatedData.getTotalElements());
         response.put("totalPages", paginatedData.getTotalPages());
         response.put("currentPage", paginatedData.getNumber() + 1);
+        response.put("itemsPerPage", paginatedData.getSize());
         return response;
     }
 }

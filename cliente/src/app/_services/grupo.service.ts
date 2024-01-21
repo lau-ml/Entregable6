@@ -1,38 +1,41 @@
 import { Injectable } from '@angular/core';
 import {GrupoCreateRequest} from "../_requests/grupoCreateRequest";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {map} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class GrupoService {
-  private perPage: number = 6;
+  private url: string = "http://localhost:8080/grupos";
 
   constructor(private http: HttpClient) { }
 
   createGroup(grupo:GrupoCreateRequest) {
-    return this.http.post<any>("http://localhost:8080/grupo/crear", grupo).pipe(
+    return this.http.post<any>(this.url + "/crear", grupo).pipe(
       map((grupoData) => grupoData)
     );
 
   }
 
-  getPerPages() {
-    return this.perPage;
-  }
 
-  getGroups(page: number) {
+  getGroups(page?: number, categoria?: string, nombre?: string) {
+    const options = {
+      params: new HttpParams()
+        .set('page', page ? page.toString() : '')
+        .set('nombre', nombre || '')
+        .set('categoria', categoria || '')
+    };
 
-    const url = `http://localhost:8080/grupo/todos?page=${page}&pageSize=${this.perPage}`;
 
-    return this.http.get<any>(url).pipe(
+    return this.http.get<any>(this.url,options).pipe(
       map((grupoData) => {
         return {
           grupos: grupoData.grupos, // Ajusta según la estructura real de tu respuesta
           totalItems: grupoData.totalItems,
           totalPages: grupoData.totalPages,
-          currentPage: grupoData.currentPage
+          currentPage: grupoData.currentPage,
+          itemsPerPage: grupoData.itemsPerPage
         };
       }
     ));

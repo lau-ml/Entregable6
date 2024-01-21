@@ -1,9 +1,34 @@
-<button class="btn btn-primary mb-4" data-bs-target="#grupoModal" data-bs-toggle="modal" type="button">
-  Crear Grupo
-</button>
+<div class="d-flex w-100 align-content-end justify-content-end flex-wrap">
+  <form (ngSubmit)="getPage(1)" [formGroup]="groupForm" class="m-2 form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+
+    <div class="input-group d-flex align-items-center">
+      <div class="mr-2">
+        <select formControlName="categoria" required>
+          <option [selected]="true" value="">Todas</option>
+          <option value="FAMILIAR">Familiar</option>
+          <option value="OCIO">Ocio</option>
+          <option value="VIAJE">Viaje</option>
+          <option value="SALIDA">Salida</option>
+
+        </select>
+      </div>
+      <input aria-describedby="basic-addon2" aria-label="Buscar" class="form-control  border-0 small"
+             formControlName="nombre" placeholder="Buscar..." type="text">
+      <div class="input-group-append">
+        <button class="btn btn-primary" type="submit">
+          <i class="fas fa-search fa-sm"></i>
+        </button>
+      </div>
+    </div>
+  </form>
+  <a class="btn btn-primary mb-4" data-bs-target="#grupoModal" data-bs-toggle="modal" type="button">
+    Crear Grupo
+  </a>
+</div>
+
 <div class="row mt-4">
   <div
-    *ngFor="let grupo of grupos | paginate: { id: 'server', itemsPerPage: perPage, currentPage: currentPage, totalItems: totalItems }"
+    *ngFor="let grupo of grupos | paginate: { id: 'server', itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }"
     class="d-flex justify-content-center align-items-center col-lg-4 mb-4">
     <div class="card shadow w-100" style="max-width: 300px;">
       <div class="card-header py-3">
