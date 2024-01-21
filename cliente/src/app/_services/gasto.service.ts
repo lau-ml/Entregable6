@@ -15,7 +15,7 @@ export class GastoService {
   crearGasto(gasto: any) {
 
 
-    return this.httpClient.post("http://localhost:8080/gasto/crear", gasto);
+    return this.httpClient.post("http://localhost:8080/gastos/crear", gasto);
   }
 
   getPerPages() {
@@ -24,7 +24,7 @@ export class GastoService {
 
   getGastos(page: number) {
 
-    const url = `http://localhost:8080/gasto/todos?page=${page}&pageSize=${this.perPage}`;
+    const url = `http://localhost:8080/gastos?page=${page}&pageSize=${this.perPage}`;
 
     return this.httpClient.get<any>(url).pipe(
       map((grupoData) => {

@@ -10,8 +10,7 @@ import {GastoResponse} from "../_responses/gastoResponse";
   styleUrl: './gastos.component.css'
 })
 export class GastosComponent {
-  personas: string[] = ['Usuario 1', 'Usuario 2', 'Usuario 3'];
-  tuFormulario: FormGroup = new FormGroup({});
+  formulario: FormGroup = new FormGroup({});
   imagen: File = new File([], "");
   private id: number = 0;
   gastos: GastoResponse[] = [];
@@ -26,7 +25,7 @@ export class GastosComponent {
   }
 
   ngOnInit() {
-    this.tuFormulario = this.formBuilder.group({
+    this.formulario = this.formBuilder.group({
       monto: ['', Validators.required],
       fecha: ['', Validators.required],
       imagen: ['', Validators.required],
@@ -46,7 +45,7 @@ export class GastosComponent {
 
 
   get personasFormArray() {
-    return this.tuFormulario.get('personas') as FormArray;
+    return this.formulario.get('personas') as FormArray;
   }
 
   agregarUsuario() {
@@ -82,8 +81,8 @@ export class GastosComponent {
   guardarRecibo() {
 
     const formData = new FormData();
-    this.armarGastoRequest(this.tuFormulario);
-    const blob = new Blob([JSON.stringify(this.tuFormulario.value)], {
+    this.armarGastoRequest(this.formulario);
+    const blob = new Blob([JSON.stringify(this.formulario.value)], {
       type: 'application/json'
     });
     formData.append('imagen', this.imagen);
@@ -100,7 +99,7 @@ export class GastosComponent {
         }
         ,
         complete: () => {
-          this.tuFormulario.reset();
+          this.formulario.reset();
           this.getPage(this.currentPage);
         }
       }
@@ -108,39 +107,39 @@ export class GastosComponent {
   }
 
 
-  armarGastoRequest(tuFormularo: FormGroup) {
-    if (!tuFormularo.value.grupoBool) {
-      tuFormularo.value.id_grupo = 0;
+  armarGastoRequest(formulario: FormGroup) {
+    if (!formulario.value.grupoBool) {
+      formulario.value.id_grupo = 0;
     }
-    if (tuFormularo.value.division === 'MONTOIGUAL') {
-      tuFormularo.value.personas.forEach((persona: any) => {
-        persona.monto = tuFormularo.value.monto / tuFormularo.value.personas.length;
+    if (formulario.value.division === 'MONTOIGUAL') {
+      formulario.value.personas.forEach((persona: any) => {
+        persona.monto = formulario.value.monto / formulario.value.personas.length;
       });
-      tuFormularo.value.division = 'MONTO';
+      formulario.value.division = 'MONTO';
     }
-    if (tuFormularo.value.division === 'PORCENTAJEIGUAL') {
-      tuFormularo.value.personas.forEach((persona: any) => {
-        persona.monto = (tuFormularo.value.monto / tuFormularo.value.personas.length) * 100 / tuFormularo.value.monto;
+    if (formulario.value.division === 'PORCENTAJEIGUAL') {
+      formulario.value.personas.forEach((persona: any) => {
+        persona.monto = (formulario.value.monto / formulario.value.personas.length) * 100 / formulario.value.monto;
       });
-      tuFormularo.value.division = 'PORCENTAJE';
+      formulario.value.division = 'PORCENTAJE';
     }
     let suma: number = 0;
-    tuFormularo.value.personas.forEach((persona: any) => {
+    formulario.value.personas.forEach((persona: any) => {
         suma += Number(persona.monto);
 
       }
     );
-    if (tuFormularo.value.division === 'MONTO') {
-      tuFormularo.value.personas.push({nombre: this.id, monto: tuFormularo.value.monto - suma});
+    if (formulario.value.division === 'MONTO') {
+      formulario.value.personas.push({id: this.id, monto: formulario.value.monto - suma});
     } else {
-      tuFormularo.value.personas.push({nombre: this.id, monto: 100 - suma});
+      formulario.value.personas.push({nombre: this.id, monto: 100 - suma});
     }
 
 
   }
 
   resetearForm() {
-    this.tuFormulario.reset();
+    this.formulario.reset();
     this.personasFormArray.clear();
   }
 

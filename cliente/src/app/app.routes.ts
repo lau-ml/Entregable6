@@ -7,9 +7,10 @@ import {RecuperarContraComponent} from "./recuperar-contra/recuperar-contra.comp
 import {GruposComponent} from "./grupos/grupos.component";
 import {AuthGuard} from "./_guards";
 import {NoAuthGuard} from "./_guards/noAuth.guard";
-import {BienvenidaComponent} from "./bienvenida/bienvenida/bienvenida.component";
+import {BienvenidaComponent} from "./bienvenida/bienvenida.component";
 import {GrupoComponent} from "./grupos/grupo.component";
 import {GastosComponent} from "./gastos/gastos.component";
+import {AmigosComponent} from "./amigos/amigos.component";
 
 export const routes: Routes = [
 
@@ -59,6 +60,11 @@ export const routes: Routes = [
   {
     path:'gastos',
     component:GastosComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'amigos',
+    component:AmigosComponent,
     canActivate:[AuthGuard]
   },
   {

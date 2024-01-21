@@ -39,9 +39,10 @@ public class GrupoController {
 
     @RequestMapping(value = "/crear", method = RequestMethod.POST)
     public ResponseEntity<?> crearGrupo(@RequestBody GrupoCreateRequest grupoCreateRequest) throws UsuarioInvalidoException {
-        Usuario user = usuarioService.recuperarUsuario();
+
         Grupo grupo = new Grupo(grupoCreateRequest.getNombre(), grupoCreateRequest.getCategoria(), .0);
         try {
+            Usuario user = usuarioService.recuperarUsuario();
             grupoService.crearGrupo(grupo, user);
             return new ResponseEntity<Grupo>(grupo, HttpStatus.OK);
         } catch (Exception e) {
@@ -52,11 +53,9 @@ public class GrupoController {
     @RequestMapping(value = "/todos", method = RequestMethod.GET)
     public ResponseEntity<?> getGrupos(@RequestParam(defaultValue = "1") int page,
                                        @RequestParam(defaultValue = "10") int pageSize) throws UsuarioInvalidoException {
-        Usuario user = usuarioService.recuperarUsuario();
 
         try {
-            assert user != null;
-
+            Usuario user = usuarioService.recuperarUsuario();
             Page<Grupo> gruposPaginados = grupoService.recuperarGruposPaginados(user.getId(), page - 1, pageSize);
 
             List<GrupoDTO> grupoDTOs = gruposPaginados.stream()
@@ -74,13 +73,11 @@ public class GrupoController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> verGrupo(@PathVariable("id") long id) throws UsuarioInvalidoException {
-        Usuario user = usuarioService.recuperarUsuario();
+
         try {
-            assert user != null;
+            Usuario user = usuarioService.recuperarUsuario();
             Grupo grupo = grupoService.recuperar(id);
-            if (grupoService.usuarioPerteneciente(grupo, user) == null) {
-                return new ResponseEntity<String>("El usuario no pertenece al grupo", HttpStatus.UNAUTHORIZED);
-            }
+            grupoService.usuarioPerteneciente(grupo, user);
             return new ResponseEntity<GrupoDTO>(mapper.grupoDTO(grupo), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<String>("Error al recuperar grupo", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -89,15 +86,11 @@ public class GrupoController {
 
     @RequestMapping(value = "/{id}/actualizar", method = RequestMethod.PUT)
     public ResponseEntity<?> actulizarGrupo(@RequestBody GrupoUpdateRequest grupoUpdateRequest, HttpSession httpSession, @PathVariable("id") long id) throws UsuarioInvalidoException {
-        Usuario user = usuarioService.recuperarUsuario();
+
         try {
             Grupo grupo = grupoService.recuperar(id);
-            assert user != null;
-            if (grupoService.usuarioPerteneciente(grupo, user) == null) {
-                return new ResponseEntity<String>("El usuario no pertenece al grupo", HttpStatus.UNAUTHORIZED);
-            }
-            grupo.setNombre(grupoUpdateRequest.getNombre());
-            grupo.setCategoria(grupoUpdateRequest.getCategoria());
+            Usuario user = usuarioService.recuperarUsuario();
+            grupoService.actualizarGrupo(grupo, grupoUpdateRequest, user);
             grupoService.actualizar(grupo);
             return new ResponseEntity<GrupoDTO>(mapper.grupoDTO(grupo), HttpStatus.OK);
         } catch (Exception e) {
@@ -111,8 +104,9 @@ public class GrupoController {
         if (user_id == null) {
             return new ResponseEntity<String>("No hay usuario conectado", HttpStatus.UNAUTHORIZED);
         }
-        Usuario user = usuarioService.recuperar(user_id);
+
         try {
+            Usuario user = usuarioService.recuperar(user_id);
             Usuario usuario = usuarioService.recuperar(id_usuario);
             if (usuario == null) {
                 return new ResponseEntity<String>("El usuario no existe", HttpStatus.BAD_REQUEST);
@@ -135,8 +129,9 @@ public class GrupoController {
         if (user_id == null) {
             return new ResponseEntity<String>("No hay usuario conectado", HttpStatus.UNAUTHORIZED);
         }
-        Usuario user = usuarioService.recuperar(user_id);
+
         try {
+            Usuario user = usuarioService.recuperar(user_id);
             Usuario usuario = usuarioService.recuperar(id_usuario);
             if (usuario == null) {
                 return new ResponseEntity<String>("El usuario no existe", HttpStatus.BAD_REQUEST);
@@ -156,10 +151,10 @@ public class GrupoController {
     @RequestMapping(value = "/{id}/gastos", method = RequestMethod.GET)
     public ResponseEntity<?> getGastos(@PathVariable("id") long id) throws UsuarioInvalidoException {
 
-        Usuario user = usuarioService.recuperarUsuario();
+
         try {
+            Usuario user = usuarioService.recuperarUsuario();
             Grupo grupo = grupoService.recuperar(id);
-            assert user != null;
             if (grupoService.usuarioPerteneciente(grupo, user) == null) {
                 return new ResponseEntity<String>("El usuario no pertenece al grupo", HttpStatus.UNAUTHORIZED);
             }

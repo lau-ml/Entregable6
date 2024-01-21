@@ -24,7 +24,7 @@ public class Mapper {
 
         return GastoGrupoDTO.builder()
                 .id(gasto.getId())
-                .nombre(gasto.getNombre())
+                .nombreGrupo(gasto.getGrupo().getNombre())
                 .monto(gasto.getMonto())
                 .id_grupo(gasto.getGrupo().getId())
                 .tipo(gasto.getTipo())

@@ -3,6 +3,8 @@ package ttps.java.entregable6_v2.servicios;
 import jakarta.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import ttps.java.entregable6_v2.excepciones.GrupoException;
+import ttps.java.entregable6_v2.helpers.requests.grupos.GrupoUpdateRequest;
 import ttps.java.entregable6_v2.modelos.Gasto;
 import ttps.java.entregable6_v2.modelos.Grupo;
 import ttps.java.entregable6_v2.modelos.Usuario;
@@ -27,46 +29,49 @@ public class GrupoService {
     }
 
 
-    public Grupo recuperar(Long id) throws Exception {
+    public Grupo recuperar(Long id) {
         return dao.findById(id).orElse(null);
     }
 
 
-    public boolean actualizar(Grupo entity) throws Exception {
+    public void actualizar(Grupo entity) throws Exception {
 
-        Grupo grupo = dao.findById(entity.getId()).orElse(null);
-        if (grupo != null) {
-            dao.save(entity);
-            return true;
-        } else {
-            return false;
-        }
+        Grupo grupo = this.recuperar(entity.getId());
+        dao.save(entity);
     }
 
 
-    public Usuario usuarioPerteneciente(Grupo grupo, Usuario usuario) {
+
+    public Usuario usuarioPerteneciente(Grupo grupo, Usuario usuario) throws GrupoException {
 
         try {
             return dao.usuarioPerteneciente(grupo.getId(), usuario.getId());
         } catch (NoResultException e) {
-            return null;
+            throw new GrupoException("El usuario no pertenece al grupo");
         }
 
     }
 
+    public void actualizarGrupo(Grupo grupo, GrupoUpdateRequest grupoRequest, Usuario user) throws Exception {
+        this.usuarioPerteneciente(grupo, user);
+        grupo.setNombre(grupoRequest.getNombre());
+        grupo.setCategoria(grupoRequest.getCategoria());
+        this.actualizar(grupo);
+    }
 
-    public void crearGrupo(Grupo grupo, Usuario usuario) throws Exception {
+
+    public void crearGrupo(Grupo grupo, Usuario usuario) throws GrupoException {
         try {
             Grupo grupo_persistido = persistir(grupo);
             Usuario usuarioConGrupos = usuarioDAO.recuperarConGrupos(usuario.getId());
             usuarioConGrupos.agregarGrupo(grupo_persistido);
             usuarioDAO.save(usuarioConGrupos);
         } catch (Exception e) {
-            throw new Exception("Error al crear grupo");
+            throw new GrupoException("Error al crear grupo");
         }
     }
 
-    public List<Gasto> recuperarTodosLosGastos(long id) throws Exception {
+    public List<Gasto> recuperarTodosLosGastos(long id)  {
         return dao.recuperarTodosLosGastos(id);
     }
 

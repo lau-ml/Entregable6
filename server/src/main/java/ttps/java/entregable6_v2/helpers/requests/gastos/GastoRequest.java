@@ -28,33 +28,31 @@ public class GastoRequest {
     private Division division;
     private List<PersonaGasto> personas;
 
-    public boolean isValid() {
+    public void isValid() {
         if (getPersonas() == null || getPersonas().isEmpty()) {
-            return false;
+            throw new IllegalArgumentException("No se puede crear un gasto sin participantes");
         }
-        if(getPersonas().stream().map(PersonaGasto::getNombre).collect(Collectors.toUnmodifiableSet()).size() != getPersonas().size()){
-            return false;
+        if (getPersonas().stream().map(PersonaGasto::getId).collect(Collectors.toUnmodifiableSet()).size() != getPersonas().size()) {
+            throw new IllegalArgumentException("No se puede crear un gasto con participantes repetidos");
         }
 
-        if (getFecha() == null ) {
-            return false;
+        if (getFecha() == null) {
+            throw new IllegalArgumentException("No se puede crear un gasto sin fecha");
         }
         if (getTipo() == null) {
-            return false;
+            throw new IllegalArgumentException("No se puede crear un gasto sin tipo");
         }
         if (getMonto() <= 0) {
-            return false;
+            throw new IllegalArgumentException("No se puede crear un gasto con monto menor o igual a 0");
         }
         if (getDivision() == null)
-            return false;
-
-
+            throw new IllegalArgumentException("No se puede crear un gasto sin division");
         if (getDivision() == Division.MONTO) {
-            return getMonto() == getPersonas().stream().map(PersonaGasto::getMonto).reduce(0.0, Double::sum);
+            if (!(getMonto() == getPersonas().stream().map(PersonaGasto::getMonto).reduce(0.0, Double::sum)))
+                throw new IllegalArgumentException("La suma de los montos de los participantes debe ser igual al monto del gasto");
         } else {
-            return getPersonas().stream().map(PersonaGasto::getMonto).reduce(0.0, Double::sum) == 100;
+            if (!(getPersonas().stream().map(PersonaGasto::getMonto).reduce(0.0, Double::sum) == 100))
+                throw new IllegalArgumentException("La suma de los porcentajes de los participantes debe ser igual a 100");
         }
-
-
     }
 }

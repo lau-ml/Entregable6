@@ -3,6 +3,7 @@ package ttps.java.entregable6_v2.servicios;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import net.bytebuddy.utility.RandomString;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ttps.java.entregable6_v2.excepciones.UsuarioInvalidoException;
+import ttps.java.entregable6_v2.helpers.requests.gastos.GastoRequest;
 import ttps.java.entregable6_v2.helpers.requests.usuarios.*;
 import ttps.java.entregable6_v2.modelos.Usuario;
 import ttps.java.entregable6_v2.repository.UsuarioJPA;
@@ -20,8 +22,7 @@ import ttps.java.entregable6_v2.response.MessageResponse;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -41,18 +42,15 @@ public class UsuarioService {
 
         Usuario usuarioByEmail = dao.findByEmail(request.getEmail());
         Optional<Usuario> usuarioByUsuario = dao.findByUsuario(request.getUsername());
-
         if (usuarioByEmail != null && usuarioByUsuario.isPresent()) {
             throw new UsuarioInvalidoException("El mail y/o el usuario ingresado ya existe");
         }
-
         if (usuarioByEmail != null) {
             throw new UsuarioInvalidoException("El mail ingresado ya existe");
         }
         if (usuarioByUsuario.isPresent()) {
             throw new UsuarioInvalidoException("El usuario ingresado ya existe");
         }
-
 
         String randomCode = RandomString.make(64);
         Usuario entity = Usuario
@@ -179,10 +177,22 @@ public class UsuarioService {
         }
     }
 
-    public Usuario recuperarUsuario(){
+
+    public void usuariosValoresGasto(GastoRequest gastoRequest, Set<Usuario> usuarios, Map<Usuario, Double> valores) throws UsuarioInvalidoException {
+
+        for (int i = 0; i < gastoRequest.getPersonas().size(); i++) {
+            Usuario aux = this.recuperar(gastoRequest.getPersonas().get(i).getId());
+            if (aux == null) {
+                throw new UsuarioInvalidoException("Los usuarios ingresados no son válidos");
+            }
+            usuarios.add(aux);
+            valores.put(aux, gastoRequest.getPersonas().get(i).getMonto());
+        }
+    }
+    public Usuario recuperarUsuario() throws UsuarioInvalidoException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        Usuario user = findByUsername(username).orElse(null);
-        return user;
+        return findByUsername(username).orElseThrow(() -> new UsuarioInvalidoException("Usuario invalido"));
+
     }
 }

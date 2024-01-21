@@ -1,5 +1,6 @@
 export interface GastoResponse {
     id: number;
+    nombreGrupo: string;
     monto: number;
     fecha: string;
     imagen: string;

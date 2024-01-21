@@ -6,7 +6,7 @@ import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {AppComponent} from './app.component';
 import {routing} from './app.routes';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-
+import {AmigosComponent} from "./amigos/amigos.component";
 import {JwtInterceptor, ErrorInterceptor} from './_helpers';
 import {LoginComponent} from './login';
 import {NavComponent} from "./nav/nav.component";
@@ -19,7 +19,7 @@ import {RecuperarContraComponent} from "./recuperar-contra/recuperar-contra.comp
 import {GruposComponent} from "./grupos/grupos.component";
 import {AuthGuard} from "./_guards";
 import {NoAuthGuard} from "./_guards/noAuth.guard";
-import {BienvenidaComponent} from "./bienvenida/bienvenida/bienvenida.component";
+import {BienvenidaComponent} from "./bienvenida/bienvenida.component";
 import {NgxPaginationModule} from "ngx-pagination";
 import {GrupoComponent} from "./grupos/grupo.component";
 import {SaldoCardComponent} from "./saldo/saldo-card.component";
@@ -49,7 +49,8 @@ import {GastosComponent} from "./gastos/gastos.component";
     RecuperarContraComponent,
     GruposComponent,
     BienvenidaComponent,
-    GrupoComponent
+    GrupoComponent,
+    AmigosComponent
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},

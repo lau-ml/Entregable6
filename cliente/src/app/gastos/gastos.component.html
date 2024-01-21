@@ -48,8 +48,8 @@
             <div class="text-truncate" ngbTooltip="{{integrante}}">{{ integrante }}</div>
           </td>
 
-          <td *ngIf="!gasto.id_grupo">-</td>
-          <td *ngIf="gasto.id_grupo">{{ gasto.id_grupo }}</td>
+          <td *ngIf="!gasto.nombreGrupo">-</td>
+          <td *ngIf="gasto.nombreGrupo">{{ gasto.nombreGrupo }}</td>
           <td>{{ gasto.monto }}</td>
           <td>{{ gasto.fecha | date:'dd/MM/yyyy' }}</td>
 
@@ -69,8 +69,13 @@
 
 
           </td>
-          <td><a download href="/assets/{{gasto.imagen}}"> <i class="fa-regular fa-file"></i> </a> <i
-            class="fa-solid fa-pen-to-square"></i></td>
+          <td>
+            <a download href="/assets/{{gasto.imagen}}">
+              <i class="fa-regular fa-file"></i> Comprobante
+            </a>
+
+          </td>
+
         </tr>
 
         </tbody>
@@ -92,7 +97,7 @@
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="tuFormulario" enctype="multipart/form-data">
+        <form [formGroup]="formulario" enctype="multipart/form-data">
           <div class="form-group">
             <label for="monto">Monto del gasto:</label>
             <input class="form-control" formControlName="monto" id="monto" type="number">
@@ -111,7 +116,7 @@
             <input formControlName="grupoBool" id="grupoBool" type="checkbox">
 
           </div>
-          <div class="form-group" *ngIf="tuFormulario.get('grupoBool')?.value">
+          <div class="form-group" *ngIf="formulario.get('grupoBool')?.value">
             <label for="id_grupo">Nombre del grupo</label>
             <input class="form-control" formControlName="id_grupo" id="id_grupo" type="text">
 
@@ -151,9 +156,10 @@
                 <input [attr.id]="'nombre' + i" class="form-control" formControlName="nombre" type="text">
               </div>
               <div
-                *ngIf="tuFormulario.get('division')?.value != 'MONTOIGUAL' && tuFormulario.get('division')?.value !='PORCENTAJEIGUAL' "
+                *ngIf="formulario.get('division')?.value != 'MONTOIGUAL' && formulario.get('division')?.value !='PORCENTAJEIGUAL' "
                 class="col-4">
-                <label [attr.for]="'monto' + i">Monto:</label>
+
+                <label *ngIf="formulario.get('division')?.value" [attr.for]="'monto' + i">Monto:</label>
 
                 <input [attr.id]="'monto' + i" class="form-control" formControlName="monto" type="text">
               </div>
