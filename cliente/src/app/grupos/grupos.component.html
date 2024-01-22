@@ -56,9 +56,16 @@
     </div>
   </div>
 
-  <div class="has-text-centered">
+  <div  *ngIf="totalItems!=0" class="has-text-centered">
     <div [ngClass]="{ 'hidden': !loading }" class="spinner"></div>
     <pagination-controls (pageChange)="getPage($event)" id="server"></pagination-controls>
+  </div>
+</div>
+<div *ngIf="totalItems==0" class="card-body">
+  <div class="text-center">
+    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
+         src="/assets/8961448_3973477.svg" alt="...">
+    <p>No se encontraron resultados</p>
   </div>
 </div>
 <div aria-hidden="true" aria-labelledby="grupoModalLabel" class="modal fade" id="grupoModal" role="dialog"

@@ -39,7 +39,10 @@ export class GrupoService {
             itemsPerPage: grupoData.itemsPerPage
           };
         }
-      ));
+
+      )
+
+    );
   }
 
   getGroup(id: number) {

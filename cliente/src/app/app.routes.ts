@@ -9,7 +9,7 @@ import {AuthGuard} from "./_guards";
 import {NoAuthGuard} from "./_guards/noAuth.guard";
 import {BienvenidaComponent} from "./bienvenida/bienvenida.component";
 import {GrupoComponent} from "./grupos/grupo.component";
-import {GastosComponent} from "./gastos/gastos.component";
+import {GastosComponent} from "./gasto/gastos/gastos.component";
 import {AmigosComponent} from "./amigos/amigos.component";
 
 export const routes: Routes = [

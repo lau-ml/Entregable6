@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {GastoService} from "../_services/gasto.service";
-import {UsuarioService} from "../_services/usuario.service";
-import {GastoResponse} from "../_responses/gastoResponse";
+import {GastoService} from "../../_services/gasto.service";
+import {UsuarioService} from "../../_services/usuario.service";
+import {GastoResponse} from "../../_responses/gastoResponse";
 
 @Component({
   selector: 'app-gastos',

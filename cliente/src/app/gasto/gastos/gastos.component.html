@@ -83,10 +83,17 @@
     </div>
 
   </div>
-  <div class="has-text-centered">
+
+  <div *ngIf="totalItems!=0" class="has-text-centered">
     <div [ngClass]="{ 'hidden': !loading }" class="spinner"></div>
     <pagination-controls (pageChange)="getPage($event)" id="server"></pagination-controls>
   </div>
+  <div *ngIf="totalItems==0" class="card-body">
+    <div class="text-center">
+      <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
+           src="https://image.flaticon.com/icons/png/512/2919/2919600.png" alt="...">
+      <p>No se encontraron resultados</p>
+    </div>
 </div>
 
 <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="cargarRecibo" tabindex="-1">

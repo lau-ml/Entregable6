@@ -60,22 +60,35 @@ export class GruposComponent implements OnInit {
 
   getPage(page: number) {
     this.loading = true;
-    this.grupoService.getGroups(page, this.groupForm.get('categoria')?.value ?? '', this.groupForm.get('nombre')?.value ?? '').subscribe(
-      {
-        next: (data) => {
-          this.grupos = data.grupos;
-          this.totalItems = data.totalItems;
-          this.totalPages = data.totalPages;
-          this.currentPage = data.currentPage;
-          this.itemsPerPage = data.itemsPerPage;
 
-        },
-        error: (error) => {
-          console.log(error)
-        }
-      }
-    )
+    const categoria = this.groupForm.get('categoria')?.value ?? '';
+    const nombre = this.groupForm.get('nombre')?.value ?? '';
+
+    this.grupoService.getGroups(page, categoria, nombre).subscribe({
+      next: ({ grupos, totalItems, totalPages, currentPage, itemsPerPage }) => {
+        this.grupos = grupos;
+        this.totalItems = totalItems;
+        this.totalPages = totalPages;
+        this.currentPage = currentPage;
+        this.itemsPerPage = itemsPerPage;
+      },
+      error: (error) => {
+        console.error(error);
+      },
+      complete: () => {
+        this.loading = false;
+        this.updateQueryParams(page, nombre, categoria);
+      },
+    });
   }
+  updateQueryParams(page: number, nombre: string, categoria: string) {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { page, nombre, categoria },
+      queryParamsHandling: 'merge',
+    });
+  }
+
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {

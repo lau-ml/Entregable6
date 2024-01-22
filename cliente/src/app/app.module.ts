@@ -6,7 +6,7 @@ import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 
 import {HttpParams} from "@angular/common/http";
 
-
+import {MiPerfilVisualizarComponent} from "./mi-perfil/mi-perfil-visualizar/mi-perfil-visualizar.component";
 import {AppComponent} from './app.component';
 import {routing} from './app.routes';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -28,7 +28,7 @@ import {NgxPaginationModule} from "ngx-pagination";
 import {GrupoComponent} from "./grupos/grupo.component";
 import {SaldoCardComponent} from "./saldo/saldo-card.component";
 import {HomeComponent} from "./home/home.component";
-import {GastosComponent} from "./gastos/gastos.component";
+import {GastosComponent} from "./gasto/gastos/gastos.component";
 @NgModule({
   imports: [
     BrowserModule,
@@ -56,6 +56,7 @@ import {GastosComponent} from "./gastos/gastos.component";
     BienvenidaComponent,
     GrupoComponent,
     AmigosComponent,
+    MiPerfilVisualizarComponent
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
