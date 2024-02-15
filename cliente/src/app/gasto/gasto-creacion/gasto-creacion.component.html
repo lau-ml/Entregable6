@@ -1,1 +1,93 @@
-<p>gasto-creacion works!</p>
+<div id="cargarRecibo" >
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Cargar Recibo</h4>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="formulario" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="monto">Monto del gasto:</label>
+            <input class="form-control" formControlName="monto" id="monto" type="number">
+          </div>
+          <div class="form-group">
+            <label for="fecha">Fecha del gasto:</label>
+            <input class="form-control" formControlName="fecha" id="fecha" type="date">
+          </div>
+          <div class="form-group">
+            <label for="imagen">Imagen asociada:</label>
+            <input (change)="onChange($event)" class="form-control" formControlName="imagen" id="imagen" type="file"
+                   accept="image/*">
+          </div>
+          <div class="form-group">
+            <label for="grupoBool">¿Es un gasto grupal?</label>
+            <input formControlName="grupoBool" id="grupoBool" type="checkbox">
+
+          </div>
+          <div class="form-group" *ngIf="formulario.get('grupoBool')?.value">
+            <label for="id_grupo">Nombre del grupo</label>
+            <input class="form-control" formControlName="id_grupo" id="id_grupo" type="text">
+
+          </div>
+
+
+          <div class="form-group">
+            <label for="division">Forma de dividir el gasto entre integrantes:</label>
+            <select class="form-control" formControlName="division" id="division">
+              <option value="PORCENTAJE">Porcentaje por integrante</option>
+              <option value="MONTOIGUAL">Igual monto para todos</option>
+              <option value="MONTO">Montos fijos por integrante</option>
+              <option value="PORCENTAJEIGUAL">Igual % para todos</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="tipo">Tipo de gasto:</label>
+            <select class="form-control" formControlName="tipo" id="tipo">
+              <option value="COMIDA">Comida</option>
+              <option value="COMBUSTIBLE">Combustible</option>
+              <option value="ALOJAMIENTO">Alojamiento</option>
+              <option value="ENTRADAS">Entradas</option>
+            </select>
+          </div>
+
+
+          <div class="form-group">
+            <button (click)="agregarUsuario()" class="btn btn-primary" type="button">Agregar Usuario</button>
+          </div>
+          <div *ngFor="let usuario of personasFormArray.controls; let i = index"
+               formArrayName="personas">
+            <div [formGroupName]="i" class="d-flex flex-row">
+              <div class="col-4">
+                <label [attr.for]="'nombre' + i">Nombre:</label>
+
+                <input [attr.id]="'nombre' + i" class="form-control" formControlName="nombre" type="text">
+              </div>
+              <div
+                *ngIf="formulario.get('division')?.value != 'MONTOIGUAL' && formulario.get('division')?.value !='PORCENTAJEIGUAL' "
+                class="col-4">
+
+                <label *ngIf="formulario.get('division')?.value" [attr.for]="'monto' + i">Monto:</label>
+
+                <input [attr.id]="'monto' + i" class="form-control" formControlName="monto" type="text">
+              </div>
+              <div class="col-2">
+                <button (click)="eliminarUsuario(i)" class="btn btn-primary" type="button">Eliminar integrante
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button (click)="resetearForm()" class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cerrar
+        </button>
+        <button (click)="guardarRecibo()" class="btn btn-primary" data-bs-dismiss="modal" type="button">Guardar Recibo
+        </button>
+
+      </div>
+    </div>
+  </div>
+</div>
