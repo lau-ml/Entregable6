@@ -29,6 +29,7 @@ import {GrupoComponent} from "./grupos/grupo.component";
 import {SaldoCardComponent} from "./saldo/saldo-card.component";
 import {HomeComponent} from "./home/home.component";
 import {GastosComponent} from "./gasto/gastos/gastos.component";
+import {GastoCreacionComponent} from "./gasto/gasto-creacion/gasto-creacion.component";
 @NgModule({
   imports: [
     BrowserModule,
@@ -56,7 +57,8 @@ import {GastosComponent} from "./gasto/gastos/gastos.component";
     BienvenidaComponent,
     GrupoComponent,
     AmigosComponent,
-    MiPerfilVisualizarComponent
+    MiPerfilVisualizarComponent,
+    GastoCreacionComponent
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},

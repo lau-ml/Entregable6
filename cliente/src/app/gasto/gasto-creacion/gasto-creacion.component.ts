@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import {NgForOf, NgIf} from "@angular/common";
 import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {GastoResponse} from "../../_responses/gastoResponse";
 import {GastoService} from "../../_services/gasto.service";
@@ -7,12 +6,7 @@ import {UsuarioService} from "../../_services/usuario.service";
 
 @Component({
   selector: 'app-gasto-creacion',
-  standalone: true,
-  imports: [
-    NgForOf,
-    NgIf,
-    ReactiveFormsModule
-  ],
+
   templateUrl: './gasto-creacion.component.html',
   styleUrl: './gasto-creacion.component.css'
 })
