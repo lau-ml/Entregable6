@@ -1,4 +1,4 @@
-<div id="cargarRecibo" >
+<div id="cargarRecibo">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -26,8 +26,10 @@
 
           </div>
           <div class="form-group" *ngIf="formulario.get('grupoBool')?.value">
-            <label for="id_grupo">Nombre del grupo</label>
-            <input class="form-control" formControlName="id_grupo" id="id_grupo" type="text">
+            <label for="id_grupo">Grupo</label>
+            <select  class="form-control" formControlName="id_grupo" id="id_grupo">
+              <option  *ngFor="let grupo of grupos" [value]="grupo.id">{{grupo.nombre}}</option>
+            </select>
 
           </div>
 
@@ -51,38 +53,46 @@
               <option value="ENTRADAS">Entradas</option>
             </select>
           </div>
+          <div *ngIf="formulario.get('division')?.value && formulario.get('tipo')?.value"  >
 
+            <div class="form-group">
+              <label for="responsable">Responsable: </label>
+              <input class="form-control" formControlName="responsable" id="responsable">
+            </div>
 
-          <div class="form-group">
-            <button (click)="agregarUsuario()" class="btn btn-primary" type="button">Agregar Usuario</button>
-          </div>
-          <div *ngFor="let usuario of personasFormArray.controls; let i = index"
-               formArrayName="personas">
-            <div [formGroupName]="i" class="d-flex flex-row">
-              <div class="col-4">
-                <label [attr.for]="'nombre' + i">Nombre:</label>
+            <div class="form-group">
+              <button (click)="agregarUsuario()" class="btn btn-primary" type="button">Agregar Usuario</button>
+            </div>
+            <div *ngFor="let usuario of personasFormArray.controls; let i = index"
+                 formArrayName="personas">
+              <div [formGroupName]="i" class="d-flex flex-row">
+                <div class="col-4">
+                  <label [attr.for]="'nombre' + i">Nombre:</label>
 
-                <input [attr.id]="'nombre' + i" class="form-control" formControlName="nombre" type="text">
+                  <input [attr.id]="'nombre' + i" class="form-control" formControlName="nombre" type="text">
+                </div>
+                <div
+                  *ngIf="formulario.get('division')?.value != 'MONTOIGUAL' && formulario.get('division')?.value !='PORCENTAJEIGUAL' "
+                  class="col-4">
+
+                  <label *ngIf="formulario.get('division')?.value == 'MONTO'" [attr.for]="'monto' + i">Monto:</label>
+                  <label *ngIf="formulario.get('division')?.value == 'PORCENTAJE'"
+                         [attr.for]="'monto' + i">Porcentaje:</label>
+
+                  <input [attr.id]="'monto' + i" class="form-control" formControlName="monto" type="text">
+                </div>
+                <div class="col-2">
+                  <button (click)="eliminarUsuario(i)" class="btn btn-primary" type="button">Eliminar integrante
+                  </button>
+                </div>
+
               </div>
-              <div
-                *ngIf="formulario.get('division')?.value != 'MONTOIGUAL' && formulario.get('division')?.value !='PORCENTAJEIGUAL' "
-                class="col-4">
-
-                <label *ngIf="formulario.get('division')?.value" [attr.for]="'monto' + i">Monto:</label>
-
-                <input [attr.id]="'monto' + i" class="form-control" formControlName="monto" type="text">
-              </div>
-              <div class="col-2">
-                <button (click)="eliminarUsuario(i)" class="btn btn-primary" type="button">Eliminar integrante
-                </button>
-              </div>
-
             </div>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button (click)="resetearForm()" class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cerrar
+        <button (click)="resetearForm()" class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancelar
         </button>
         <button (click)="guardarRecibo()" class="btn btn-primary" data-bs-dismiss="modal" type="button">Guardar Recibo
         </button>

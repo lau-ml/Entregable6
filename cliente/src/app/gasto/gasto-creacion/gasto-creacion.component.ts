@@ -3,6 +3,8 @@ import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from
 import {GastoResponse} from "../../_responses/gastoResponse";
 import {GastoService} from "../../_services/gasto.service";
 import {UsuarioService} from "../../_services/usuario.service";
+import {GrupoResponse} from "../../_responses/grupoResponse";
+import {GrupoService} from "../../_services/grupo.service";
 
 @Component({
   selector: 'app-gasto-creacion',
@@ -15,6 +17,7 @@ export class GastoCreacionComponent {
   imagen: File = new File([], "");
   private id: number = 0;
   gastos: GastoResponse[] = [];
+  grupos: GrupoResponse[] =[];
   totalItems: number = 0;
   totalPages: number = 0;
   currentPage: number = 0;
@@ -22,7 +25,7 @@ export class GastoCreacionComponent {
   itemsPerPage: number = 0;
 
   constructor(private formBuilder: FormBuilder, private gastoService: GastoService,
-              private usuarioService: UsuarioService) {
+              private usuarioService: UsuarioService, private grupoService:GrupoService) {
   }
 
   ngOnInit() {
@@ -39,6 +42,11 @@ export class GastoCreacionComponent {
     this.usuarioService.getUsuario().subscribe({
       next: (data) => {
         this.id = data.id;
+      }
+    })
+    this.grupoService.getGroups().subscribe({
+      next:(data)=>{
+        this.grupos=data.grupos;
       }
     })
   }
