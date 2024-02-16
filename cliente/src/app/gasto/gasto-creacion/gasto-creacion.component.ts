@@ -143,4 +143,9 @@ export class GastoCreacionComponent {
       this.imagen = new File([], "");
     }
   }
+
+  cambioGrupo($event: Event) {
+
+
+  }
 }
