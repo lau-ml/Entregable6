@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
-
+import {MatSelectModule} from '@angular/material/select';
 
 import {HttpParams} from "@angular/common/http";
 
@@ -35,7 +35,7 @@ import {GastoCreacionComponent} from "./gasto/gasto-creacion/gasto-creacion.comp
     BrowserModule,
     ReactiveFormsModule,
     HttpClientModule,
-
+    MatSelectModule,
     NgbModule,
     routing,
     SweetAlert2Module.forRoot(),

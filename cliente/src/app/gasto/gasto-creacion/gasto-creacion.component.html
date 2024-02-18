@@ -43,7 +43,8 @@
               <option value="ENTRADAS">Entradas</option>
             </select>
           </div>
-          <div *ngIf="formulario.get('division')?.value!='--Seleccione una opción--' && formulario.get('tipo')?.value !='--Seleccione una opción--'">
+          <div
+            *ngIf="formulario.get('division')?.value!='--Seleccione una opción--' && formulario.get('tipo')?.value !='--Seleccione una opción--'">
 
 
             <div class="form-group">
@@ -53,7 +54,7 @@
             </div>
             <div class="form-group" *ngIf="formulario.get('grupoBool')?.value">
               <label for="id_grupo">Grupo</label>
-              <select  (change)="cambioGrupo($event)" class="form-control" formControlName="id_grupo" id="id_grupo">
+              <select (change)="cambioGrupo($event)" class="form-control" formControlName="id_grupo" id="id_grupo">
                 <option disabled>--Seleccione una opción--</option>
                 <option *ngFor="let grupo of grupos" [value]="grupo.id">{{ grupo.nombre }}</option>
               </select>
@@ -72,9 +73,13 @@
                 <div class="col-4">
                   <label [attr.for]="'nombre' + i">Usuario:</label>
 
-                  <select  (focus)="antesCambioUsuario($event, i)" (change)="cambioUsuario($event, i)" [attr.id]="'nombre' + i" class="form-control" formControlName="nombre">
+                  <select (focus)="antesCambioUsuario($event, i)" (change)="cambioUsuario($event, i)"
+                          [attr.id]="'nombre' + i" class="form-control" formControlName="nombre">
                     <option selected disabled>--Seleccione una opción--</option>
-                    <option  *ngFor="let persona of integrantes; let j=index">{{ persona }}</option>
+                    <option [disabled]="chequearSeleccionado(persona,i)"
+                            *ngFor="let persona of integrantes; let j=index"
+                            [value]="persona">{{ persona }}
+                    </option>
                   </select>
                 </div>
                 <div

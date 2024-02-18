@@ -26,9 +26,7 @@ export class GastoCreacionComponent {
   loading: boolean = true;
   itemsPerPage: number = 0;
   previousValue: string = "";
-  cargados: Set<number> = new Set<number>();
-  seleccionados: Set<string> = new Set<string>();
-
+  seleccionCargado: Map<string, number> = new Map<string, number>();
   constructor(private formBuilder: FormBuilder, private gastoService: GastoService,
               private usuarioService: UsuarioService, private grupoService: GrupoService) {
   }
@@ -74,12 +72,7 @@ export class GastoCreacionComponent {
   }
 
   eliminarUsuario(index: number) {
-    this.getAllIntegrantesOptions().forEach((option: HTMLOptionElement) => {
-      if (option.value === this.personasFormArray.at(index).get('nombre')?.value)
-        option.disabled = false;
-    });
-    this.cargados.delete(this.cargados.size - 1);
-    this.seleccionados.delete(this.personasFormArray.at(index).get('nombre')?.value);
+    this.seleccionCargado.delete(this.personasFormArray.at(index).get('nombre')?.value);
     this.personasFormArray.removeAt(index);
   }
 
@@ -165,44 +158,16 @@ export class GastoCreacionComponent {
 
   cambioUsuario($event: any, i: number) {
     const selectedValue = $event.target.value;
-    const personasFormArray = this.personasFormArray as FormArray;
-    personasFormArray.controls.forEach((control, index) => {
-      const otroSelect = control.get('nombre');
-      if (otroSelect) {
-        const options = this.getIntegrantesOptions(index); // Obtener las opciones
-        options.forEach((option: HTMLOptionElement) => {
-          if (option.value === selectedValue && index != i) {
-            option.disabled = true; // Deshabilitar la opción seleccionada en otros selects
-          }
-          if (option.value === this.previousValue && this.previousValue !== "--Seleccione una opción--") {
-            option.disabled = false; // Habilitar la opción anteriormente seleccionada
-          }
-        });
-      }
-    });
-    this.seleccionados.add(selectedValue);
-    this.seleccionados.delete(this.previousValue);
+    this.seleccionCargado.delete(this.previousValue);
+    this.seleccionCargado.set(selectedValue, i);
   }
-
-
-  getIntegrantesOptions(i: number): NodeListOf<HTMLOptionElement> {
-    return document.querySelectorAll(`[id="nombre${i}"] option`);
-  }
-
-  getAllIntegrantesOptions(): NodeListOf<HTMLOptionElement> {
-    return document.querySelectorAll(`[id^="nombre"] option`);
-  }
-
 
   antesCambioUsuario($event: any, i: number) {
-    if (!this.cargados.has(i)) {
-      this.cargados.add(i);
-      const options = this.getIntegrantesOptions(i);
-      options.forEach((option: HTMLOptionElement) => {
-        option.disabled = option.value == "--Seleccione una opción--" || this.seleccionados.has(option.value);
-      });
-    }
     this.previousValue = $event.target.value;
   }
 
+  chequearSeleccionado(persona: string, i: number) {
+
+    return this.seleccionCargado.get(persona) != i && this.seleccionCargado.get(persona) != undefined;
+  }
 }
