@@ -1,5 +1,6 @@
 package ttps.java.entregable6_v2.modelos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,6 +36,7 @@ public class Usuario implements UserDetails {
     private String apellido;
     @Column(unique = true)
     private String usuario;
+    @JsonIgnore
     private String contrasena;
     @Column(unique = true)
     private String email;

@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {Component} from '@angular/core';
+import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {GastoResponse} from "../../_responses/gastoResponse";
 import {GastoService} from "../../_services/gasto.service";
 import {UsuarioService} from "../../_services/usuario.service";
@@ -15,17 +15,22 @@ import {GrupoService} from "../../_services/grupo.service";
 export class GastoCreacionComponent {
   formulario: FormGroup = new FormGroup({});
   imagen: File = new File([], "");
-  private id: number = 0;
+  private usuario: any;
+  integrantes: string[] = [];
   gastos: GastoResponse[] = [];
-  grupos: GrupoResponse[] =[];
+  grupos: GrupoResponse[] = [];
+
   totalItems: number = 0;
   totalPages: number = 0;
   currentPage: number = 0;
   loading: boolean = true;
   itemsPerPage: number = 0;
+  previousValue: string = "";
+  cargados: number[] = [];
+  seleccionados: string[] = [];
 
   constructor(private formBuilder: FormBuilder, private gastoService: GastoService,
-              private usuarioService: UsuarioService, private grupoService:GrupoService) {
+              private usuarioService: UsuarioService, private grupoService: GrupoService) {
   }
 
   ngOnInit() {
@@ -34,19 +39,21 @@ export class GastoCreacionComponent {
       fecha: ['', Validators.required],
       imagen: ['', Validators.required],
       grupoBool: [false],
-      id_grupo: ['', Validators.required],
-      division: ['', Validators.required],
-      tipo: ['', Validators.required],
+      id_grupo: ["--Seleccione una opción--", Validators.required],
+      division: ["--Seleccione una opción--", Validators.required],
+      tipo: ["--Seleccione una opción--", Validators.required],
       personas: this.formBuilder.array([]),
     });
     this.usuarioService.getUsuario().subscribe({
       next: (data) => {
-        this.id = data.id;
+        this.usuario = data;
+        this.integrantes = data.amigos.slice();
+        this.integrantes.push(this.usuario.username)
       }
     })
-    this.grupoService.getGroups().subscribe({
-      next:(data)=>{
-        this.grupos=data.grupos;
+    this.grupoService.getGroupsPaginated().subscribe({
+      next: (data) => {
+        this.grupos = data.grupos;
       }
     })
   }
@@ -57,15 +64,22 @@ export class GastoCreacionComponent {
   }
 
   agregarUsuario() {
-    this.personasFormArray.push(this.formBuilder.group({
-      nombre: ['', Validators.required],
+    // Agregar un nuevo usuario al FormArray
+    const nuevoUsuario = this.formBuilder.group({
+      nombre: ['--Seleccione una opción--', Validators.required],
       monto: ['', Validators.required],
-    }));
+    });
+    this.personasFormArray.push(nuevoUsuario);
+
   }
 
-
-
   eliminarUsuario(index: number) {
+    this.getAllIntegrantesOptions().forEach((option: HTMLOptionElement) => {
+      if (option.value === this.personasFormArray.at(index).get('nombre')?.value)
+        option.disabled = false;
+    });
+    this.seleccionados.filter((value) => value !== this.personasFormArray.at(index).get('nombre')?.value);
+    this.cargados = this.cargados.filter((value) => value !== index);
     this.personasFormArray.removeAt(index);
   }
 
@@ -120,9 +134,9 @@ export class GastoCreacionComponent {
       }
     );
     if (formulario.value.division === 'MONTO') {
-      formulario.value.personas.push({id: this.id, monto: formulario.value.monto - suma});
+      formulario.value.personas.push({id: this.usuario.id, monto: formulario.value.monto - suma});
     } else {
-      formulario.value.personas.push({id: this.id, monto: 100 - suma});
+      formulario.value.personas.push({id: this.usuario.id, monto: 100 - suma});
     }
 
 
@@ -146,6 +160,50 @@ export class GastoCreacionComponent {
 
   cambioGrupo($event: Event) {
 
+  }
+
+
+  cambioUsuario($event: any, i: number) {
+    const selectedValue = $event.target.value;
+    const personasFormArray = this.personasFormArray as FormArray;
+    personasFormArray.controls.forEach((control, index) => {
+      const otroSelect = control.get('nombre');
+      if (otroSelect) {
+        const options = this.getIntegrantesOptions(index); // Obtener las opciones
+        options.forEach((option: HTMLOptionElement) => {
+          if (option.value === selectedValue && index != i) {
+            option.disabled = true; // Deshabilitar la opción seleccionada en otros selects
+          }
+          if (option.value === this.previousValue && this.previousValue !== "--Seleccione una opción--") {
+            option.disabled = false; // Habilitar la opción anteriormente seleccionada
+          }
+        });
+      }
+    });
+    this.seleccionados.filter((value) => value !== this.previousValue);
+    this.seleccionados.push(selectedValue);
 
   }
+
+
+  getIntegrantesOptions(i: number): NodeListOf<HTMLOptionElement> {
+    return document.querySelectorAll(`[id="nombre${i}"] option`);
+  }
+
+  getAllIntegrantesOptions(): NodeListOf<HTMLOptionElement> {
+    return document.querySelectorAll(`[id^="nombre"] option`);
+  }
+
+
+  antesCambioUsuario($event: any, i: number) {
+    if (!this.cargados.includes(i)) {
+      this.cargados.push(i);
+      const options = this.getIntegrantesOptions(i);
+      options.forEach((option: HTMLOptionElement) => {
+        option.disabled = option.value=="--Seleccione una opción--" || this.seleccionados.includes(option.value);
+      });
+    }
+    this.previousValue = $event.target.value;
+  }
+
 }

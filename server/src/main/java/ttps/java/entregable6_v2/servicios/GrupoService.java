@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import ttps.java.entregable6_v2.excepciones.GrupoException;
+import ttps.java.entregable6_v2.helpers.requests.grupos.GrupoCreateRequest;
 import ttps.java.entregable6_v2.helpers.requests.grupos.GrupoUpdateRequest;
 import ttps.java.entregable6_v2.modelos.Categoria;
 import ttps.java.entregable6_v2.modelos.Gasto;
@@ -59,12 +60,14 @@ public class GrupoService {
     }
 
 
-    public void crearGrupo(Grupo grupo, Usuario usuario) throws GrupoException {
+    public Grupo crearGrupo(GrupoCreateRequest grupoCreateRequest, Usuario usuario) throws GrupoException {
         try {
-            Grupo grupo_persistido = persistir(grupo);
+
+            Grupo grupo_persistido = persistir(new Grupo(grupoCreateRequest.getNombre(), grupoCreateRequest.getCategoria(), .0));
             Usuario usuarioConGrupos = usuarioDAO.recuperarConGrupos(usuario.getId());
             usuarioConGrupos.agregarGrupo(grupo_persistido);
             usuarioDAO.save(usuarioConGrupos);
+            return grupo_persistido;
         } catch (Exception e) {
             throw new GrupoException("Error al crear grupo");
         }

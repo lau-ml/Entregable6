@@ -20,6 +20,7 @@ export class GruposComponent implements OnInit {
 
   grupos: GrupoResponse[] = [];
   loading: boolean = false;
+  perPage: number= 6;
   totalPages: number = 0;
   currentPage: number = 0;
   totalItems: number = 0;
@@ -64,7 +65,7 @@ export class GruposComponent implements OnInit {
     const categoria = this.groupForm.get('categoria')?.value ?? '';
     const nombre = this.groupForm.get('nombre')?.value ?? '';
 
-    this.grupoService.getGroups(page, categoria, nombre).subscribe({
+    this.grupoService.getGroupsPaginated(page, categoria, nombre, this.perPage).subscribe({
       next: ({ grupos, totalItems, totalPages, currentPage, itemsPerPage }) => {
         this.grupos = grupos;
         this.totalItems = totalItems;

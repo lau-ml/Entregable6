@@ -39,12 +39,8 @@ public class GrupoController {
 
     @RequestMapping(value = "/crear", method = RequestMethod.POST)
     public ResponseEntity<?> crearGrupo(@RequestBody GrupoCreateRequest grupoCreateRequest) throws UsuarioInvalidoException {
-
-        Grupo grupo = new Grupo(grupoCreateRequest.getNombre(), grupoCreateRequest.getCategoria(), .0);
         try {
-            Usuario user = usuarioService.recuperarUsuario();
-            grupoService.crearGrupo(grupo, user);
-            return new ResponseEntity<Grupo>(grupo, HttpStatus.OK);
+            return new ResponseEntity<Grupo>(grupoService.crearGrupo(grupoCreateRequest, usuarioService.recuperarUsuario()), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<String>("Error al crear grupo", HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -52,7 +48,7 @@ public class GrupoController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ResponseEntity<?> getGrupos(@RequestParam(defaultValue = "1") int page,
-                                       @RequestParam(defaultValue = "6") int pageSize,
+                                       @RequestParam(defaultValue = "" + Integer.MAX_VALUE) int pageSize,
                                        @RequestParam(defaultValue = "") String nombre,
                                        @RequestParam(defaultValue = "") Categoria categoria) throws UsuarioInvalidoException {
 

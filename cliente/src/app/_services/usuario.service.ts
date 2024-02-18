@@ -13,7 +13,7 @@ export class UsuarioService {
   private apellido: BehaviorSubject<string> = new BehaviorSubject<string>("");
   private email: BehaviorSubject<string> = new BehaviorSubject<string>("");
   private id: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-
+  private amigos: BehaviorSubject<any> = new BehaviorSubject<any>("")
   constructor(private http: HttpClient) {
   }
 
@@ -23,6 +23,7 @@ export class UsuarioService {
         this.saldo.next(usuarioData.saldo);
         this.nombre.next(usuarioData.nombre);
         this.apellido.next(usuarioData.apellido);
+        this.amigos.next(usuarioData.amigos)
         this.email.next(usuarioData.email);
         this.id.next(usuarioData.id);
       }),

@@ -56,6 +56,7 @@ public class Mapper {
                 .apellido(usuario.getApellido())
                 .email(usuario.getEmail())
                 .saldo(usuario.getSaldo())
+                .amigos(usuario.getAmigos().stream().map(Usuario::getUsuario).collect(Collectors.toSet()))
                 .build();
     }
 

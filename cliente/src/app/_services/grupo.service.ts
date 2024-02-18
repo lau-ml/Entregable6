@@ -20,12 +20,14 @@ export class GrupoService {
   }
 
 
-  getGroups(page?: number, categoria?: string, nombre?: string) {
+
+  getGroupsPaginated(page?: number, categoria?: string, nombre?: string, perPage?:number) {
     const options = {
       params: new HttpParams()
-        .set('page', page ? page.toString() : '')
+        .set('page', page ? page.toString() : "1")
         .set('nombre', nombre || '')
         .set('categoria', categoria || '')
+        .set('pageSize', perPage ? perPage.toString() : "")
     };
 
 
