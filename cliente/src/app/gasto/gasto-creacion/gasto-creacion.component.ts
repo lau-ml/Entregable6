@@ -78,7 +78,8 @@ export class GastoCreacionComponent {
       if (option.value === this.personasFormArray.at(index).get('nombre')?.value)
         option.disabled = false;
     });
-    this.seleccionados.filter((value) => value !== this.personasFormArray.at(index).get('nombre')?.value);
+
+    this.seleccionados = this.seleccionados.filter((value) => value !== this.personasFormArray.at(index).get('nombre')?.value);
     this.cargados = this.cargados.filter((value) => value !== index);
     this.personasFormArray.removeAt(index);
   }
@@ -180,8 +181,9 @@ export class GastoCreacionComponent {
         });
       }
     });
-    this.seleccionados.filter((value) => value !== this.previousValue);
     this.seleccionados.push(selectedValue);
+    this.seleccionados = this.seleccionados.filter((value) => value !== this.previousValue);
+
 
   }
 
@@ -200,7 +202,7 @@ export class GastoCreacionComponent {
       this.cargados.push(i);
       const options = this.getIntegrantesOptions(i);
       options.forEach((option: HTMLOptionElement) => {
-        option.disabled = option.value=="--Seleccione una opción--" || this.seleccionados.includes(option.value);
+        option.disabled = option.value == "--Seleccione una opción--" || this.seleccionados.includes(option.value);
       });
     }
     this.previousValue = $event.target.value;
