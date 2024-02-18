@@ -42,6 +42,7 @@ export class GastoCreacionComponent {
       division: ["--Seleccione una opción--", Validators.required],
       tipo: ["--Seleccione una opción--", Validators.required],
       personas: this.formBuilder.array([]),
+      responsable: ["--Seleccione una opción--", Validators.required],
     });
     this.usuarioService.getUsuario().subscribe({
       next: (data) => {

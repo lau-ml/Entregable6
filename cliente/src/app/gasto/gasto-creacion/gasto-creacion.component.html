@@ -105,8 +105,8 @@
             <div class="form-group mt-3">
               <label for="responsable">Responsable: </label>
               <select class="form-control" formControlName="responsable" id="responsable">
-
-
+                <option selected disabled>--Seleccione una opción--</option>
+                <option *ngFor="let persona of seleccionCargado.keys()" [value]="persona">{{ persona }}</option>
               </select>
             </div>
           </div>
