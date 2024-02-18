@@ -26,8 +26,8 @@ export class GastoCreacionComponent {
   loading: boolean = true;
   itemsPerPage: number = 0;
   previousValue: string = "";
-  cargados: number[] = [];
-  seleccionados: string[] = [];
+  cargados: Set<number> = new Set<number>();
+  seleccionados: Set<string> = new Set<string>();
 
   constructor(private formBuilder: FormBuilder, private gastoService: GastoService,
               private usuarioService: UsuarioService, private grupoService: GrupoService) {
@@ -78,9 +78,8 @@ export class GastoCreacionComponent {
       if (option.value === this.personasFormArray.at(index).get('nombre')?.value)
         option.disabled = false;
     });
-
-    this.seleccionados = this.seleccionados.filter((value) => value !== this.personasFormArray.at(index).get('nombre')?.value);
-    this.cargados = this.cargados.filter((value) => value !== index);
+    this.cargados.delete(this.cargados.size - 1);
+    this.seleccionados.delete(this.personasFormArray.at(index).get('nombre')?.value);
     this.personasFormArray.removeAt(index);
   }
 
@@ -181,10 +180,8 @@ export class GastoCreacionComponent {
         });
       }
     });
-    this.seleccionados.push(selectedValue);
-    this.seleccionados = this.seleccionados.filter((value) => value !== this.previousValue);
-
-
+    this.seleccionados.add(selectedValue);
+    this.seleccionados.delete(this.previousValue);
   }
 
 
@@ -198,11 +195,11 @@ export class GastoCreacionComponent {
 
 
   antesCambioUsuario($event: any, i: number) {
-    if (!this.cargados.includes(i)) {
-      this.cargados.push(i);
+    if (!this.cargados.has(i)) {
+      this.cargados.add(i);
       const options = this.getIntegrantesOptions(i);
       options.forEach((option: HTMLOptionElement) => {
-        option.disabled = option.value == "--Seleccione una opción--" || this.seleccionados.includes(option.value);
+        option.disabled = option.value == "--Seleccione una opción--" || this.seleccionados.has(option.value);
       });
     }
     this.previousValue = $event.target.value;
