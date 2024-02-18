@@ -27,6 +27,7 @@ export class GastoCreacionComponent {
   itemsPerPage: number = 0;
   previousValue: string = "";
   seleccionCargado: Map<string, number> = new Map<string, number>();
+
   constructor(private formBuilder: FormBuilder, private gastoService: GastoService,
               private usuarioService: UsuarioService, private grupoService: GrupoService) {
   }
@@ -72,10 +73,18 @@ export class GastoCreacionComponent {
   }
 
   eliminarUsuario(index: number) {
-    this.seleccionCargado.delete(this.personasFormArray.at(index).get('nombre')?.value);
+    // Eliminar la entrada en el Map correspondiente al índice
+    this.seleccionCargado.forEach((value, key) => {
+      if (value === index) {
+        this.seleccionCargado.delete(key);
+      } else if (value > index) {
+        this.seleccionCargado.set(key, value - 1);
+      }
+    });
+
+    // Eliminar el usuario del FormArray
     this.personasFormArray.removeAt(index);
   }
-
   guardarRecibo() {
 
     const formData = new FormData();
@@ -167,7 +176,6 @@ export class GastoCreacionComponent {
   }
 
   chequearSeleccionado(persona: string, i: number) {
-
     return this.seleccionCargado.get(persona) != i && this.seleccionCargado.get(persona) != undefined;
   }
 }
