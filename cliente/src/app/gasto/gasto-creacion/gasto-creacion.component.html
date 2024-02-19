@@ -49,65 +49,69 @@
 
             <div class="form-group">
               <label for="grupoBool">¿Es un gasto grupal?</label>
-              <input formControlName="grupoBool" class="mx-2" id="grupoBool" type="checkbox">
+              <input (change)="gastoGrupalCheck($event)" formControlName="grupoBool" class="mx-2" id="grupoBool"
+                     type="checkbox">
 
             </div>
             <div class="form-group" *ngIf="formulario.get('grupoBool')?.value">
               <label for="id_grupo">Grupo</label>
               <select (change)="cambioGrupo($event)" class="form-control" formControlName="id_grupo" id="id_grupo">
-                <option disabled>--Seleccione una opción--</option>
+                <option disabled selected>--Seleccione una opción--</option>
                 <option *ngFor="let grupo of grupos" [value]="grupo.id">{{ grupo.nombre }}</option>
               </select>
 
             </div>
-            <div class="form-group">
-              <label>
-                Participantes del gasto
-                <button *ngIf="personasFormArray.length < integrantes.length" (click)="agregarUsuario()"
-                        class="btn btn-primary" type="button"><i class="fa-solid fa-plus"></i></button>
-              </label>
-            </div>
-            <div *ngFor="let usuario of personasFormArray.controls; let i = index"
-                 formArrayName="personas">
-              <div [formGroupName]="i" class="d-flex flex-row">
-                <div class="col-4">
-                  <label [attr.for]="'nombre' + i">Usuario:</label>
-
-                  <select (focus)="antesCambioUsuario($event, i)" (change)="cambioUsuario($event, i)"
-                          [attr.id]="'nombre' + i" class="form-control" formControlName="nombre">
-                    <option selected disabled>--Seleccione una opción--</option>
-                    <option [disabled]="chequearSeleccionado(persona,i)"
-                            *ngFor="let persona of integrantes; let j=index"
-                            [value]="persona">{{ persona }}
-                    </option>
-                  </select>
-                </div>
-                <div
-                  *ngIf="formulario.get('division')?.value != 'MONTOIGUAL' && formulario.get('division')?.value !='PORCENTAJEIGUAL' "
-                  class="col-4">
-
-                  <label *ngIf="formulario.get('division')?.value == 'MONTO'" [attr.for]="'monto' + i">Monto:</label>
-                  <label *ngIf="formulario.get('division')?.value == 'PORCENTAJE'"
-                         [attr.for]="'monto' + i">Porcentaje:</label>
-
-                  <input [attr.id]="'monto' + i" class="form-control" formControlName="monto" type="text">
-                </div>
-                <div class="col-1 d-flex flex-column">
-                  <label for="eliminar_usuario">Quitar </label>
-                  <button (click)="eliminarUsuario(i)" class="btn btn-danger d-flex justify-content-center"
-                          type="button" id="eliminar_usuario"><i class="fa-solid fa-x"></i>
-                  </button>
-
-                </div>
-
+            <div
+              *ngIf="!formulario.get('grupoBool')?.value || (formulario.get('grupoBool')?.value) && formulario.get('id_grupo')?.value !='--Seleccione una opción--'">
+              <div class="form-group">
+                <label>
+                  Participantes del gasto
+                  <button *ngIf="personasFormArray.length < integrantes.length" (click)="agregarUsuario()"
+                          class="btn btn-primary" type="button"><i class="fa-solid fa-plus"></i></button>
+                </label>
               </div>
-            </div>
-            <div class="form-group mt-3">
-              <label for="responsable">Responsable: </label>
-              <select class="form-control" formControlName="responsable" id="responsable">
-                <option selected disabled>--Seleccione una opción--</option>
-                <option *ngFor="let persona of seleccionCargado.keys()" [value]="persona">{{ persona }}</option>
-              </select>
+              <div *ngFor="let usuario of personasFormArray.controls; let i = index"
+                   formArrayName="personas">
+                <div [formGroupName]="i" class="d-flex flex-row">
+                  <div class="col-4">
+                    <label [attr.for]="'nombre' + i">Usuario:</label>
+
+                    <select (focus)="antesCambioUsuario($event, i)" (change)="cambioUsuario($event, i)"
+                            [attr.id]="'nombre' + i" class="form-control" formControlName="nombre">
+                      <option selected disabled>--Seleccione una opción--</option>
+                      <option [disabled]="chequearSeleccionado(persona,i)"
+                              *ngFor="let persona of integrantes; let j=index"
+                              [value]="persona">{{ persona }}
+                      </option>
+                    </select>
+                  </div>
+                  <div
+                    *ngIf="formulario.get('division')?.value != 'MONTOIGUAL' && formulario.get('division')?.value !='PORCENTAJEIGUAL' "
+                    class="col-4">
+
+                    <label *ngIf="formulario.get('division')?.value == 'MONTO'" [attr.for]="'monto' + i">Monto:</label>
+                    <label *ngIf="formulario.get('division')?.value == 'PORCENTAJE'"
+                           [attr.for]="'monto' + i">Porcentaje:</label>
+
+                    <input [attr.id]="'monto' + i" class="form-control" formControlName="monto" type="text">
+                  </div>
+                  <div class="col-1 d-flex flex-column">
+                    <label for="eliminar_usuario">Quitar </label>
+                    <button (click)="eliminarUsuario(i)" class="btn btn-danger d-flex justify-content-center"
+                            type="button" id="eliminar_usuario"><i class="fa-solid fa-x"></i>
+                    </button>
+
+                  </div>
+
+                </div>
+              </div>
+              <div class="form-group mt-3">
+                <label for="responsable">Responsable: </label>
+                <select class="form-control" formControlName="responsable" id="responsable">
+                  <option selected disabled>--Seleccione una opción--</option>
+                  <option *ngFor="let persona of seleccionCargado.keys()" [value]="persona">{{ persona }}</option>
+                </select>
+              </div>
             </div>
           </div>
         </form>

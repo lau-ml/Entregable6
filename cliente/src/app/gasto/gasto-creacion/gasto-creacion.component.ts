@@ -26,6 +26,7 @@ export class GastoCreacionComponent {
   loading: boolean = true;
   itemsPerPage: number = 0;
   previousValue: string = "";
+  amigosConUsuario: string[] = [];
   seleccionCargado: Map<string, number> = new Map<string, number>();
 
   constructor(private formBuilder: FormBuilder, private gastoService: GastoService,
@@ -49,6 +50,7 @@ export class GastoCreacionComponent {
         this.usuario = data;
         this.integrantes = data.amigos.slice();
         this.integrantes.push(this.usuario.username)
+        this.amigosConUsuario = this.integrantes.slice();
       }
     })
     this.grupoService.getGroupsPaginated().subscribe({
@@ -161,9 +163,22 @@ export class GastoCreacionComponent {
     }
   }
 
-  cambioGrupo($event: Event) {
+  cambioGrupo($event: any) {
+    const foundGroup = this.grupos.find((grupo) => grupo.id == $event.target.value);
+
+    if (foundGroup) {
+      this.integrantes = foundGroup.participantes;
+      this.seleccionCargado.clear();
+      this.formulario.get('responsable')?.setValue("--Seleccione una opción--");
+      this.personasFormArray.clear();
+    } else {
+      // Handle the case where no matching group is found
+      console.error("No matching group found");
+    }
 
   }
+
+
 
 
   cambioUsuario($event: any, i: number) {
@@ -178,5 +193,18 @@ export class GastoCreacionComponent {
 
   chequearSeleccionado(persona: string, i: number) {
     return this.seleccionCargado.get(persona) != i && this.seleccionCargado.get(persona) != undefined;
+  }
+
+  gastoGrupalCheck($event: any) {
+    this.personasFormArray.clear();
+    this.seleccionCargado.clear();
+    this.formulario.get('responsable')?.setValue("--Seleccione una opción--");
+    this.formulario.get('id_grupo')?.setValue("--Seleccione una opción--");
+    if (!$event.target.checked) {
+      this.integrantes = this.usuario.amigos.slice();
+      this.integrantes.push(this.usuario.username);
+      return;
+    }
+    this.integrantes = [];
   }
 }
