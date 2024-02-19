@@ -9,7 +9,6 @@ import ttps.java.entregable6_v2.excepciones.GrupoException;
 import ttps.java.entregable6_v2.excepciones.UsuarioInvalidoException;
 import ttps.java.entregable6_v2.helpers.ImagenUtils.ImageUtils;
 import ttps.java.entregable6_v2.helpers.requests.gastos.GastoRequest;
-import ttps.java.entregable6_v2.helpers.requests.grupos.GrupoUpdateRequest;
 import ttps.java.entregable6_v2.modelos.Gasto;
 import ttps.java.entregable6_v2.modelos.Grupo;
 import ttps.java.entregable6_v2.modelos.Usuario;
@@ -17,9 +16,6 @@ import ttps.java.entregable6_v2.repository.GastoJPA;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 @org.springframework.stereotype.Service
 public class GastoService {
@@ -50,12 +46,10 @@ public class GastoService {
     }
 
 
-    public Gasto crearGasto(GastoRequest gastoCreateRequest, String imagen) throws  UsuarioInvalidoException {
+    public Gasto crearGasto(GastoRequest gastoCreateRequest, String imagen) throws UsuarioInvalidoException {
         Grupo grupo = grupoService.recuperar(gastoCreateRequest.getId_grupo());
-        Set<Usuario> usuarios = new HashSet<>();
-        Map<Usuario, Double> valores = new HashMap<>();
-        usuarioService.usuariosValoresGasto(gastoCreateRequest, usuarios, valores);
-        Gasto gasto = new Gasto(gastoCreateRequest.getMonto(), gastoCreateRequest.getFecha(), imagen, usuarios, usuarioService.recuperarUsuario(), grupo, gastoCreateRequest.getTipo(), valores, gastoCreateRequest.getDivision());
+        HashMap<Usuario, Double> usuariosValores = usuarioService.usuariosGastoValores(gastoCreateRequest);
+        Gasto gasto = new Gasto(gastoCreateRequest.getMonto(), gastoCreateRequest.getFecha(), imagen, usuariosValores, usuarioService.recuperarUsuario(), grupo, gastoCreateRequest.getTipo(), gastoCreateRequest.getDivision());
         this.persistir(gasto);
         return gasto;
 
@@ -67,10 +61,8 @@ public class GastoService {
             throw new GastoException("No tiene permisos para modificar el gasto");
         }
         Grupo grupo = grupoService.recuperar(gastoUpdateRequest.getId_grupo());
-        Set<Usuario> usuarios = new HashSet<>();
-        Map<Usuario, Double> valores = new HashMap<>();
-        usuarioService.usuariosValoresGasto(gastoUpdateRequest, usuarios, valores);
-        ttps.java.entregable6_v2.helpers.actualizarGasto.Gasto.actualizarGasto(gasto, gastoUpdateRequest, grupo, usuarios, valores, ImageUtils.guardarImagen(imagen));
+        HashMap<Usuario, Double> usuariosGastos = usuarioService.usuariosGastoValores(gastoUpdateRequest);
+        ttps.java.entregable6_v2.helpers.actualizarGasto.Gasto.actualizarGasto(gasto, gastoUpdateRequest, grupo, usuariosGastos, ImageUtils.guardarImagen(imagen));
         this.actualizar(gasto);
         return gasto;
 

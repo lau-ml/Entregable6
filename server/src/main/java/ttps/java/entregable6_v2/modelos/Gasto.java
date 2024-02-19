@@ -1,26 +1,23 @@
 package ttps.java.entregable6_v2.modelos;
 
 import jakarta.persistence.*;
+import ttps.java.entregable6_v2.helpers.requests.PersonaGasto;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "gastos")
 public class Gasto {
 
-    public Gasto(double monto, java.sql.Date fecha, String imagen, Set<Usuario> usuarios, Usuario user, Grupo grupo, TipoGasto tipo, Map<Usuario, Double> valores, Division division) {
+    public Gasto(double monto, java.sql.Date fecha, String imagen, HashMap<Usuario, Double> usuariosValores, Usuario responsable, Grupo grupo, TipoGasto tipo, Division division) {
 
         this.monto = monto;
         this.fecha = fecha;
         this.imagen = imagen;
-        this.participantes = usuarios;
-        this.responsable = user;
+        this.responsable = responsable;
         this.grupo = grupo;
         this.tipo = tipo;
-        this.valores = valores;
+        this.valores = usuariosValores;
         this.division = division;
     }
 
@@ -40,16 +37,6 @@ public class Gasto {
     private double monto;
     private Date fecha;
     private String imagen;
-
-    @ManyToMany
-    @JoinTable(
-            name = "gasto_participantes",
-            joinColumns = @JoinColumn(name = "gasto_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "id")
-
-    )
-    private Set<Usuario> participantes;
-
 
     @ManyToOne
     @JoinColumn(name = "responsable_id")
@@ -97,7 +84,7 @@ public class Gasto {
         this.division = division;
     }
 
-    public Gasto(String nombre, double monto, Date fecha, String imagen, Set<Usuario> participantes, Usuario responsable, Grupo grupo, TipoGasto tipo, Map<Usuario, Double> valores, Division division) {
+    public Gasto(String nombre, double monto, Date fecha, String imagen, Usuario responsable, Grupo grupo, TipoGasto tipo, Map<Usuario, Double> valores, Division division) {
         this.nombre = nombre;
         this.monto = monto;
         this.fecha = fecha;
@@ -106,7 +93,6 @@ public class Gasto {
         this.grupo = grupo;
         this.tipo = tipo;
         this.valores = valores;
-        this.participantes = participantes;
         this.division = division;
     }
 
@@ -142,13 +128,7 @@ public class Gasto {
         this.imagen = imagen;
     }
 
-    public Set<Usuario> getParticipantes() {
-        return participantes;
-    }
 
-    public void setParticipantes(Set<Usuario> participantes) {
-        this.participantes = participantes;
-    }
 
     public Usuario getResponsable() {
         return responsable;

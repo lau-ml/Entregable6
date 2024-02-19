@@ -21,7 +21,9 @@ import ttps.java.entregable6_v2.response.MessageResponse;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -181,17 +183,18 @@ public class UsuarioService {
     }
 
 
-    public void usuariosValoresGasto(GastoRequest gastoRequest, Set<Usuario> usuarios, Map<Usuario, Double> valores) throws UsuarioInvalidoException {
-
+    public HashMap<Usuario, Double> usuariosGastoValores(GastoRequest gastoRequest) throws UsuarioInvalidoException {
+        HashMap<Usuario, Double> usuarios = new HashMap<>();
         for (int i = 0; i < gastoRequest.getPersonas().size(); i++) {
             Usuario aux = this.recuperar(gastoRequest.getPersonas().get(i).getUsuario());
             if (aux == null) {
                 throw new UsuarioInvalidoException("Los usuarios ingresados no son válidos");
             }
-            usuarios.add(aux);
-            valores.put(aux, gastoRequest.getPersonas().get(i).getMonto());
+            usuarios.put(aux, gastoRequest.getPersonas().get(i).getMonto());
         }
+        return usuarios;
     }
+
     public Usuario recuperarUsuario() throws UsuarioInvalidoException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
