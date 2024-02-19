@@ -3,7 +3,6 @@ package ttps.java.entregable6_v2.servicios;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import net.bytebuddy.utility.RandomString;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -74,6 +73,10 @@ public class UsuarioService {
     public Usuario recuperar(Serializable id) throws UsuarioInvalidoException {
         return dao.findById((Long) id).orElse(null);
 
+    }
+
+    public Usuario recuperar(String username) throws UsuarioInvalidoException {
+        return dao.findByUsuario(username).orElse(null);
     }
 
 
@@ -181,7 +184,7 @@ public class UsuarioService {
     public void usuariosValoresGasto(GastoRequest gastoRequest, Set<Usuario> usuarios, Map<Usuario, Double> valores) throws UsuarioInvalidoException {
 
         for (int i = 0; i < gastoRequest.getPersonas().size(); i++) {
-            Usuario aux = this.recuperar(gastoRequest.getPersonas().get(i).getId());
+            Usuario aux = this.recuperar(gastoRequest.getPersonas().get(i).getUsuario());
             if (aux == null) {
                 throw new UsuarioInvalidoException("Los usuarios ingresados no son válidos");
             }

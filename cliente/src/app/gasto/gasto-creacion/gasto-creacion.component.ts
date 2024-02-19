@@ -39,7 +39,7 @@ export class GastoCreacionComponent {
       fecha: ['', Validators.required],
       imagen: ['', Validators.required],
       grupoBool: [false],
-      id_grupo: ["--Seleccione una opción--", Validators.required],
+      id_grupo: [0, Validators.required],
       division: ["--Seleccione una opción--", Validators.required],
       tipo: ["--Seleccione una opción--", Validators.required],
       personas: this.formBuilder.array([]),
@@ -68,8 +68,8 @@ export class GastoCreacionComponent {
   agregarUsuario() {
     // Agregar un nuevo usuario al FormArray
     const nuevoUsuario = this.formBuilder.group({
-      nombre: ['--Seleccione una opción--', Validators.required],
-      monto: ['', Validators.required],
+      usuario: ['--Seleccione una opción--', Validators.required],
+      monto: ['0', Validators.required],
     });
     this.personasFormArray.push(nuevoUsuario);
 
@@ -88,7 +88,8 @@ export class GastoCreacionComponent {
     // Eliminar el usuario del FormArray
     this.personasFormArray.removeAt(index);
   }
-  guardarRecibo() {
+
+  crearGasto() {
 
     const formData = new FormData();
     this.armarGastoRequest(this.formulario);
@@ -97,11 +98,11 @@ export class GastoCreacionComponent {
     });
     formData.append('imagen', this.imagen);
     formData.append('gastoRequest', blob);
+    alert(JSON.stringify(this.formulario.value));
     // Realiza la solicitud HTTP POST
     this.gastoService.crearGasto(formData).subscribe(
       {
         next: (data) => {
-          console.log(data);
           this.resetearForm();
         },
         error: (error) => {
@@ -117,9 +118,6 @@ export class GastoCreacionComponent {
 
 
   armarGastoRequest(formulario: FormGroup) {
-    if (!formulario.value.grupoBool) {
-      formulario.value.id_grupo = 0;
-    }
     if (formulario.value.division === 'MONTOIGUAL') {
       formulario.value.personas.forEach((persona: any) => {
         persona.monto = formulario.value.monto / formulario.value.personas.length;
@@ -132,19 +130,6 @@ export class GastoCreacionComponent {
       });
       formulario.value.division = 'PORCENTAJE';
     }
-    let suma: number = 0;
-    formulario.value.personas.forEach((persona: any) => {
-        suma += Number(persona.monto);
-
-      }
-    );
-    if (formulario.value.division === 'MONTO') {
-      formulario.value.personas.push({id: this.usuario.id, monto: formulario.value.monto - suma});
-    } else {
-      formulario.value.personas.push({id: this.usuario.id, monto: 100 - suma});
-    }
-
-
   }
 
   resetearForm() {
@@ -179,8 +164,6 @@ export class GastoCreacionComponent {
   }
 
 
-
-
   cambioUsuario($event: any, i: number) {
     const selectedValue = $event.target.value;
     this.seleccionCargado.delete(this.previousValue);
@@ -199,7 +182,7 @@ export class GastoCreacionComponent {
     this.personasFormArray.clear();
     this.seleccionCargado.clear();
     this.formulario.get('responsable')?.setValue("--Seleccione una opción--");
-    this.formulario.get('id_grupo')?.setValue("--Seleccione una opción--");
+    this.formulario.get('id_grupo')?.setValue(0);
     if (!$event.target.checked) {
       this.integrantes = this.usuario.amigos.slice();
       this.integrantes.push(this.usuario.username);

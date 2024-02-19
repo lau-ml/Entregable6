@@ -56,7 +56,7 @@
             <div class="form-group" *ngIf="formulario.get('grupoBool')?.value">
               <label for="id_grupo">Grupo</label>
               <select (change)="cambioGrupo($event)" class="form-control" formControlName="id_grupo" id="id_grupo">
-                <option disabled selected>--Seleccione una opción--</option>
+                <option  [ngValue]="0" disabled selected>--Seleccione una opción--</option>
                 <option *ngFor="let grupo of grupos" [value]="grupo.id">{{ grupo.nombre }}</option>
               </select>
 
@@ -74,10 +74,10 @@
                    formArrayName="personas">
                 <div [formGroupName]="i" class="d-flex flex-row">
                   <div class="col-4">
-                    <label [attr.for]="'nombre' + i">Usuario:</label>
+                    <label [attr.for]="'usuario' + i">Usuario:</label>
 
                     <select (focus)="antesCambioUsuario($event, i)" (change)="cambioUsuario($event, i)"
-                            [attr.id]="'nombre' + i" class="form-control" formControlName="nombre">
+                            [attr.id]="'usuario' + i" class="form-control" formControlName="usuario">
                       <option selected disabled>--Seleccione una opción--</option>
                       <option [disabled]="chequearSeleccionado(persona,i)"
                               *ngFor="let persona of integrantes; let j=index"
@@ -119,7 +119,7 @@
       <div class="modal-footer">
         <button (click)="resetearForm()" class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancelar
         </button>
-        <button (click)="guardarRecibo()" class="btn btn-primary" data-bs-dismiss="modal" type="button">Guardar Recibo
+        <button (click)="crearGasto()" class="btn btn-primary" data-bs-dismiss="modal" type="button">Guardar Recibo
         </button>
 
       </div>

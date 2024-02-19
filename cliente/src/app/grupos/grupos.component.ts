@@ -14,7 +14,7 @@ import {GrupoResponse} from "../_responses/grupoResponse";
 export class GruposComponent implements OnInit {
 
   groupForm = this.formBuilder.group({
-    nombre: ['', Validators.required],
+    usuario: ['', Validators.required],
     categoria: ['', Validators.required],
   });
 
@@ -95,7 +95,7 @@ export class GruposComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.groupForm.patchValue({
         categoria: params['categoria'] || '',
-        nombre: params['nombre']|| ''
+        usuario: params['nombre']|| ''
       });
     });
     this.getPage(1);

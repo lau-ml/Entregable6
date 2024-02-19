@@ -50,7 +50,7 @@ public class GastoService {
     }
 
 
-    public Gasto crearGasto(GastoRequest gastoCreateRequest, String imagen) throws GrupoException, UsuarioInvalidoException {
+    public Gasto crearGasto(GastoRequest gastoCreateRequest, String imagen) throws  UsuarioInvalidoException {
         Grupo grupo = grupoService.recuperar(gastoCreateRequest.getId_grupo());
         Set<Usuario> usuarios = new HashSet<>();
         Map<Usuario, Double> valores = new HashMap<>();

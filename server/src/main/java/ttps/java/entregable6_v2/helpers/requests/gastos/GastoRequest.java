@@ -27,12 +27,12 @@ public class GastoRequest {
     private String imagen;
     private Division division;
     private List<PersonaGasto> personas;
-
+    private String responsable;
     public void isValid() {
         if (getPersonas() == null || getPersonas().isEmpty()) {
             throw new IllegalArgumentException("No se puede crear un gasto sin participantes");
         }
-        if (getPersonas().stream().map(PersonaGasto::getId).collect(Collectors.toUnmodifiableSet()).size() != getPersonas().size()) {
+        if (getPersonas().stream().map(PersonaGasto::getUsuario).collect(Collectors.toUnmodifiableSet()).size() != getPersonas().size()) {
             throw new IllegalArgumentException("No se puede crear un gasto con participantes repetidos");
         }
 

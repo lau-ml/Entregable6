@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PersonaGasto {
-    private Long id;
+    private String usuario;
     private Double monto;
 
     // Constructors, getters, setters, and other methods go here
