@@ -27,7 +27,6 @@ public class GastoGrupoDTO {
     private Date fecha;
     private String imagen;
     private Division division;
-    private Set<String> participantes;
     private HashMap<String, Double> valores;
     private String responsable;
     private Long id_responsable;
@@ -41,7 +40,6 @@ public class GastoGrupoDTO {
         this.fecha = gasto.getFecha();
         this.imagen = gasto.getImagen();
         this.division = gasto.getDivision();
-        this.participantes = (gasto.getParticipantes().stream().map(Usuario::getUsuario).collect(Collectors.toSet()));
         this.valores = valores;
         this.responsable = gasto.getResponsable().getUsuario();
         this.id_responsable = gasto.getResponsable().getId();

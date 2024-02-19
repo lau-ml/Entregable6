@@ -16,11 +16,6 @@ import java.util.stream.Collectors;
 @Component
 public class Mapper {
     public GastoGrupoDTO gastoGrupoDTO(Gasto gasto) {
-        Set<String> participantes= gasto.getParticipantes().stream().map(Usuario::getUsuario).collect(Collectors.toSet());
-        HashMap<String, Double> valores = new HashMap<>();
-        for (Usuario usuario : gasto.getParticipantes()) {
-            valores.put(usuario.getUsuario(), gasto.getValores().get(usuario));
-        }
 
         return GastoGrupoDTO.builder()
                 .id(gasto.getId())
@@ -31,8 +26,12 @@ public class Mapper {
                 .fecha(new Date(gasto.getFecha().getTime()))
                 .imagen(gasto.getImagen())
                 .division(gasto.getDivision())
-                .participantes(participantes)
-                .valores(valores)
+                .valores(new HashMap<>(gasto.getValores().keySet().stream()
+                        .collect(Collectors.toMap(
+                                Usuario::getUsuario,
+                                gasto.getValores()::get
+                        )))
+                )
                 .responsable(gasto.getResponsable().getUsuario())
                 .id_responsable(gasto.getResponsable().getId())
                 .build();

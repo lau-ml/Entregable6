@@ -14,7 +14,6 @@ public class Gasto {
         gasto.setMonto(gastoUpdateRequest.getMonto());
         gasto.setFecha(gastoUpdateRequest.getFecha());
         gasto.setImagen(nombreArchivo);
-        gasto.setParticipantes(valores.keySet());
         gasto.setResponsable(gasto.getResponsable());
         gasto.setGrupo(grupo);
         gasto.setTipo(gastoUpdateRequest.getTipo());

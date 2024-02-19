@@ -21,7 +21,6 @@ public interface GrupoJPA extends JpaRepository<Grupo, Long>  {
 
     @Query("SELECT DISTINCT g FROM Gasto g " +
             "LEFT JOIN FETCH g.valores " +
-            "LEFT JOIN FETCH g.participantes " +
             "INNER JOIN g.responsable u " +
             "INNER JOIN g.grupo gr " +
             "WHERE gr.id = :id")
