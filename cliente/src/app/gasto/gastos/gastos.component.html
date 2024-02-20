@@ -93,7 +93,8 @@
 
   <div *ngIf="totalItems!=0" class="has-text-centered">
     <div [ngClass]="{ 'hidden': !loading }" class="spinner"></div>
-    <pagination-controls (pageChange)="getPage($event)" id="server"></pagination-controls>
+    <pagination-controls  previousLabel="Anterior"
+                          nextLabel="Siguiente" (pageChange)="getPage($event)" id="server"></pagination-controls>
   </div>
   <div *ngIf="totalItems==0" class="card-body">
     <div class="text-center">
