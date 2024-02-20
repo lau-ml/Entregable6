@@ -18,7 +18,8 @@ export class GastosComponent {
   currentPage: number = 0;
   loading: boolean = true;
   itemsPerPage: number = 0;
-  integrantesTexto: string = '';
+
+
 
   constructor(private formBuilder: FormBuilder, private gastoService: GastoService,
               private usuarioService: UsuarioService) {

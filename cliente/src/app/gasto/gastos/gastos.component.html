@@ -1,21 +1,40 @@
 <div class="d-flex w-100 align-content-end justify-content-end flex-wrap">
   <form class="m-2 form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
 
-    <div class="input-group d-flex align-items-center">
-      <div class="mr-2">
-        <select required>
-          <option value="0">Persona</option>
-          <option value="1">Grupo</option>
+    <div class="input-group d-flex align-items-end flex-wrap">
+      <div class="mr-2 d-flex align-items-center flex-wrap">
 
-        </select>
+        <div>
+          <label for="categoria">Categoría </label>
+          <select id="categoria" class="mr-1">
+            <option value="">Todas</option>
+            <option value="COMIDA">Comida</option>
+            <option value="COMBUSTIBLE">Combustible</option>
+            <option value="ALOJAMIENTO">Alojamiento</option>
+            <option value="ENTRADAS">Entradas</option>
+          </select>
+        </div>
+        <div>
+          <label for="fechaDesde">Fecha desde </label>
+          <input id="fechaDesde" class="mr-1" type="date">
+        </div>
+        <div>
+          <label for="fechaHasta">Fecha hasta </label>
+          <input id="fechaHasta" type="date">
+        </div>
+
+
       </div>
+
+
       <input aria-describedby="basic-addon2" aria-label="Buscar" class="form-control bg-light border-0 small"
-             placeholder="Buscar..." type="text">
+             placeholder="Buscar por grupo..." type="text">
       <div class="input-group-append">
         <button class="btn btn-primary" type="button">
           <i class="fas fa-search fa-sm"></i>
         </button>
       </div>
+
     </div>
   </form>
   <a class="btn btn-sm btn-primary shadow-sm" data-bs-target="#cargarRecibo" data-bs-toggle="modal"
@@ -44,7 +63,8 @@
           *ngFor="let gasto of gastos | paginate: { id: 'server', itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }">
         <tr>
           <td style="max-width: 100px; overflow: hidden; text-overflow: ellipsis;">
-            <span ngbTooltip="{{Object.keys(gasto.valores)}}"  class="text-truncate">{{ Object.keys(gasto.valores).join(', ') }}</span>
+            <span ngbTooltip="{{Object.keys(gasto.valores)}}"
+                  class="text-truncate">{{ Object.keys(gasto.valores).join(', ') }}</span>
           </td>
 
           <td *ngIf="!gasto.nombreGrupo">-</td>
@@ -93,8 +113,8 @@
 
   <div *ngIf="totalItems!=0" class="has-text-centered">
     <div [ngClass]="{ 'hidden': !loading }" class="spinner"></div>
-    <pagination-controls  previousLabel="Anterior"
-                          nextLabel="Siguiente" (pageChange)="getPage($event)" id="server"></pagination-controls>
+    <pagination-controls previousLabel="Anterior"
+                         nextLabel="Siguiente" (pageChange)="getPage($event)" id="server"></pagination-controls>
   </div>
   <div *ngIf="totalItems==0" class="card-body">
     <div class="text-center">
