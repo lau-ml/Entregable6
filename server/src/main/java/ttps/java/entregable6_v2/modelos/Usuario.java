@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -55,7 +56,12 @@ public class Usuario implements UserDetails {
     private Set<Grupo> grupos;
 
 
-    @OneToMany
+    @ManyToMany
+    @JoinTable(
+            name = "usuarios_amigos",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "amigo_id")
+    )
     private Set<Usuario> amigos;
 
 
@@ -113,5 +119,18 @@ public class Usuario implements UserDetails {
     @Override
     public boolean isEnabled() {
         return getActivo();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Usuario usuario = (Usuario) o;
+        return Objects.equals(usuario.getUsuario(), usuario.usuario);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(usuario);
     }
 }
