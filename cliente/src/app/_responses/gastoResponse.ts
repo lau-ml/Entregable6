@@ -8,5 +8,5 @@ export interface GastoResponse {
     tipo: string;
     grupoBool: boolean;
     id_grupo: number;
-    participantes: string[];
+    valores: Map<string, number>;
 }

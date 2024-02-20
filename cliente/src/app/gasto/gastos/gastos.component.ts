@@ -52,4 +52,6 @@ export class GastosComponent {
       }
     )
   }
+
+  protected readonly Object = Object;
 }
