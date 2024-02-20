@@ -49,7 +49,7 @@ public class GastoService {
     public Gasto crearGasto(GastoRequest gastoCreateRequest, String imagen) throws UsuarioInvalidoException {
         Grupo grupo = grupoService.recuperar(gastoCreateRequest.getId_grupo());
         HashMap<Usuario, Double> usuariosValores = usuarioService.usuariosGastoValores(gastoCreateRequest);
-        Gasto gasto = new Gasto(gastoCreateRequest.getMonto(), gastoCreateRequest.getFecha(), imagen, usuariosValores, usuarioService.recuperarUsuario(), grupo, gastoCreateRequest.getTipo(), gastoCreateRequest.getDivision());
+        Gasto gasto = new Gasto(gastoCreateRequest.getMonto(), gastoCreateRequest.getFecha(), imagen, usuariosValores, usuarioService.recuperar(gastoCreateRequest.getResponsable()), grupo, gastoCreateRequest.getTipo(), gastoCreateRequest.getDivision());
         this.persistir(gasto);
         return gasto;
 

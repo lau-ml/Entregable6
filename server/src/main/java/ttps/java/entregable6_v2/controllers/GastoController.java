@@ -42,7 +42,7 @@ public class GastoController {
             Usuario user = usuarioService.recuperarUsuario();
             gastoCreateRequest.isValid();
             Gasto gasto = gastoService.crearGasto(gastoCreateRequest, ImageUtils.guardarImagen(imagen));
-            usuarioService.actualizar(user);
+            gasto.getValores().forEach((usuario, monto) -> System.out.println(usuario.getUsuario() + " " + monto));
             GastoGrupoDTO gastoDTO = new GastoGrupoDTO(gasto, (gasto.getValores().entrySet().stream().collect(Collectors.toMap(e -> e.getKey().getUsuario(), Map.Entry::getValue, (a, b) -> b, HashMap::new))));
             return new ResponseEntity<>(gastoDTO, HttpStatus.OK);
         } catch (Exception e) {

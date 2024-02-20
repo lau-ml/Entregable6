@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder} from "@angular/forms";
 import {GastoService} from "../../_services/gasto.service";
 import {UsuarioService} from "../../_services/usuario.service";
 import {GastoResponse} from "../../_responses/gastoResponse";
@@ -18,6 +18,7 @@ export class GastosComponent {
   currentPage: number = 0;
   loading: boolean = true;
   itemsPerPage: number = 0;
+  integrantesTexto: string = '';
 
   constructor(private formBuilder: FormBuilder, private gastoService: GastoService,
               private usuarioService: UsuarioService) {
@@ -31,6 +32,8 @@ export class GastosComponent {
       }
     })
     this.getPage(1);
+
+
   }
 
   getPage(page: number) {
@@ -44,7 +47,6 @@ export class GastosComponent {
           this.totalPages = data.totalPages;
           this.currentPage = data.currentPage;
           this.itemsPerPage = data.itemsPerPage;
-
         },
         error: (error) => {
           console.log(error)

@@ -14,7 +14,7 @@ public interface GastoJPA extends JpaRepository<Gasto, Long> {
     @Query("select g from Gasto g inner join Usuario u on(u.id= g.responsable.id) inner join Grupo gru on (gru.id=g.grupo.id)  where g.id = :id")
     public Gasto obtenerGasto(Long id);
 
-    @Query("SELECT DISTINCT g FROM Gasto g LEFT JOIN FETCH g.valores u WHERE KEY(u).id = :id")
+    @Query("SELECT DISTINCT g FROM Gasto g LEFT JOIN FETCH g.valores u LEFT JOIN FETCH g.valores otherUsers WHERE KEY(u).id = :id")
     Page<Gasto> recuperarGastosPaginados(@Param("id") Long id, Pageable pageable);
 
 

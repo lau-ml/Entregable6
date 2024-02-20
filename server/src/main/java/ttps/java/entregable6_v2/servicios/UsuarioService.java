@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ttps.java.entregable6_v2.excepciones.UsuarioInvalidoException;
+import ttps.java.entregable6_v2.helpers.requests.PersonaGasto;
 import ttps.java.entregable6_v2.helpers.requests.gastos.GastoRequest;
 import ttps.java.entregable6_v2.helpers.requests.usuarios.*;
 import ttps.java.entregable6_v2.modelos.Usuario;
@@ -201,4 +202,5 @@ public class UsuarioService {
         return findByUsername(username).orElseThrow(() -> new UsuarioInvalidoException("Usuario invalido"));
 
     }
+
 }
