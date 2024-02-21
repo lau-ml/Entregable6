@@ -8,6 +8,7 @@ import ttps.java.entregable6_v2.modelos.Gasto;
 import ttps.java.entregable6_v2.modelos.Grupo;
 import ttps.java.entregable6_v2.modelos.Usuario;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
@@ -23,7 +24,7 @@ public class Mapper {
                 .monto(gasto.getMonto())
                 .id_grupo(gasto.getGrupo().getId())
                 .tipo(gasto.getTipo())
-                .fecha(new Date(gasto.getFecha().getTime()))
+                .fecha(gasto.getFecha())
                 .imagen(gasto.getImagen())
                 .division(gasto.getDivision())
                 .valores(new HashMap<>(gasto.getValores().keySet().stream()

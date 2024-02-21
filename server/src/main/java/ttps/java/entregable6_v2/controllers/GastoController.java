@@ -11,12 +11,18 @@ import ttps.java.entregable6_v2.dto.GastoGrupoDTO;
 import ttps.java.entregable6_v2.helpers.ImagenUtils.ImageUtils;
 import ttps.java.entregable6_v2.helpers.Pagination.PaginationUtils;
 import ttps.java.entregable6_v2.helpers.requests.gastos.GastoRequest;
-import ttps.java.entregable6_v2.modelos.*;
+import ttps.java.entregable6_v2.modelos.Gasto;
+import ttps.java.entregable6_v2.modelos.TipoGasto;
+import ttps.java.entregable6_v2.modelos.Usuario;
 import ttps.java.entregable6_v2.servicios.GastoService;
 import ttps.java.entregable6_v2.servicios.GrupoService;
 import ttps.java.entregable6_v2.servicios.UsuarioService;
 
-import java.util.*;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -67,17 +73,16 @@ public class GastoController {
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ResponseEntity<?> getGastos(@RequestParam(defaultValue = "1") int page,
                                        @RequestParam(defaultValue = "10") int pageSize,
-                                       @RequestParam(defaultValue = "") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaDesde,
-                                       @RequestParam(defaultValue = "") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaHasta,
-                                        @RequestParam(defaultValue = "") String nombreGrupo,
-                                        @RequestParam(defaultValue = "") TipoGasto tipoGasto,
-                                        @RequestParam(defaultValue = "") String responsable
+                                       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate fechaDesde,
+                                       @RequestParam(required = false)  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate fechaHasta,
+                                       @RequestParam(defaultValue = "") String nombreGrupo,
+                                       @RequestParam(defaultValue = "") TipoGasto tipoGasto
 
 
     ) {
         try {
             Usuario user = usuarioService.recuperarUsuario();
-            Page<Gasto> gastosPaginados = gastoService.recuperarGastosPaginados(user.getId(),page - 1, pageSize,fechaDesde, fechaHasta, nombreGrupo, tipoGasto, responsable);
+            Page<Gasto> gastosPaginados = gastoService.recuperarGastosPaginados(user.getId(), page - 1, pageSize, fechaDesde, fechaHasta, nombreGrupo, tipoGasto);
             PaginationUtils<Gasto> paginationUtils = new PaginationUtils<>();
             Map<String, Object> response = paginationUtils.createPaginationResponse(gastosPaginados);
             List<GastoGrupoDTO> gastoDTOs = gastosPaginados.stream()

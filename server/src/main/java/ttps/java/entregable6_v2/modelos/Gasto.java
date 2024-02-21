@@ -3,13 +3,14 @@ package ttps.java.entregable6_v2.modelos;
 import jakarta.persistence.*;
 import ttps.java.entregable6_v2.helpers.requests.PersonaGasto;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Entity
 @Table(name = "gastos")
 public class Gasto {
 
-    public Gasto(double monto, java.sql.Date fecha, String imagen, HashMap<Usuario, Double> usuariosValores, Usuario responsable, Grupo grupo, TipoGasto tipo, Division division) {
+    public Gasto(double monto, LocalDate fecha, String imagen, HashMap<Usuario, Double> usuariosValores, Usuario responsable, Grupo grupo, TipoGasto tipo, Division division) {
 
         this.monto = monto;
         this.fecha = fecha;
@@ -35,7 +36,7 @@ public class Gasto {
 
     private String nombre;
     private double monto;
-    private Date fecha;
+    private LocalDate fecha;
     private String imagen;
 
     @ManyToOne
@@ -73,7 +74,7 @@ public class Gasto {
     public Gasto() {
     }
 
-    public Gasto(String nombre,double monto, Date fecha, String imagen, List<Usuario> participantes, Usuario responsable, TipoGasto tipo, Map<Usuario, Double> valores, Division division) {
+    public Gasto(String nombre,double monto, LocalDate fecha, String imagen, List<Usuario> participantes, Usuario responsable, TipoGasto tipo, Map<Usuario, Double> valores, Division division) {
         this.nombre = nombre;
         this.monto = monto;
         this.fecha = fecha;
@@ -84,7 +85,7 @@ public class Gasto {
         this.division = division;
     }
 
-    public Gasto(String nombre, double monto, Date fecha, String imagen, Usuario responsable, Grupo grupo, TipoGasto tipo, Map<Usuario, Double> valores, Division division) {
+    public Gasto(String nombre, double monto, LocalDate fecha, String imagen, Usuario responsable, Grupo grupo, TipoGasto tipo, Map<Usuario, Double> valores, Division division) {
         this.nombre = nombre;
         this.monto = monto;
         this.fecha = fecha;
@@ -112,11 +113,11 @@ public class Gasto {
         this.monto = monto;
     }
 
-    public Date getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 

@@ -9,6 +9,7 @@ import ttps.java.entregable6_v2.modelos.Gasto;
 import ttps.java.entregable6_v2.modelos.TipoGasto;
 import ttps.java.entregable6_v2.modelos.Usuario;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
@@ -24,7 +25,7 @@ public class GastoGrupoDTO {
     private double monto;
     private Long id_grupo;
     private TipoGasto tipo;
-    private Date fecha;
+    private LocalDate fecha;
     private String imagen;
     private Division division;
     private HashMap<String, Double> valores;

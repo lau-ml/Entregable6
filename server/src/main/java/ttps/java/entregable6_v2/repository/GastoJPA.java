@@ -12,6 +12,7 @@ import ttps.java.entregable6_v2.modelos.Categoria;
 import ttps.java.entregable6_v2.modelos.Gasto;
 import ttps.java.entregable6_v2.modelos.TipoGasto;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Repository
@@ -21,17 +22,15 @@ public interface GastoJPA extends JpaRepository<Gasto, Long> {
     public Gasto obtenerGasto(Long id);
 
     @Query("SELECT DISTINCT g FROM Gasto g LEFT JOIN FETCH g.grupo LEFT JOIN FETCH g.valores u LEFT JOIN FETCH g.valores otherUsers WHERE KEY(u).id = :id " +
-            "AND(:tipoGasto IS NULL OR g.tipo = :tipoGasto)"+
-            "AND(:fechaDesde IS NULL OR g.fecha >= :fechaDesde)"+
-            "AND(:fechaHasta IS NULL OR g.fecha <= :fechaHasta)"+
-            "AND(:nombreGrupo = '' OR g.grupo.nombre ilike %:nombreGrupo%)"+
-            "AND(:responsable = '' OR g.responsable.usuario ilike %:responsable%)"
+            "AND(:tipoGasto IS NULL OR g.tipo = :tipoGasto)" +
+            "AND(cast(:fechaDesde as localdate )IS NULL OR g.fecha >= :fechaDesde)" +
+            "AND(cast(:fechaHasta as localdate)  IS NULL OR g.fecha <= :fechaHasta)" +
+            "AND(:nombreGrupo = '' OR g.grupo.nombre ilike %:nombreGrupo%)"
     )
     Page<Gasto> recuperarGastosPaginados(@Param("id") Long id,
-                                         @Param("fechaDesde") @Temporal(TemporalType.DATE) Date fechaDesde,
-                                         @Param("fechaHasta") @Temporal(TemporalType.DATE) Date fechaHasta,
+                                         @Param("fechaDesde") LocalDate fechaDesde,
+                                         @Param("fechaHasta")  LocalDate fechaHasta,
                                          @Param("nombreGrupo") String nombreGrupo,
                                          @Param("tipoGasto") TipoGasto tipoGasto,
-                                         @Param("responsable") String responsable,
                                          Pageable pageable);
 }

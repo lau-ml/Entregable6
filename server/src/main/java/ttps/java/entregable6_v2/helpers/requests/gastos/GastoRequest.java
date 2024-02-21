@@ -5,11 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import ttps.java.entregable6_v2.helpers.requests.PersonaGasto;
 import ttps.java.entregable6_v2.modelos.Division;
 import ttps.java.entregable6_v2.modelos.TipoGasto;
 
-import java.sql.Date;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,8 +24,8 @@ public class GastoRequest {
     private double monto;
     private Long id_grupo;
     private TipoGasto tipo;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date fecha;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDate fecha;
     private String imagen;
     private Division division;
     private List<PersonaGasto> personas;

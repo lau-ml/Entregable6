@@ -13,6 +13,7 @@ import ttps.java.entregable6_v2.modelos.*;
 import ttps.java.entregable6_v2.repository.GastoJPA;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -70,7 +71,7 @@ public class GastoService {
 
 
 
-    public Page<Gasto> recuperarGastosPaginados(Long id, int page, int pageSize, Date fechaDesde, Date fechaHasta, String nombreGrupo, TipoGasto tipoGasto, String responsable) {
-        return dao.recuperarGastosPaginados(id, fechaDesde, fechaHasta, nombreGrupo, tipoGasto, responsable, PageRequest.of(page, pageSize));
+    public Page<Gasto> recuperarGastosPaginados(Long id, int page, int pageSize, LocalDate fechaDesde, LocalDate fechaHasta, String nombreGrupo, TipoGasto tipoGasto) {
+        return dao.recuperarGastosPaginados(id, fechaDesde, fechaHasta, nombreGrupo, tipoGasto, PageRequest.of(page, pageSize));
     }
 }
