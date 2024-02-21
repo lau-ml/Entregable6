@@ -21,11 +21,11 @@ export class GrupoService {
 
 
 
-  getGroupsPaginated(page?: number, categoria?: string, nombre?: string, perPage?:number) {
+  getGroupsPaginated(page?: number, categoria?: string, usuario?: string, perPage?:number) {
     const options = {
       params: new HttpParams()
         .set('page', page ? page.toString() : "1")
-        .set('nombre', nombre || '')
+        .set('usuario', usuario || '')
         .set('categoria', categoria || '')
         .set('pageSize', perPage ? perPage.toString() : "")
     };

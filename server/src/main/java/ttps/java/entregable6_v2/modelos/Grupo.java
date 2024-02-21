@@ -1,6 +1,8 @@
 package ttps.java.entregable6_v2.modelos;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.List;
@@ -9,26 +11,35 @@ import java.util.Set;
 @Entity
 @Table(name = "grupos")
 public class Grupo {
+    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
+    @Getter
     @Column(name = "nombre")
     private String nombre;
 
+    @Getter
+    @Setter
     @Enumerated(EnumType.STRING)
     @Column(name = "categoria")
     private Categoria categoria;
 
+    @Getter
     @Column(name = "saldo")
     private double saldo;
 
 
+    @Getter
     @ManyToMany(mappedBy = "grupos")
     private Set<Usuario> participantes = new HashSet<>();
 
     // Otros atributos y métodos
 
+    @ManyToOne
+    private Usuario responsable;
 
     @OneToMany(mappedBy = "grupo")
     private Set<SolicitudGrupo> solicitudesGrupo;
@@ -58,41 +69,21 @@ public class Grupo {
         this.saldo = saldo;
     }
 
-    // Getters y setters
-
-    public void setNombre(String nombre) {
+    public Grupo(String nombre, Categoria categoria, double v, Usuario usuario) {
         this.nombre = nombre;
+        this.categoria = categoria;
+        this.saldo = v;
+        this.responsable = usuario;
     }
 
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-    }
+    // Getters y setters
 
     public void setSaldo(double saldo) {
         this.saldo = saldo;
     }
 
-    public Set<Usuario> getParticipantes() {
-        return participantes;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-
-    public String getNombre() {
-        return nombre;
-    }
 
     // Métodos adicionales, por ejemplo, para agregar integrantes y gastos
 
-    public double getSaldo() {
-        return saldo;
-    }
-
-    public Categoria getCategoria() {
-        return categoria;
-    }
 }
 

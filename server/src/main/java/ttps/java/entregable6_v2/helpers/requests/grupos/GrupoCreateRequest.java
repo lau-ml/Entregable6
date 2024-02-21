@@ -11,6 +11,6 @@ import ttps.java.entregable6_v2.modelos.Categoria;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GrupoCreateRequest {
-    private String nombre;
+    private String usuario;
     private Categoria categoria;
 }

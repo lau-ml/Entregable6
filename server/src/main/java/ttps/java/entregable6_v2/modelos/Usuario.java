@@ -85,6 +85,9 @@ public class Usuario implements UserDetails {
     @OneToMany(mappedBy = "friendReceiver")
     private Set<SolicitudAmistad> receivedFriends;
 
+    @OneToMany(mappedBy = "responsable")
+    private Set<Grupo> gruposResponsable;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

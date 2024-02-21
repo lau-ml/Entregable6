@@ -63,8 +63,9 @@ public class GrupoService {
     public Grupo crearGrupo(GrupoCreateRequest grupoCreateRequest, Usuario usuario) throws GrupoException {
         try {
 
-            Grupo grupo_persistido = persistir(new Grupo(grupoCreateRequest.getNombre(), grupoCreateRequest.getCategoria(), .0));
+
             Usuario usuarioConGrupos = usuarioDAO.recuperarConGrupos(usuario.getId());
+            Grupo grupo_persistido = persistir(new Grupo(grupoCreateRequest.getUsuario(), grupoCreateRequest.getCategoria(), .0, usuarioConGrupos));
             usuarioConGrupos.agregarGrupo(grupo_persistido);
             usuarioDAO.save(usuarioConGrupos);
             return grupo_persistido;

@@ -63,9 +63,9 @@ export class GruposComponent implements OnInit {
     this.loading = true;
 
     const categoria = this.groupForm.get('categoria')?.value ?? '';
-    const nombre = this.groupForm.get('usuario')?.value ?? '';
+    const usuario = this.groupForm.get('usuario')?.value ?? '';
 
-    this.grupoService.getGroupsPaginated(page, categoria, nombre, this.perPage).subscribe({
+    this.grupoService.getGroupsPaginated(page, categoria, usuario, this.perPage).subscribe({
       next: ({ grupos, totalItems, totalPages, currentPage, itemsPerPage }) => {
         this.grupos = grupos;
         this.totalItems = totalItems;
@@ -78,14 +78,14 @@ export class GruposComponent implements OnInit {
       },
       complete: () => {
         this.loading = false;
-        this.updateQueryParams(page, nombre, categoria);
+        this.updateQueryParams(page, usuario, categoria);
       },
     });
   }
-  updateQueryParams(page: number, nombre: string, categoria: string) {
+  updateQueryParams(page: number, usuario: string, categoria: string) {
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { page, nombre, categoria },
+      queryParams: { page, usuario, categoria },
       queryParamsHandling: 'merge',
     });
   }
@@ -95,7 +95,7 @@ export class GruposComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.groupForm.patchValue({
         categoria: params['categoria'] || '',
-        usuario: params['nombre']|| ''
+        usuario: params['usuario']|| ''
       });
     });
     this.getPage(1);
