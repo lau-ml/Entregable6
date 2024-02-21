@@ -39,7 +39,7 @@ export class GastoCreacionComponent {
       fecha: ['', Validators.required],
       imagen: ['', Validators.required],
       grupoBool: [false],
-      id_grupo: [0, Validators.required],
+      id_grupo: ['--Seleccione una opción--', Validators.required],
       division: ["--Seleccione una opción--", Validators.required],
       tipo: ["--Seleccione una opción--", Validators.required],
       personas: this.formBuilder.array([]),
@@ -84,7 +84,7 @@ export class GastoCreacionComponent {
         this.seleccionCargado.set(key, value - 1);
       }
     });
-
+    this.formulario.get('responsable')?.setValue("--Seleccione una opción--");
     // Eliminar el usuario del FormArray
     this.personasFormArray.removeAt(index);
   }
@@ -150,7 +150,7 @@ export class GastoCreacionComponent {
   }
 
   cambioGrupo($event: any) {
-    const foundGroup = this.grupos.find((grupo) => grupo.id == $event.target.value);
+    const foundGroup = this.grupos.find((grupo) => grupo.id == $event);
 
     if (foundGroup) {
       this.integrantes = foundGroup.participantes;
@@ -166,13 +166,13 @@ export class GastoCreacionComponent {
 
 
   cambioUsuario($event: any, i: number) {
-    const selectedValue = $event.target.value;
+    const selectedValue = $event;
     this.seleccionCargado.delete(this.previousValue);
     this.seleccionCargado.set(selectedValue, i);
   }
 
   antesCambioUsuario($event: any, i: number) {
-    this.previousValue = $event.target.value;
+    this.previousValue = $event;
   }
 
   chequearSeleccionado(persona: string, i: number) {
@@ -183,7 +183,7 @@ export class GastoCreacionComponent {
     this.personasFormArray.clear();
     this.seleccionCargado.clear();
     this.formulario.get('responsable')?.setValue("--Seleccione una opción--");
-    this.formulario.get('id_grupo')?.setValue(0);
+    this.formulario.get('id_grupo')?.setValue('--Seleccione una opción--');
     if (!$event.target.checked) {
       this.integrantes = this.usuario.amigos.slice();
       this.integrantes.push(this.usuario.username);

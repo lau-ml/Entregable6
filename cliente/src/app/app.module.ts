@@ -5,7 +5,7 @@ import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {MatSelectModule} from '@angular/material/select';
 
 import {HttpParams} from "@angular/common/http";
-
+import { NgSelectModule } from '@ng-select/ng-select';
 import {MiPerfilVisualizarComponent} from "./mi-perfil/mi-perfil-visualizar/mi-perfil-visualizar.component";
 import {AppComponent} from './app.component';
 import {routing} from './app.routes';
@@ -31,6 +31,8 @@ import {HomeComponent} from "./home/home.component";
 import {GastosComponent} from "./gasto/gastos/gastos.component";
 import {GastoCreacionComponent} from "./gasto/gasto-creacion/gasto-creacion.component";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -42,7 +44,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     routing,
     SweetAlert2Module.forRoot(),
     NgxPaginationModule,
-    FormsModule
+    FormsModule,
+    NgSelectModule
   ],
   declarations: [
     AppComponent,
