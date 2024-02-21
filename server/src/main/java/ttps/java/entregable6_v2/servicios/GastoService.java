@@ -9,12 +9,11 @@ import ttps.java.entregable6_v2.excepciones.GrupoException;
 import ttps.java.entregable6_v2.excepciones.UsuarioInvalidoException;
 import ttps.java.entregable6_v2.helpers.ImagenUtils.ImageUtils;
 import ttps.java.entregable6_v2.helpers.requests.gastos.GastoRequest;
-import ttps.java.entregable6_v2.modelos.Gasto;
-import ttps.java.entregable6_v2.modelos.Grupo;
-import ttps.java.entregable6_v2.modelos.Usuario;
+import ttps.java.entregable6_v2.modelos.*;
 import ttps.java.entregable6_v2.repository.GastoJPA;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 
 @org.springframework.stereotype.Service
@@ -68,9 +67,10 @@ public class GastoService {
 
     }
 
-    public Page<Gasto> recuperarGastosPaginados(Long id, int page, int pageSize) {
-        return dao.recuperarGastosPaginados(id, PageRequest.of(page, pageSize));
+
+
+
+    public Page<Gasto> recuperarGastosPaginados(Long id, int page, int pageSize, Date fechaDesde, Date fechaHasta, String nombreGrupo, TipoGasto tipoGasto, String responsable) {
+        return dao.recuperarGastosPaginados(id, fechaDesde, fechaHasta, nombreGrupo, tipoGasto, responsable, PageRequest.of(page, pageSize));
     }
-
-
 }
