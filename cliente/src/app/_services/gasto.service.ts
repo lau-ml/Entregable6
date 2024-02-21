@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {map} from "rxjs";
 
 @Injectable({
@@ -13,18 +13,22 @@ export class GastoService {
 
   crearGasto(gasto: any) {
 
-
     return this.httpClient.post(this.url+"/crear", gasto);
   }
 
 
-  getGastos(page: number) {
+  getGastos(page?: number, tipoGasto?: string, fechaDesde?: string, fechaHasta?: string, nombreGrupo?: string) {
 
-    const url = `http://localhost:8080/gastos?page=${page}`;
     const options={
 
+      params:new HttpParams()
+        .set('page',page? page.toString():'')
+        .set('tipoGasto',tipoGasto? tipoGasto:'')
+        .set('fechaDesde',fechaDesde ? new Date(fechaDesde).toISOString() : '')
+        .set('fechaHasta',fechaHasta ? new Date(fechaHasta).toISOString() : '')
+        .set('nombreGrupo',nombreGrupo? nombreGrupo:'')
     }
-    return this.httpClient.get<any>(url).pipe(
+    return this.httpClient.get<any>(this.url, options).pipe(
       map((grupoData) => {
           return {
             gastos: grupoData.gastos,

@@ -130,6 +130,7 @@ export class GastoCreacionComponent {
       });
       formulario.value.division = 'PORCENTAJE';
     }
+    formulario.value.fecha = new Date(formulario.value.fecha).toISOString();
   }
 
   resetearForm() {

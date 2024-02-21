@@ -1,12 +1,12 @@
 <div class="d-flex w-100 align-content-end justify-content-end flex-wrap">
-  <form class="m-2 form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+  <form (ngSubmit)="getPage(1)" [formGroup]="groupForm"  class="m-2 form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
 
     <div class="input-group d-flex align-items-end flex-wrap">
       <div class="mr-2 d-flex align-items-center flex-wrap">
 
         <div>
-          <label for="categoria">Categoría </label>
-          <select id="categoria" class="mr-1">
+          <label for="tipo">Tipo </label>
+          <select formControlName="tipoGasto" id="tipo" class="mr-1">
             <option value="">Todas</option>
             <option value="COMIDA">Comida</option>
             <option value="COMBUSTIBLE">Combustible</option>
@@ -16,20 +16,20 @@
         </div>
         <div>
           <label for="fechaDesde">Fecha desde </label>
-          <input id="fechaDesde" class="mr-1" type="date">
+          <input placeholder="dd/mm/yyyy" formControlName="fechaDesde" id="fechaDesde" class="mr-1" type="date">
         </div>
         <div>
           <label for="fechaHasta">Fecha hasta </label>
-          <input id="fechaHasta" type="date">
+          <input placeholder="dd/mm/yyyy" id="fechaHasta" formControlName="fechaHasta" type="date">
         </div>
 
       </div>
 
 
-      <input aria-describedby="basic-addon2" aria-label="Buscar" class="form-control bg-light border-0 small"
+      <input aria-describedby="basic-addon2" formControlName="nombreGrupo" aria-label="Buscar" class="form-control bg-light border-0 small"
              placeholder="Buscar por grupo..." type="text">
       <div class="input-group-append">
-        <button class="btn btn-primary" type="button">
+        <button class="btn btn-primary" type="submit">
           <i class="fas fa-search fa-sm"></i>
         </button>
       </div>
