@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "grupos")
+@Table(name = "grupos", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_nombre_responsable", columnNames = {"nombre", "responsable_id"})
+})
 public class Grupo {
     @Getter
     @Id
