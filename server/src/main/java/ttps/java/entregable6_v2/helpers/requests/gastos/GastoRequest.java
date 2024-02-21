@@ -24,6 +24,7 @@ public class GastoRequest {
     private double monto;
     private Long id_grupo;
     private TipoGasto tipo;
+    private Boolean grupoBool;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDate fecha;
     private String imagen;

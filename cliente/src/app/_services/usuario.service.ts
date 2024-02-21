@@ -35,6 +35,10 @@ export class UsuarioService {
     return this.saldo.asObservable();
   }
 
+  getAmigos() {
+    return this.amigos.asObservable();
+  }
+
   getNombre() {
     return this.nombre.asObservable();
   }

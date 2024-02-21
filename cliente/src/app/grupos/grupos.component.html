@@ -13,7 +13,7 @@
         </select>
       </div>
       <input aria-describedby="basic-addon2" aria-label="Buscar" class="form-control  border-0 small"
-             formControlName="usuario" placeholder="Buscar..." type="text">
+             formControlName="nombreGrupo" placeholder="Buscar..." type="text">
       <div class="input-group-append">
         <button class="btn btn-primary" type="submit">
           <i class="fas fa-search fa-sm"></i>
@@ -82,20 +82,29 @@
         <form (ngSubmit)="onSubmit()" [formGroup]="groupForm">
           <div class="form-group">
             <label for="nombreGrupo">Nombre del Grupo</label>
-            <input class="form-control" formControlName="usuario" id="nombreGrupo"
+            <input class="form-control" formControlName="nombreGrupo" id="nombreGrupo"
                    placeholder="Ingrese el nombre del grupo"
                    type="text">
           </div>
 
           <div class="form-group">
             <label for="categoria">Categoría del Grupo</label>
-            <select class="form-control" formControlName="categoria" id="categoria">
-              <option value="FAMILIAR">Familia</option>
-              <option value="VIAJE">Viaje</option>
-              <option value="SALIDA">Salida</option>
-              <option value="OCIO">Ocio</option>
-            </select>
+            <ng-select  formControlName="categoria" id="categoria">
+              <ng-option [disabled]="true">--Seleccione una opción--</ng-option>
+              <ng-option value="FAMILIAR">Familia</ng-option>
+              <ng-option value="VIAJE">Viaje</ng-option>
+              <ng-option value="SALIDA">Salida</ng-option>
+              <ng-option value="OCIO">Ocio</ng-option>
+            </ng-select>
           </div>
+
+          <div class="form-group">
+            <label for="amigos">Agregar Amigos</label>
+            <ng-select id="amigos" [multiple]="true" formControlName="participantes">
+              <ng-option *ngFor="let amigo of amigos" [value]="amigo">{{amigo}}</ng-option>
+            </ng-select>
+          </div>
+
           <div class="modal-footer">
             <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cerrar</button>
             <button [disabled]="!groupForm.valid" class="btn btn-primary" data-bs-dismiss="modal" type="submit">Crear

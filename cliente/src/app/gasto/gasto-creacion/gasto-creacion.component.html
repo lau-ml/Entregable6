@@ -56,7 +56,7 @@
             <div class="form-group" *ngIf="formulario.get('grupoBool')?.value">
               <label for="id_grupo">Grupo</label>
               <ng-select (change)="cambioGrupo($event)"  formControlName="id_grupo" id="id_grupo">
-                <ng-option  [disabled]="true" >--Seleccione una opción--</ng-option>
+                <ng-option  [disabled]="true" [value]="">--Seleccione una opción--</ng-option>
                 <ng-option *ngFor="let grupo of grupos" [value]="grupo.id">{{ grupo.nombre }}</ng-option>
               </ng-select>
 
@@ -76,7 +76,8 @@
                   <div class="col-4">
                     <label [attr.for]="'usuario' + i">Usuario:</label>
 
-                    <ng-select (focus)="antesCambioUsuario($event, i)" (change)="cambioUsuario($event, i)"
+                    <ng-select (focus)="antesCambioUsuario(i)" (change)="cambioUsuario($event, i)"
+                               (clear)="eliminarSeleccion(i)"
                             [attr.id]="'usuario' + i"  formControlName="usuario">
                       <ng-option  [disabled]="true">--Seleccione una opción--</ng-option>
                       <ng-option [disabled]="chequearSeleccionado(persona,i)"

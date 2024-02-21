@@ -13,6 +13,7 @@ export class GrupoService {
   }
 
   createGroup(grupo: GrupoCreateRequest) {
+    alert(grupo)
     return this.http.post<any>(this.url + "/crear", grupo).pipe(
       map((grupoData) => grupoData)
     );
@@ -21,13 +22,14 @@ export class GrupoService {
 
 
 
-  getGroupsPaginated(page?: number, categoria?: string, usuario?: string, perPage?:number) {
+  getGroupsPaginated(page?: number,perPage?:number, categoria?: string, nombreGrupo?: string, participantes?: any[] ) {
     const options = {
       params: new HttpParams()
         .set('page', page ? page.toString() : "1")
-        .set('usuario', usuario || '')
+        .set('nombreGrupo', nombreGrupo || '')
         .set('categoria', categoria || '')
         .set('pageSize', perPage ? perPage.toString() : "")
+        .set('amigos', participantes ? participantes.join(",") : "")
     };
 
 

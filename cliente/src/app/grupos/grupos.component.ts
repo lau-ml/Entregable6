@@ -5,6 +5,7 @@ import {GrupoService} from "../_services/grupo.service";
 import {GrupoCreateRequest} from "../_requests/grupoCreateRequest";
 import {SweetalertService} from "../_services/sweetalert.service";
 import {GrupoResponse} from "../_responses/grupoResponse";
+import {UsuarioService} from "../_services/usuario.service";
 
 @Component({
   selector: 'app-grupos',
@@ -14,22 +15,25 @@ import {GrupoResponse} from "../_responses/grupoResponse";
 export class GruposComponent implements OnInit {
 
   groupForm = this.formBuilder.group({
-    usuario: ['', Validators.required],
-    categoria: ['', Validators.required],
+    nombreGrupo: ['', Validators.required],
+    categoria: ['--Seleccione una opción--', Validators.required],
+    participantes: this.formBuilder.control([])
   });
 
   grupos: GrupoResponse[] = [];
   loading: boolean = false;
-  perPage: number= 6;
+  perPage: number = 6;
   totalPages: number = 0;
   currentPage: number = 0;
   totalItems: number = 0;
   itemsPerPage: number = 0;
   nombre: string = "";
   categoria: string = "";
+  amigos: string[] = [];
 
   constructor(private formBuilder: FormBuilder, private router: Router, private grupoService: GrupoService, private sweetAlertService: SweetalertService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private usuarioService: UsuarioService) {
   }
 
   onSubmit() {
@@ -37,6 +41,7 @@ export class GruposComponent implements OnInit {
       this.groupForm.markAllAsTouched();
       return;
     }
+    alert(this.groupForm.value.participantes)
     this.grupoService.createGroup(this.groupForm.value as GrupoCreateRequest).subscribe(
       {
         next: (data) => {
@@ -63,10 +68,9 @@ export class GruposComponent implements OnInit {
     this.loading = true;
 
     const categoria = this.groupForm.get('categoria')?.value ?? '';
-    const usuario = this.groupForm.get('usuario')?.value ?? '';
-
-    this.grupoService.getGroupsPaginated(page, categoria, usuario, this.perPage).subscribe({
-      next: ({ grupos, totalItems, totalPages, currentPage, itemsPerPage }) => {
+    const nombreGrupo = this.groupForm.get('nombreGrupo')?.value ?? '';
+    this.grupoService.getGroupsPaginated(page, this.perPage, categoria, nombreGrupo).subscribe({
+      next: ({grupos, totalItems, totalPages, currentPage, itemsPerPage}) => {
         this.grupos = grupos;
         this.totalItems = totalItems;
         this.totalPages = totalPages;
@@ -78,24 +82,30 @@ export class GruposComponent implements OnInit {
       },
       complete: () => {
         this.loading = false;
-        this.updateQueryParams(page, usuario, categoria);
+        this.updateQueryParams(page, nombreGrupo, categoria);
       },
     });
   }
+
   updateQueryParams(page: number, usuario: string, categoria: string) {
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { page, usuario, categoria },
+      queryParams: {page, usuario, categoria},
       queryParamsHandling: 'merge',
     });
   }
 
 
   ngOnInit(): void {
+    this.usuarioService.getAmigos().subscribe({
+      next: (data) => {
+        this.amigos = data;
+      }
+    });
     this.route.queryParams.subscribe(params => {
       this.groupForm.patchValue({
         categoria: params['categoria'] || '',
-        usuario: params['usuario']|| ''
+        nombreGrupo: params['nombreGrupo'] || ''
       });
     });
     this.getPage(1);

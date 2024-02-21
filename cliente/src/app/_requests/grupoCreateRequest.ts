@@ -1,4 +1,5 @@
 export interface GrupoCreateRequest{
-    nombre: string;
+    nombreGrupo: string;
     categoria: string;
+    participantes: string[];
 }

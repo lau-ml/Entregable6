@@ -25,7 +25,7 @@ export class GastoCreacionComponent {
   currentPage: number = 0;
   loading: boolean = true;
   itemsPerPage: number = 0;
-  previousValue: string = "";
+  previousValue: Map<number, string> = new Map<number, string>();
   amigosConUsuario: string[] = [];
   seleccionCargado: Map<string, number> = new Map<string, number>();
 
@@ -39,7 +39,7 @@ export class GastoCreacionComponent {
       fecha: ['', Validators.required],
       imagen: ['', Validators.required],
       grupoBool: [false],
-      id_grupo: ['--Seleccione una opción--', Validators.required],
+      id_grupo: ['', Validators.required],
       division: ["--Seleccione una opción--", Validators.required],
       tipo: ["--Seleccione una opción--", Validators.required],
       personas: this.formBuilder.array([]),
@@ -84,6 +84,13 @@ export class GastoCreacionComponent {
         this.seleccionCargado.set(key, value - 1);
       }
     });
+    this.previousValue.forEach((value, key) => {
+      if (key > index) {
+        this.previousValue.set(key - 1, value);
+      } else if (key === index) {
+        this.previousValue.delete(key);
+      }
+    });
     this.formulario.get('responsable')?.setValue("--Seleccione una opción--");
     // Eliminar el usuario del FormArray
     this.personasFormArray.removeAt(index);
@@ -98,7 +105,6 @@ export class GastoCreacionComponent {
     });
     formData.append('imagen', this.imagen);
     formData.append('gastoRequest', blob);
-    alert(JSON.stringify(this.formulario.value));
     // Realiza la solicitud HTTP POST
     this.gastoService.crearGasto(formData).subscribe(
       {
@@ -167,12 +173,24 @@ export class GastoCreacionComponent {
 
   cambioUsuario($event: any, i: number) {
     const selectedValue = $event;
-    this.seleccionCargado.delete(this.previousValue);
+    this.seleccionCargado.delete(<string>this.previousValue.get(i));
+    this.previousValue.set(i, selectedValue);
     this.seleccionCargado.set(selectedValue, i);
   }
 
-  antesCambioUsuario($event: any, i: number) {
-    this.previousValue = $event;
+  antesCambioUsuario(i: number) {
+    this.previousValue.set(i, this.personasFormArray.at(i).get('usuario')?.value);
+  }
+
+  eliminarSeleccion(i: number) {
+
+    this.seleccionCargado.forEach((value, key) => {
+      if (value === i) {
+        this.seleccionCargado.delete(key);
+      }
+    });
+    this.previousValue.delete(i);
+    this.personasFormArray.at(i).get('usuario')?.setValue("--Seleccione una opción--");
   }
 
   chequearSeleccionado(persona: string, i: number) {
@@ -183,7 +201,7 @@ export class GastoCreacionComponent {
     this.personasFormArray.clear();
     this.seleccionCargado.clear();
     this.formulario.get('responsable')?.setValue("--Seleccione una opción--");
-    this.formulario.get('id_grupo')?.setValue('--Seleccione una opción--');
+    this.formulario.get('id_grupo')?.setValue('');
     if (!$event.target.checked) {
       this.integrantes = this.usuario.amigos.slice();
       this.integrantes.push(this.usuario.username);

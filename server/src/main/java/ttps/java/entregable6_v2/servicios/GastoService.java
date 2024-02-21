@@ -9,12 +9,14 @@ import ttps.java.entregable6_v2.excepciones.GrupoException;
 import ttps.java.entregable6_v2.excepciones.UsuarioInvalidoException;
 import ttps.java.entregable6_v2.helpers.ImagenUtils.ImageUtils;
 import ttps.java.entregable6_v2.helpers.requests.gastos.GastoRequest;
-import ttps.java.entregable6_v2.modelos.*;
+import ttps.java.entregable6_v2.modelos.Gasto;
+import ttps.java.entregable6_v2.modelos.Grupo;
+import ttps.java.entregable6_v2.modelos.TipoGasto;
+import ttps.java.entregable6_v2.modelos.Usuario;
 import ttps.java.entregable6_v2.repository.GastoJPA;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashMap;
 
 @org.springframework.stereotype.Service
@@ -47,7 +49,7 @@ public class GastoService {
 
 
     public Gasto crearGasto(GastoRequest gastoCreateRequest, String imagen) throws UsuarioInvalidoException {
-        Grupo grupo = grupoService.recuperar(gastoCreateRequest.getId_grupo());
+        Grupo grupo = gastoCreateRequest.getGrupoBool() ? grupoService.recuperar(gastoCreateRequest.getId_grupo()) : null;
         HashMap<Usuario, Double> usuariosValores = usuarioService.usuariosGastoValores(gastoCreateRequest);
         Gasto gasto = new Gasto(gastoCreateRequest.getMonto(), gastoCreateRequest.getFecha(), imagen, usuariosValores, usuarioService.recuperar(gastoCreateRequest.getResponsable()), grupo, gastoCreateRequest.getTipo(), gastoCreateRequest.getDivision());
         this.persistir(gasto);
@@ -67,8 +69,6 @@ public class GastoService {
         return gasto;
 
     }
-
-
 
 
     public Page<Gasto> recuperarGastosPaginados(Long id, int page, int pageSize, LocalDate fechaDesde, LocalDate fechaHasta, String nombreGrupo, TipoGasto tipoGasto) {

@@ -65,7 +65,7 @@ public class GrupoService {
 
 
             Usuario usuarioConGrupos = usuarioDAO.recuperarConGrupos(usuario.getId());
-            Grupo grupo_persistido = persistir(new Grupo(grupoCreateRequest.getUsuario(), grupoCreateRequest.getCategoria(), .0, usuarioConGrupos));
+            Grupo grupo_persistido = persistir(new Grupo(grupoCreateRequest.getNombreGrupo(), grupoCreateRequest.getCategoria(), .0, usuarioConGrupos));
             usuarioConGrupos.agregarGrupo(grupo_persistido);
             usuarioDAO.save(usuarioConGrupos);
             return grupo_persistido;
