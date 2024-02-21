@@ -63,7 +63,7 @@ export class GruposComponent implements OnInit {
     this.loading = true;
 
     const categoria = this.groupForm.get('categoria')?.value ?? '';
-    const nombre = this.groupForm.get('nombre')?.value ?? '';
+    const nombre = this.groupForm.get('usuario')?.value ?? '';
 
     this.grupoService.getGroupsPaginated(page, categoria, nombre, this.perPage).subscribe({
       next: ({ grupos, totalItems, totalPages, currentPage, itemsPerPage }) => {
