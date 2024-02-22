@@ -65,7 +65,7 @@
             </div>
           </div>
           <div
-            *ngIf="formulario.get('division')?.value!='--Seleccione una opción--' && formulario.get('tipo')?.value ">
+            *ngIf="formulario.get('division')?.value && formulario.get('tipo')?.value ">
 
 
             <div class="form-group">
@@ -76,10 +76,17 @@
             </div>
             <div class="form-group" *ngIf="formulario.get('grupoBool')?.value">
               <label for="id_grupo">Grupo</label>
-              <ng-select (change)="cambioGrupo($event)" formControlName="id_grupo" id="id_grupo">
+              <ng-select
+                [ngClass]="{ 'is-invalid':  f['id_grupo'].invalid && (f['id_grupo'].dirty || f['id_grupo'].touched )}"
+                (change)="cambioGrupo($event)" formControlName="id_grupo" id="id_grupo">
                 <ng-option [disabled]="true" [value]="">--Seleccione una opción--</ng-option>
                 <ng-option *ngFor="let grupo of grupos" [value]="grupo.id">{{ grupo.nombre }}</ng-option>
+
               </ng-select>
+              <div *ngIf="f['id_grupo'].invalid && (f['id_grupo'].dirty || f['id_grupo'].touched )"
+                   class="invalid-feedback">
+                <div *ngIf="f['id_grupo'].errors?.['required']">Grupo requerido</div>
+              </div>
 
             </div>
             <div

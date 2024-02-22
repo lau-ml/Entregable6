@@ -40,7 +40,7 @@ export class GastoCreacionComponent {
       fecha: ['', Validators.required],
       imagen: [''],
       grupoBool: [false],
-      id_grupo: [''],
+      id_grupo: ['', this.requiredIfGrupoBool()],
       responsable: ["", Validators.required],
       division: ["", Validators.required],
       tipo: ["", Validators.required],
@@ -61,16 +61,26 @@ export class GastoCreacionComponent {
     })
   }
 
-get f() {
+  private requiredIfGrupoBool() {
+    if (this.formulario.get('grupoBool')?.value) {
+      return {required: true};
+    }
+    return null;
+  };
+
+
+  get f() {
     return this.formulario.controls;
-}
+  }
+
   get personasFormArray() {
     return this.formulario.get('personas') as FormArray;
   }
 
-  get fp(){
+  get fp() {
     return (this.formulario.get('personas') as FormArray).controls;
   }
+
   agregarUsuario() {
     // Agregar un nuevo usuario al FormArray
     const nuevoUsuario = this.formBuilder.group({
@@ -81,7 +91,10 @@ get f() {
 
   }
 
-  eliminarUsuario(index: number) {
+  eliminarUsuario(index
+                    :
+                    number
+  ) {
     // Eliminar la entrada en el Map correspondiente al índice
     this.seleccionCargado.forEach((value, key) => {
       if (value === index) {
@@ -129,7 +142,10 @@ get f() {
   }
 
 
-  armarGastoRequest(formulario: FormGroup) {
+  armarGastoRequest(formulario
+                      :
+                      FormGroup
+  ) {
     if (this.formulario.invalid) {
       this.formulario.markAllAsTouched();
       return;
@@ -154,7 +170,10 @@ get f() {
     this.personasFormArray.clear();
   }
 
-  onChange(event: any) {
+  onChange(event
+             :
+             any
+  ) {
 
     const file: File = event.target.files[0];
 
@@ -165,7 +184,10 @@ get f() {
     }
   }
 
-  cambioGrupo($event: any) {
+  cambioGrupo($event
+                :
+                any
+  ) {
     const foundGroup = this.grupos.find((grupo) => grupo.id == $event);
 
     if (foundGroup) {
@@ -181,18 +203,29 @@ get f() {
   }
 
 
-  cambioUsuario($event: any, i: number) {
+  cambioUsuario($event
+                  :
+                  any, i
+                  :
+                  number
+  ) {
     const selectedValue = $event;
     this.seleccionCargado.delete(<string>this.previousValue.get(i));
     this.previousValue.set(i, selectedValue);
     this.seleccionCargado.set(selectedValue, i);
   }
 
-  antesCambioUsuario(i: number) {
+  antesCambioUsuario(i
+                       :
+                       number
+  ) {
     this.previousValue.set(i, this.personasFormArray.at(i).get('usuario')?.value);
   }
 
-  eliminarSeleccion(i: number) {
+  eliminarSeleccion(i
+                      :
+                      number
+  ) {
 
     this.seleccionCargado.forEach((value, key) => {
       if (value === i) {
@@ -203,11 +236,19 @@ get f() {
     this.personasFormArray.at(i).get('usuario')?.setValue("");
   }
 
-  chequearSeleccionado(persona: string, i: number) {
+  chequearSeleccionado(persona
+                         :
+                         string, i
+                         :
+                         number
+  ) {
     return this.seleccionCargado.get(persona) != i && this.seleccionCargado.get(persona) != undefined;
   }
 
-  gastoGrupalCheck($event: any) {
+  gastoGrupalCheck($event
+                     :
+                     any
+  ) {
     this.personasFormArray.clear();
     this.seleccionCargado.clear();
     this.formulario.get('responsable')?.setValue("");
@@ -215,8 +256,11 @@ get f() {
     if (!$event.target.checked) {
       this.integrantes = this.usuario.amigos.slice();
       this.integrantes.push(this.usuario.usuario);
+      this.formulario.get('id_grupo')?.setValidators(null);
       return;
+    }else{
+      this.integrantes = [];
+      this.formulario.get('id_grupo')?.setValidators(Validators.required);
     }
-    this.integrantes = [];
   }
 }
