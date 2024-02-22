@@ -5,6 +5,8 @@ import {GrupoResponse} from "../../_responses/grupoResponse";
 import {GastoService} from "../../_services/gasto.service";
 import {UsuarioService} from "../../_services/usuario.service";
 import {GrupoService} from "../../_services/grupo.service";
+import {ActivatedRoute, Router} from "@angular/router";
+import {SweetalertService} from "../../_services/sweetalert.service";
 
 @Component({
   selector: 'app-gasto-modificacion',
@@ -21,10 +23,14 @@ export class GastoModificacionComponent {
   previousValue: Map<number, string> = new Map<number, string>();
   amigosConUsuario: string[] = [];
   seleccionCargado: Map<string, number> = new Map<string, number>();
-
+  gastoId: number = 0;
+  valores: Map<string, number> = new Map<string, number>();
 
   constructor(private formBuilder: FormBuilder, private gastoService: GastoService,
-              private usuarioService: UsuarioService, private grupoService: GrupoService) {
+              private usuarioService: UsuarioService, private grupoService: GrupoService,
+              private sweetAlertService: SweetalertService,
+              private route: ActivatedRoute, private router: Router) {
+
   }
 
   ngOnInit() {
@@ -52,7 +58,23 @@ export class GastoModificacionComponent {
         this.grupos = data.grupos;
       }
     })
+    this.gastoId = +this.route.snapshot.paramMap.get('id')!;
+    this.gastoService.getGasto(this.gastoId).subscribe({
+      next: (data) => {
+        this.formulario.patchValue(data);
+        for (const key in data.valores) {
+          if (data.valores.hasOwnProperty(key)) {
+            const value = data.valores[key];
+            this.agregarUsuario();
+            this.personasFormArray.at(this.personasFormArray.length - 1).get('usuario')?.setValue(key);
+            this.personasFormArray.at(this.personasFormArray.length - 1).get('monto')?.setValue(data.division === 'MONTO' ? value : value * 100 / data.monto);
+            this.seleccionCargado.set(key, this.personasFormArray.length - 1);
+          }
+        }
+      }
+    })
   }
+
 
   private requiredIfGrupoBool() {
     if (this.formulario.get('grupoBool')?.value) {
@@ -108,7 +130,7 @@ export class GastoModificacionComponent {
     this.personasFormArray.removeAt(index);
   }
 
-  crearGasto() {
+  actualizarGasto() {
 
     const formData = new FormData();
     this.armarGastoRequest(this.formulario);
@@ -118,12 +140,15 @@ export class GastoModificacionComponent {
     formData.append('imagen', this.imagen);
     formData.append('gastoRequest', blob);
     // Realiza la solicitud HTTP POST
-    this.gastoService.crearGasto(formData).subscribe(
+    this.gastoService.updateGasto(this.gastoId,formData).subscribe(
       {
         next: (data) => {
           this.resetearForm();
+          this.sweetAlertService.showAlert("success", "¡Éxito!", "Gasto modificado");
+          this.router.navigate(['/gastos']);
         },
         error: (error) => {
+          this.sweetAlertService.showAlert("error", "¡Error!", "No se pudo modificar el gasto");
           console.log(error);
         }
         ,

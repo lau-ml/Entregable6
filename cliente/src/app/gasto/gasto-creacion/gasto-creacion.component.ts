@@ -5,6 +5,8 @@ import {GastoService} from "../../_services/gasto.service";
 import {UsuarioService} from "../../_services/usuario.service";
 import {GrupoResponse} from "../../_responses/grupoResponse";
 import {GrupoService} from "../../_services/grupo.service";
+import {SweetalertService} from "../../_services/sweetalert.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-gasto-creacion',
@@ -25,7 +27,9 @@ export class GastoCreacionComponent {
 
 
   constructor(private formBuilder: FormBuilder, private gastoService: GastoService,
-              private usuarioService: UsuarioService, private grupoService: GrupoService) {
+              private sweetAlertService: SweetalertService,
+              private usuarioService: UsuarioService, private grupoService: GrupoService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -123,6 +127,8 @@ export class GastoCreacionComponent {
       {
         next: (data) => {
           this.resetearForm();
+          this.sweetAlertService.showAlert("success", "¡Éxito!", "Gasto creado");
+          this.router.navigate(['/gastos']);
         },
         error: (error) => {
           console.log(error);

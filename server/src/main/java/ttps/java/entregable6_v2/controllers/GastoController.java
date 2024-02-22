@@ -19,7 +19,6 @@ import ttps.java.entregable6_v2.servicios.GrupoService;
 import ttps.java.entregable6_v2.servicios.UsuarioService;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,11 +67,24 @@ public class GastoController {
         }
     }
 
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> getGasto(@PathVariable("id") long id) {
+        try {
+            Usuario user = usuarioService.recuperarUsuario();
+            Gasto gasto = gastoService.recuperarGastoParticular(user.getId(), id);
+            GastoGrupoDTO gastoDTO = new GastoGrupoDTO(gasto, (gasto.getValores().entrySet().stream().collect(Collectors.toMap(e -> e.getKey().getUsuario(), Map.Entry::getValue, (a, b) -> b, HashMap::new))));
+            return new ResponseEntity<>(gastoDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ResponseEntity<?> getGastos(@RequestParam(defaultValue = "1") int page,
                                        @RequestParam(defaultValue = "10") int pageSize,
                                        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate fechaDesde,
-                                       @RequestParam(required = false)  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate fechaHasta,
+                                       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate fechaHasta,
                                        @RequestParam(defaultValue = "") String nombreGrupo,
                                        @RequestParam(defaultValue = "") TipoGasto tipoGasto
 

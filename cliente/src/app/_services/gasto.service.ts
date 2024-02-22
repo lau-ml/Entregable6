@@ -17,6 +17,29 @@ export class GastoService {
   }
 
 
+  updateGasto(id: number, gasto: any) {
+    return this.httpClient.put(this.url + "/" + id + "/actualizar", gasto);
+  }
+
+
+  getGasto(id: number) {
+    return this.httpClient.get<any>(this.url + "/" + id).pipe(
+      map((gastoData) => {
+        return {
+          valores: gastoData.valores,
+          id: gastoData.id,
+          nombreGrupo: gastoData.nombreGrupo,
+          monto: gastoData.monto,
+          fecha: gastoData.fecha,
+          responsable: gastoData.responsable,
+          imagen: gastoData.imagen,
+          division: gastoData.division,
+          tipo: gastoData.tipo,
+          grupoBool: !!gastoData.id_grupo,
+          id_grupo: gastoData.id_grupo
+        };
+      }));
+  }
   getGastos(page?: number, tipoGasto?: string, fechaDesde?: string, fechaHasta?: string, nombreGrupo?: string) {
 
     const options={

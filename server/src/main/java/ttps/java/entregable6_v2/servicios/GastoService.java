@@ -41,6 +41,10 @@ public class GastoService {
         return dao.findById(id).orElseThrow(() -> new GastoException("No se encontro el gasto"));
     }
 
+    public Gasto recuperarGastoParticular(Long id, long idGasto) {
+        return dao.obtenerGastoParticular(id, idGasto);
+    }
+
 
     public void actualizar(Gasto entity) throws GastoException {
         Gasto gasto = this.recuperar(entity.getId());
@@ -70,12 +74,14 @@ public class GastoService {
         if (!gasto.getResponsable().getUsuario().equals(user.getUsuario())) {
             throw new GastoException("No tiene permisos para modificar el gasto");
         }
-        Grupo grupo = grupoService.recuperar(gastoUpdateRequest.getId_grupo());
+        Grupo grupo=null;
+        if (gastoUpdateRequest.getGrupoBool() != null && gastoUpdateRequest.getGrupoBool()) {
+            grupo = grupoService.recuperar(gastoUpdateRequest.getId_grupo());
+        }
         HashMap<Usuario, Double> usuariosGastos = usuarioService.usuariosGastoValores(gastoUpdateRequest);
         ttps.java.entregable6_v2.helpers.actualizarGasto.Gasto.actualizarGasto(gasto, gastoUpdateRequest, grupo, usuariosGastos, ImageUtils.guardarImagen(imagen));
         this.actualizar(gasto);
         return gasto;
-
     }
 
 
