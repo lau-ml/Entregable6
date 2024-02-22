@@ -33,13 +33,14 @@ public class Grupo {
     @Column(name = "saldo")
     private double saldo;
 
-
+    @Setter
     @Getter
     @ManyToMany(mappedBy = "grupos")
     private Set<Usuario> participantes = new HashSet<>();
 
     // Otros atributos y métodos
 
+    @Getter
     @ManyToOne
     private Usuario responsable;
 
@@ -76,6 +77,14 @@ public class Grupo {
         this.categoria = categoria;
         this.saldo = v;
         this.responsable = usuario;
+    }
+
+    public Grupo(String nombreGrupo, Categoria categoria, double saldo, Usuario usuarioConGrupos, Set<Usuario> participantes) {
+        this.nombre = nombreGrupo;
+        this.categoria = categoria;
+        this.saldo = saldo;
+        this.responsable = usuarioConGrupos;
+        this.participantes = participantes;
     }
 
     // Getters y setters

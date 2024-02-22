@@ -6,24 +6,6 @@
        href="#">
       <i class="fa-regular fa-file"></i>Modificar grupo
     </a>
-
-    <a class="btn btn-sm btn-primary shadow-sm m-2" data-target="#historialModal" data-toggle="modal"
-       href="#">
-      <i class="fa-regular fa-file"></i>Eventos
-    </a>
-    <a class="btn btn-sm btn-primary shadow-sm m-2" data-target="#dataTableModal" data-toggle="modal"
-       href="#">
-      <i class="fa-regular fa-file"></i>Gastos
-    </a>
-    <a class="btn btn-sm btn-primary shadow-sm m-2" data-target="#modalPagoPersona" data-toggle="modal"
-       href="#">
-      <i class="fa-solid fa-money-bill"></i>Saldar pago
-    </a>
-
-    <a class="btn btn-sm btn-primary shadow-sm m-2" data-target="#cargarRecibo" data-toggle="modal"
-       href="#">
-      <i class="fa-solid fa-receipt"></i> Cargar recibo
-    </a>
   </div>
 </div>
 
@@ -214,7 +196,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="grupoModalLabel">Crear Nuevo Grupo</h5>
+        <h5 class="modal-title" id="grupoModalLabel">Modificar grupo</h5>
         <button aria-label="Cerrar" class="close" data-bs-dismiss="modal" type="button">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -223,25 +205,48 @@
         <form (ngSubmit)="onSubmit()" [formGroup]="groupForm">
           <div class="form-group">
             <label for="nombreGrupo">Nombre del Grupo</label>
-            <input class="form-control" formControlName="nombre" id="nombreGrupo"
+            <input class="form-control" formControlName="nombreGrupo" id="nombreGrupo"
                    placeholder="Ingrese el nombre del grupo"
-                   type="text">
+                   type="text"
+                   [ngClass]="{ 'is-invalid':  f['nombreGrupo'].invalid && (f['nombreGrupo'].dirty || f['nombreGrupo'].touched )}"
+            >
+            <div *ngIf="f['nombreGrupo'].invalid && (f['nombreGrupo'].dirty || f['nombreGrupo'].touched )"
+                 class="invalid-feedback">
+              <div *ngIf="f['nombreGrupo'].errors?.['required']">Nombre de grupo requerido</div>
+              <div *ngIf="f['nombreGrupo'].errors?.['unique']">Ya administra un grupo con ese nombre</div>
+            </div>
+
           </div>
 
           <div class="form-group">
             <label for="categoria">Categoría del Grupo</label>
-            <select class="form-control" formControlName="categoria" id="categoria">
-              <option value="FAMILIAR">Familia</option>
-              <option value="VIAJE">Viaje</option>
-              <option value="SALIDA">Salida</option>
-              <option value="OCIO">Ocio</option>
-            </select>
+            <ng-select
+              [ngClass]="{ 'is-invalid':  f['categoria'].invalid && (f['categoria'].dirty || f['categoria'].touched )}"
+              formControlName="categoria" id="categoria">
+              <ng-option [disabled]="true" [value]="">--Seleccione una opción--</ng-option>
+              <ng-option value="FAMILIAR">Familia</ng-option>
+              <ng-option value="VIAJE">Viaje</ng-option>
+              <ng-option value="SALIDA">Salida</ng-option>
+              <ng-option value="OCIO">Ocio</ng-option>
+            </ng-select>
+
+            <div *ngIf="f['categoria'].invalid && (f['categoria'].dirty || f['categoria'].touched )"
+                 class="invalid-feedback">
+              <div *ngIf="f['categoria'].errors?.['required']">La categoría es requerida</div>
+
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="amigos">Agregar Amigos</label>
+            <ng-select id="amigos" [multiple]="true" formControlName="participantes">
+              <ng-option *ngFor="let amigo of amigos" [value]="amigo">{{ amigo }}</ng-option>
+            </ng-select>
           </div>
 
           <div class="modal-footer">
             <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cerrar</button>
-            <button [disabled]="!groupForm.valid" class="btn btn-primary" data-bs-dismiss="modal" type="submit">
-              Actualizar
+            <button [disabled]="!groupForm.valid" class="btn btn-primary"  type="submit">Actualizar
               Grupo
             </button>
           </div>

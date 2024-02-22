@@ -80,7 +80,7 @@
                 [ngClass]="{ 'is-invalid':  f['id_grupo'].invalid && (f['id_grupo'].dirty || f['id_grupo'].touched )}"
                 (change)="cambioGrupo($event)" formControlName="id_grupo" id="id_grupo">
                 <ng-option [disabled]="true" [value]="">--Seleccione una opción--</ng-option>
-                <ng-option *ngFor="let grupo of grupos" [value]="grupo.id">{{ grupo.nombre }}</ng-option>
+                <ng-option *ngFor="let grupo of grupos" [value]="grupo.id">{{ grupo.nombreGrupo }}</ng-option>
 
               </ng-select>
               <div *ngIf="f['id_grupo'].invalid && (f['id_grupo'].dirty || f['id_grupo'].touched )"

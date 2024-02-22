@@ -13,8 +13,9 @@ import java.util.Set;
 @NoArgsConstructor
 public class GrupoDTO {
     private Long id;
-    private String nombre;
+    private String nombreGrupo;
     private String categoria;
     private Set<String> participantes;
     private Double saldo;
+    private String responsable;
 }

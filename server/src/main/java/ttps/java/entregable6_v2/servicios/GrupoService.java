@@ -16,6 +16,7 @@ import ttps.java.entregable6_v2.repository.UsuarioJPA;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
 public class GrupoService {
@@ -58,8 +59,19 @@ public class GrupoService {
 
     public void actualizarGrupo(Grupo grupo, GrupoUpdateRequest grupoRequest, Usuario user) throws Exception {
         this.usuarioPerteneciente(grupo, user);
-        grupo.setNombre(grupoRequest.getNombre());
+        grupo.setNombre(grupoRequest.getNombreGrupo());
         grupo.setCategoria(grupoRequest.getCategoria());
+        Set<Usuario> participantes = grupoRequest.getParticipantes().stream().map(usuarioDAO::recuperarConGrupos).collect(Collectors.toSet());
+        participantes.add(user);
+        grupo.getParticipantes().forEach(participante -> {
+                participante.eliminarGrupo(grupo);
+                usuarioDAO.save(participante);
+        });
+        grupo.setParticipantes(participantes);
+        participantes.forEach(participante -> {
+            participante.agregarGrupo(grupo);
+            usuarioDAO.save(participante);
+        });
         this.actualizar(grupo);
     }
 
@@ -69,9 +81,13 @@ public class GrupoService {
 
 
             Usuario usuarioConGrupos = usuarioDAO.recuperarConGrupos(usuario.getId());
-            Grupo grupo_persistido = persistir(new Grupo(grupoCreateRequest.getNombreGrupo(), grupoCreateRequest.getCategoria(), .0, usuarioConGrupos));
-            usuarioConGrupos.agregarGrupo(grupo_persistido);
-            usuarioDAO.save(usuarioConGrupos);
+            Set<Usuario> participantes = grupoCreateRequest.getParticipantes().stream().map(usuarioDAO::recuperarConGrupos).collect(Collectors.toSet());
+            participantes.add(usuarioConGrupos);
+            Grupo grupo_persistido = persistir(new Grupo(grupoCreateRequest.getNombreGrupo(), grupoCreateRequest.getCategoria(), .0, usuarioConGrupos, participantes));
+            participantes.forEach(participante -> {
+                participante.agregarGrupo(grupo_persistido);
+                usuarioDAO.save(participante);
+            });
             return grupo_persistido;
         } catch (Exception e) {
             throw new GrupoException(e.getMessage());

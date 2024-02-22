@@ -38,9 +38,10 @@ public class Mapper {
     public GrupoDTO grupoDTO(Grupo grupo) {
         return GrupoDTO.builder()
                 .id(grupo.getId())
-                .nombre(grupo.getNombre())
+                .nombreGrupo(grupo.getNombre())
                 .categoria(grupo.getCategoria().toString())
                 .saldo(grupo.getSaldo())
+                .responsable(grupo.getResponsable().getUsuario())
                 .participantes(grupo.getParticipantes().stream().map(Usuario::getUsuario).collect(Collectors.toSet()))
                 .build();
     }

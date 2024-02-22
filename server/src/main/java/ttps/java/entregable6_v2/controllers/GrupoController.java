@@ -40,7 +40,7 @@ public class GrupoController {
     @RequestMapping(value = "/crear", method = RequestMethod.POST)
     public ResponseEntity<?> crearGrupo(@RequestBody GrupoCreateRequest grupoCreateRequest) throws UsuarioInvalidoException {
         try {
-            return new ResponseEntity<Grupo>(grupoService.crearGrupo(grupoCreateRequest, usuarioService.recuperarUsuario()), HttpStatus.OK);
+            return new ResponseEntity<>(mapper.grupoDTO(grupoService.crearGrupo(grupoCreateRequest, usuarioService.recuperarUsuario())), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -49,12 +49,12 @@ public class GrupoController {
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ResponseEntity<?> getGrupos(@RequestParam(defaultValue = "1") int page,
                                        @RequestParam(defaultValue = "" + Integer.MAX_VALUE) int pageSize,
-                                       @RequestParam(defaultValue = "") String nombre,
+                                       @RequestParam(defaultValue = "") String nombreGrupo,
                                        @RequestParam(defaultValue = "") Categoria categoria) throws UsuarioInvalidoException {
 
         try {
             Usuario user = usuarioService.recuperarUsuario();
-            Page<Grupo> gruposPaginados = grupoService.recuperarGruposPaginados(user.getId(), page - 1, pageSize, nombre, categoria);
+            Page<Grupo> gruposPaginados = grupoService.recuperarGruposPaginados(user.getId(), page - 1, pageSize, nombreGrupo, categoria);
 
             List<GrupoDTO> grupoDTOs = gruposPaginados.stream()
                     .map(mapper::grupoDTO)
@@ -89,7 +89,6 @@ public class GrupoController {
             Grupo grupo = grupoService.recuperar(id);
             Usuario user = usuarioService.recuperarUsuario();
             grupoService.actualizarGrupo(grupo, grupoUpdateRequest, user);
-            grupoService.actualizar(grupo);
             return new ResponseEntity<GrupoDTO>(mapper.grupoDTO(grupo), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<String>("Error al actualizar grupo", HttpStatus.INTERNAL_SERVER_ERROR);

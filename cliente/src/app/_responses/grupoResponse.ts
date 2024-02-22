@@ -1,6 +1,6 @@
 export interface GrupoResponse {
   id: number;
-  nombre: string;
+  nombreGrupo: string;
   categoria: string;
   participantes: string[];
 }

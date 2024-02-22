@@ -73,6 +73,14 @@ public class Usuario implements UserDetails {
         this.amigos.add(amigo);
     }
 
+    public void eliminarAmigo(Usuario amigo) {
+        this.amigos.remove(amigo);
+    }
+
+    public void eliminarGrupo(Grupo grupo) {
+        this.grupos.remove(grupo);
+    }
+
     @OneToMany(mappedBy = "groupRequester")
     private Set<SolicitudGrupo> requestedGroups;
 
