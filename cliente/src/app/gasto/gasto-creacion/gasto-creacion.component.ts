@@ -29,6 +29,7 @@ export class GastoCreacionComponent {
   amigosConUsuario: string[] = [];
   seleccionCargado: Map<string, number> = new Map<string, number>();
 
+
   constructor(private formBuilder: FormBuilder, private gastoService: GastoService,
               private usuarioService: UsuarioService, private grupoService: GrupoService) {
   }
@@ -49,7 +50,7 @@ export class GastoCreacionComponent {
       next: (data) => {
         this.usuario = data;
         this.integrantes = data.amigos.slice();
-        this.integrantes.push(this.usuario.username)
+        this.integrantes.push(this.usuario.usuario)
         this.amigosConUsuario = this.integrantes.slice();
       }
     })
@@ -60,7 +61,9 @@ export class GastoCreacionComponent {
     })
   }
 
-
+get f() {
+    return this.formulario.controls;
+}
   get personasFormArray() {
     return this.formulario.get('personas') as FormArray;
   }
@@ -204,7 +207,7 @@ export class GastoCreacionComponent {
     this.formulario.get('id_grupo')?.setValue('');
     if (!$event.target.checked) {
       this.integrantes = this.usuario.amigos.slice();
-      this.integrantes.push(this.usuario.username);
+      this.integrantes.push(this.usuario.usuario);
       return;
     }
     this.integrantes = [];

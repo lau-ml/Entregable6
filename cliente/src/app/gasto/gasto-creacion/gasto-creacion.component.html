@@ -9,11 +9,21 @@
         <form [formGroup]="formulario" enctype="multipart/form-data">
           <div class="form-group">
             <label for="monto">Monto del gasto:</label>
-            <input class="form-control" formControlName="monto" id="monto" type="number">
+            <input class="form-control" formControlName="monto" id="monto" type="number"
+                   [ngClass]="{ 'is-invalid':  f['monto'].invalid && (f['monto'].dirty || f['monto'].touched )}">
+            <div *ngIf="f['monto'].invalid && (f['monto'].dirty || f['monto'].touched )"
+                 class="invalid-feedback">
+              <div *ngIf="f['monto'].errors?.['required']">Monto requerido</div>
+            </div>
           </div>
           <div class="form-group">
             <label for="fecha">Fecha del gasto:</label>
-            <input placeholder="dd/mm/yyyy" class="form-control" formControlName="fecha" id="fecha" type="date">
+            <input placeholder="dd/mm/yyyy" class="form-control" formControlName="fecha" id="fecha" type="date"
+                   [ngClass]="{ 'is-invalid':  f['fecha'].invalid && (f['fecha'].dirty || f['fecha'].touched )}">
+            <div *ngIf="f['fecha'].invalid && (f['fecha'].dirty || f['fecha'].touched )"
+                 class="invalid-feedback">
+              <div *ngIf="f['fecha'].errors?.['required']">Fecha requerida</div>
+            </div>
           </div>
           <div class="form-group">
             <label for="imagen">Imagen asociada:</label>
@@ -24,103 +34,117 @@
 
           <div class="form-group">
             <label for="division">Forma de dividir el gasto entre integrantes:</label>
-            <ng-select formControlName="division" id="division">
+            <ng-select formControlName="division" id="division"
+                       [ngClass]="{ 'is-invalid':  f['division'].invalid && (f['division'].dirty || f['division'].touched )}">
               <ng-option [disabled]="true">--Seleccione una opción--</ng-option>
               <ng-option value="PORCENTAJE">Porcentaje por integrante</ng-option>
               <ng-option value="MONTOIGUAL">Igual monto para todos</ng-option>
               <ng-option value="MONTO">Montos fijos por integrante</ng-option>
               <ng-option value="PORCENTAJEIGUAL">Igual % para todos</ng-option>
             </ng-select>
+
+            <div *ngIf="f['division'].invalid && (f['division'].dirty || f['division'].touched )"
+                 class="invalid-feedback">
+              <div *ngIf="f['division'].errors?.['division']">División requerida</div>
+            </div>
           </div>
 
           <div class="form-group">
             <label for="tipo">Tipo de gasto:</label>
-            <ng-select  formControlName="tipo" id="tipo">
+            <ng-select formControlName="tipo" id="tipo"
+                       [ngClass]="{ 'is-invalid':  f['tipo'].invalid && (f['tipo'].dirty || f['tipo'].touched )}">
               <ng-option [disabled]="true">--Seleccione una opción--</ng-option>
               <ng-option value="COMIDA">Comida</ng-option>
               <ng-option value="COMBUSTIBLE">Combustible</ng-option>
               <ng-option value="ALOJAMIENTO">Alojamiento</ng-option>
               <ng-option value="ENTRADAS">Entradas</ng-option>
             </ng-select>
+            <div *ngIf="f['tipo'].invalid && (f['tipo'].dirty || f['tipo'].touched )"
+                 class="invalid-feedback">
+              <div *ngIf="f['tipo'].errors?.['required']">Tipo requerido</div>
+            </div>
           </div>
-          <div
-            *ngIf="formulario.get('division')?.value!='--Seleccione una opción--' && formulario.get('tipo')?.value !='--Seleccione una opción--'">
-
-
-            <div class="form-group">
-              <label for="grupoBool">¿Es un gasto grupal?</label>
-              <input (change)="gastoGrupalCheck($event)" formControlName="grupoBool" class="mx-2" id="grupoBool"
-                     type="checkbox">
-
-            </div>
-            <div class="form-group" *ngIf="formulario.get('grupoBool')?.value">
-              <label for="id_grupo">Grupo</label>
-              <ng-select (change)="cambioGrupo($event)"  formControlName="id_grupo" id="id_grupo">
-                <ng-option  [disabled]="true" [value]="">--Seleccione una opción--</ng-option>
-                <ng-option *ngFor="let grupo of grupos" [value]="grupo.id">{{ grupo.nombre }}</ng-option>
-              </ng-select>
-
-            </div>
             <div
-              *ngIf="!formulario.get('grupoBool')?.value || (formulario.get('grupoBool')?.value) && formulario.get('id_grupo')?.value !='--Seleccione una opción--'">
+              *ngIf="formulario.get('division')?.value!='--Seleccione una opción--' && formulario.get('tipo')?.value !='--Seleccione una opción--'">
+
+
               <div class="form-group">
-                <label>
-                  Participantes del gasto
-                  <button *ngIf="personasFormArray.length < integrantes.length" (click)="agregarUsuario()"
-                          class="btn btn-primary" type="button"><i class="fa-solid fa-plus"></i></button>
-                </label>
+                <label for="grupoBool">¿Es un gasto grupal?</label>
+                <input (change)="gastoGrupalCheck($event)" formControlName="grupoBool" class="mx-2" id="grupoBool"
+                       type="checkbox">
+
               </div>
-              <div *ngFor="let usuario of personasFormArray.controls; let i = index"
-                   formArrayName="personas">
-                <div [formGroupName]="i" class="d-flex flex-row">
-                  <div class="col-4">
-                    <label [attr.for]="'usuario' + i">Usuario:</label>
+              <div class="form-group" *ngIf="formulario.get('grupoBool')?.value">
+                <label for="id_grupo">Grupo</label>
+                <ng-select (change)="cambioGrupo($event)" formControlName="id_grupo" id="id_grupo">
+                  <ng-option [disabled]="true" [value]="">--Seleccione una opción--</ng-option>
+                  <ng-option *ngFor="let grupo of grupos" [value]="grupo.id">{{ grupo.nombre }}</ng-option>
+                </ng-select>
 
-                    <ng-select (focus)="antesCambioUsuario(i)" (change)="cambioUsuario($event, i)"
-                               (clear)="eliminarSeleccion(i)"
-                            [attr.id]="'usuario' + i"  formControlName="usuario">
-                      <ng-option  [disabled]="true">--Seleccione una opción--</ng-option>
-                      <ng-option [disabled]="chequearSeleccionado(persona,i)"
-                              *ngFor="let persona of integrantes; let j=index"
-                              [value]="persona">{{ persona }}
-                      </ng-option>
-                    </ng-select>
+              </div>
+              <div
+                *ngIf="!formulario.get('grupoBool')?.value || (formulario.get('grupoBool')?.value) && formulario.get('id_grupo')?.value !='--Seleccione una opción--'">
+                <div class="form-group">
+                  <label>
+                    Participantes del gasto
+                    <button *ngIf="personasFormArray.length < integrantes.length" (click)="agregarUsuario()"
+                            class="btn btn-primary" type="button"><i class="fa-solid fa-plus"></i></button>
+                  </label>
+                </div>
+                <div *ngFor="let usuario of personasFormArray.controls; let i = index"
+                     formArrayName="personas">
+                  <div [formGroupName]="i" class="d-flex flex-row">
+                    <div class="col-4">
+                      <label [attr.for]="'usuario' + i">Usuario:</label>
+
+                      <ng-select (focus)="antesCambioUsuario(i)" (change)="cambioUsuario($event, i)"
+                                 (clear)="eliminarSeleccion(i)"
+                                 [attr.id]="'usuario' + i" formControlName="usuario">
+                        <ng-option [disabled]="true">--Seleccione una opción--</ng-option>
+                        <ng-option [disabled]="chequearSeleccionado(persona,i)"
+                                   *ngFor="let persona of integrantes; let j=index"
+                                   [value]="persona">{{ persona }}
+                        </ng-option>
+                      </ng-select>
+                    </div>
+                    <div
+                      *ngIf="formulario.get('division')?.value != 'MONTOIGUAL' && formulario.get('division')?.value !='PORCENTAJEIGUAL' "
+                      class="col-4">
+
+                      <label *ngIf="formulario.get('division')?.value == 'MONTO'"
+                             [attr.for]="'monto' + i">Monto:</label>
+                      <label *ngIf="formulario.get('division')?.value == 'PORCENTAJE'"
+                             [attr.for]="'monto' + i">Porcentaje:</label>
+
+                      <input [attr.id]="'monto' + i" class="form-control" formControlName="monto" type="text">
+                    </div>
+                    <div class="col-1 d-flex flex-column">
+                      <label for="eliminar_usuario">Quitar </label>
+                      <button (click)="eliminarUsuario(i)" class="btn btn-danger d-flex justify-content-center"
+                              type="button" id="eliminar_usuario"><i class="fa-solid fa-x"></i>
+                      </button>
+
+                    </div>
+
                   </div>
-                  <div
-                    *ngIf="formulario.get('division')?.value != 'MONTOIGUAL' && formulario.get('division')?.value !='PORCENTAJEIGUAL' "
-                    class="col-4">
-
-                    <label *ngIf="formulario.get('division')?.value == 'MONTO'" [attr.for]="'monto' + i">Monto:</label>
-                    <label *ngIf="formulario.get('division')?.value == 'PORCENTAJE'"
-                           [attr.for]="'monto' + i">Porcentaje:</label>
-
-                    <input [attr.id]="'monto' + i" class="form-control" formControlName="monto" type="text">
-                  </div>
-                  <div class="col-1 d-flex flex-column">
-                    <label for="eliminar_usuario">Quitar </label>
-                    <button (click)="eliminarUsuario(i)" class="btn btn-danger d-flex justify-content-center"
-                            type="button" id="eliminar_usuario"><i class="fa-solid fa-x"></i>
-                    </button>
-
-                  </div>
-
+                </div>
+                <div class="form-group mt-3">
+                  <label for="responsable">Responsable: </label>
+                  <ng-select formControlName="responsable" id="responsable">
+                    <ng-option [disabled]="true">--Seleccione una opción--</ng-option>
+                    <ng-option *ngFor="let persona of seleccionCargado.keys()" [value]="persona">{{ persona }}
+                    </ng-option>
+                  </ng-select>
                 </div>
               </div>
-              <div class="form-group mt-3">
-                <label for="responsable">Responsable: </label>
-                <ng-select formControlName="responsable" id="responsable">
-                  <ng-option  [disabled]="true">--Seleccione una opción--</ng-option>
-                  <ng-option *ngFor="let persona of seleccionCargado.keys()" [value]="persona">{{ persona }}</ng-option>
-                </ng-select>
-              </div>
             </div>
-          </div>
         </form>
       </div>
       <div class="modal-footer">
         <button (click)="resetearForm()" class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancelar
         </button>
-        <button (click)="crearGasto()" class="btn btn-primary" data-bs-dismiss="modal" type="button">Guardar Recibo
+        <button [disabled]="!formulario.valid" (click)="crearGasto()" class="btn btn-primary" data-bs-dismiss="modal"
+                type="button">Cargar gasto
         </button>
 
       </div>
