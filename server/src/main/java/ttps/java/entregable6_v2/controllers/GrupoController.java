@@ -42,7 +42,7 @@ public class GrupoController {
         try {
             return new ResponseEntity<Grupo>(grupoService.crearGrupo(grupoCreateRequest, usuarioService.recuperarUsuario()), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<String>("Error al crear grupo", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

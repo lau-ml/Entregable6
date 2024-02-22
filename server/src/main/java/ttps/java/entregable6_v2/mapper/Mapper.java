@@ -8,10 +8,7 @@ import ttps.java.entregable6_v2.modelos.Gasto;
 import ttps.java.entregable6_v2.modelos.Grupo;
 import ttps.java.entregable6_v2.modelos.Usuario;
 
-import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -51,7 +48,7 @@ public class Mapper {
     public UsuarioDTO usuarioDTO(Usuario usuario) {
         return UsuarioDTO.builder()
                 .id(usuario.getId())
-                .username(usuario.getUsuario())
+                .usuario(usuario.getUsuario())
                 .nombre(usuario.getNombre())
                 .apellido(usuario.getApellido())
                 .email(usuario.getEmail())

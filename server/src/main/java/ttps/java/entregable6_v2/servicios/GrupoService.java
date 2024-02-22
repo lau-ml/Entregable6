@@ -26,7 +26,11 @@ public class GrupoService {
 
 
     public Grupo persistir(Grupo entity) throws Exception {
+        try {
         return dao.save(entity);
+        } catch (Exception e) {
+            throw new Exception("Ya administra un grupo con ese nombre");
+        }
     }
 
 
@@ -70,7 +74,7 @@ public class GrupoService {
             usuarioDAO.save(usuarioConGrupos);
             return grupo_persistido;
         } catch (Exception e) {
-            throw new GrupoException("Error al crear grupo");
+            throw new GrupoException(e.getMessage());
         }
     }
 

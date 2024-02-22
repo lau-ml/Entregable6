@@ -36,27 +36,37 @@ export class GruposComponent implements OnInit {
               private usuarioService: UsuarioService) {
   }
 
+
+  get f() {
+    return this.groupForm.controls;
+  }
   onSubmit() {
     if (this.groupForm.invalid) {
       this.groupForm.markAllAsTouched();
       return;
     }
-    alert(this.groupForm.value.participantes)
     this.grupoService.createGroup(this.groupForm.value as GrupoCreateRequest).subscribe(
       {
         next: (data) => {
           this.sweetAlertService.showAlert("success", "¡Éxito!", "Grupo creado");
+          this.getPage(1);
+          this.closeModal();
         },
         error: (error) => {
           this.sweetAlertService.showAlert("error", "¡Error!", "No se pudo crear el grupo");
+          if (error.message.includes("nombre")){
+            const nombreGrupoControl = this.groupForm.get('nombreGrupo');
+            if (nombreGrupoControl) {
+              nombreGrupoControl.setErrors({ unique: true });
+              nombreGrupoControl.markAsDirty();
+              nombreGrupoControl.markAsTouched();
+            }
+          }
         },
         complete: () => {
+
           this.groupForm.reset();
-          if (this.itemsPerPage % this.totalItems == 0) {
-            this.getPage(this.currentPage + 1);
-          } else {
-            this.getPage(this.currentPage);
-          }
+
         }
       }
     )
@@ -64,6 +74,14 @@ export class GruposComponent implements OnInit {
 
   }
 
+  closeModal() {
+    // Assuming you have a reference to your modal, replace 'yourModalId' with the actual ID or reference of your modal
+    const modal: any = document.getElementById('modal');
+    if (modal) {
+      // Close the modal
+      modal.hide();
+    }
+  }
   getPage(page: number) {
     this.loading = true;
 
@@ -78,7 +96,7 @@ export class GruposComponent implements OnInit {
         this.itemsPerPage = itemsPerPage;
       },
       error: (error) => {
-        console.error(error);
+        alert(error.error)
       },
       complete: () => {
         this.loading = false;
@@ -87,10 +105,10 @@ export class GruposComponent implements OnInit {
     });
   }
 
-  updateQueryParams(page: number, usuario: string, categoria: string) {
+  updateQueryParams(page: number, nombreGrupo: string, categoria: string) {
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: {page, usuario, categoria},
+      queryParams: {page, nombreGrupo, categoria},
       queryParamsHandling: 'merge',
     });
   }

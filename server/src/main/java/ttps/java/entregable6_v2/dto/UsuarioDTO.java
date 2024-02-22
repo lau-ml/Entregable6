@@ -13,7 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class UsuarioDTO {
     private Long id;
-    private String username;
+    private String usuario;
     private String email;
     private String nombre;
     private Double saldo;

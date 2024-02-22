@@ -13,7 +13,6 @@ export class GrupoService {
   }
 
   createGroup(grupo: GrupoCreateRequest) {
-    alert(grupo)
     return this.http.post<any>(this.url + "/crear", grupo).pipe(
       map((grupoData) => grupoData)
     );

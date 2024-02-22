@@ -14,6 +14,7 @@ export class UsuarioService {
   private email: BehaviorSubject<string> = new BehaviorSubject<string>("");
   private id: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   private amigos: BehaviorSubject<any> = new BehaviorSubject<any>("")
+  private usuario:BehaviorSubject<any> = new BehaviorSubject<any>("")
   constructor(private http: HttpClient) {
   }
 
@@ -25,6 +26,7 @@ export class UsuarioService {
         this.apellido.next(usuarioData.apellido);
         this.amigos.next(usuarioData.amigos)
         this.email.next(usuarioData.email);
+        this.usuario.next(usuarioData.usuario);
         this.id.next(usuarioData.id);
       }),
       map((usuarioData) => usuarioData)

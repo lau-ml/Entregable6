@@ -22,10 +22,8 @@ export class ErrorInterceptor implements HttpInterceptor {
           this.router.navigateByUrl("/").then(r => console.log(r));
         }
         if (error.status >= 300) {
-          this.router.navigateByUrl("/").then(r => console.log(r));
           return throwError(() => new Error(error.error));
         }
-        console.error(error);
         return new Observable<HttpEvent<any>>();
       })
     );

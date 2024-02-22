@@ -55,7 +55,7 @@
                          alt="imagen de carga"/>
                   </div>
                   <hr>
-                  <div *ngIf="error" class="text-danger">{{error}}</div>
+                  <div *ngIf="error" class="text-danger">{{ error }}</div>
                   <!--
                   <a href="index.html" class="btn btn-google btn-user btn-block">
                     <i class="fab fa-google fa-fw"></i> Iniciar con google
@@ -68,14 +68,20 @@
 
                 <hr>
                 <div class="text-center">
-                  <button [disabled]="isRecoverPass" data-bs-toggle="modal" data-bs-target="#recoverModal" class="mb-2 btn btn-primary btn-user btn-block">¿Olvidaste la contraseña?</button>
+                  <button [disabled]="isRecoverPass" data-bs-toggle="modal" data-bs-target="#recoverModal"
+                          class="mb-2 btn btn-primary btn-user btn-block">¿Olvidaste la contraseña?
+                  </button>
                 </div>
 
                 <div class="text-center">
-                  <button class="small btn btn-primary btn-user btn-block mb-2" [disabled]="isResendEmail" data-bs-toggle="modal" data-bs-target="#resendModal">¿No te llegó el mail? Reenviar confirmación</button>
+                  <button class="small btn btn-primary btn-user btn-block mb-2" [disabled]="isResendEmail"
+                          data-bs-toggle="modal" data-bs-target="#resendModal">¿No te llegó el mail? Reenviar
+                    confirmación
+                  </button>
                 </div>
                 <div class="text-center">
-                  <button class="mb-2 btn btn-primary btn-user btn-block" routerLink="/register">Crear una cuenta</button>
+                  <button class="mb-2 btn btn-primary btn-user btn-block" routerLink="/register">Crear una cuenta
+                  </button>
                 </div>
               </div>
             </div>
@@ -100,9 +106,10 @@
       </div>
       <div class="modal-body">
         <label for="confirmacionMail">Correo electrónico</label>
-        <input formControlName="email" [ngClass]="{ 'is-invalid': reenviarf['email'].invalid && (reenviarf['email'].dirty || reenviarf['email'].touched )}"
+        <input formControlName="email"
+               [ngClass]="{ 'is-invalid': reenviarf['email'].invalid && (reenviarf['email'].dirty || reenviarf['email'].touched )}"
                class="form-control form-control-user" type="email" name="correoConfirmacion"
-          id="confirmacionMail"
+               id="confirmacionMail"
         >
         <div *ngIf="reenviarf['email'].invalid && (reenviarf['email'].dirty || reenviarf['email'].touched )"
              class="invalid-feedback">
@@ -112,7 +119,10 @@
 
       <div class="modal-footer">
         <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
-        <button [disabled]="reenviarf['email'].invalid && (recoverf['email'].untouched || reenviarf['email'].dirty || reenviarf['email'].touched )" class="btn btn-primary" data-bs-dismiss="modal" type="submit">Enviar</button>
+        <button
+          [disabled]="reenviarf['email'].invalid && (recoverf['email'].untouched || reenviarf['email'].dirty || reenviarf['email'].touched )"
+          class="btn btn-primary" data-bs-dismiss="modal" type="submit">Enviar
+        </button>
       </div>
     </form>
   </div>
@@ -133,9 +143,10 @@
       </div>
       <div class="modal-body">
         <label for="emailCambio">Correo electrónico</label>
-        <input formControlName="email" [ngClass]="{ 'is-invalid': recoverf['email'].invalid && (recoverf['email'].dirty || recoverf['email'].touched )}"
+        <input formControlName="email"
+               [ngClass]="{ 'is-invalid': recoverf['email'].invalid && (recoverf['email'].dirty || recoverf['email'].touched )}"
                class="form-control form-control-user" type="email" name="correoConfirmacion"
-                placeholder="Ingresa tu email"
+               placeholder="Ingresa tu email"
                id="emailCambio"
         >
         <div *ngIf="recoverf['email'].invalid && (recoverf['email'].dirty || recoverf['email'].touched )"
@@ -146,7 +157,10 @@
 
       <div class="modal-footer">
         <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
-        <button [disabled]="recoverf['email'].invalid && (recoverf['email'].untouched || recoverf['email'].dirty || recoverf['email'].touched )" class="btn btn-primary" data-bs-dismiss="modal" type="submit">Enviar</button>
+        <button
+          [disabled]="recoverf['email'].invalid && (recoverf['email'].untouched || recoverf['email'].dirty || recoverf['email'].touched )"
+          class="btn btn-primary" data-bs-dismiss="modal" type="submit">Enviar
+        </button>
       </div>
     </form>
   </div>
