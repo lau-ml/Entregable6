@@ -38,13 +38,13 @@ export class GastoCreacionComponent {
     this.formulario = this.formBuilder.group({
       monto: ['', Validators.required],
       fecha: ['', Validators.required],
-      imagen: ['', Validators.required],
+      imagen: [''],
       grupoBool: [false],
-      id_grupo: ['', Validators.required],
-      division: ["--Seleccione una opción--", Validators.required],
-      tipo: ["--Seleccione una opción--", Validators.required],
+      id_grupo: [''],
+      responsable: ["", Validators.required],
+      division: ["", Validators.required],
+      tipo: ["", Validators.required],
       personas: this.formBuilder.array([]),
-      responsable: ["--Seleccione una opción--", Validators.required],
     });
     this.usuarioService.getUsuario().subscribe({
       next: (data) => {
@@ -68,10 +68,13 @@ get f() {
     return this.formulario.get('personas') as FormArray;
   }
 
+  get fp(){
+    return (this.formulario.get('personas') as FormArray).controls;
+  }
   agregarUsuario() {
     // Agregar un nuevo usuario al FormArray
     const nuevoUsuario = this.formBuilder.group({
-      usuario: ['--Seleccione una opción--', Validators.required],
+      usuario: ['', Validators.required],
       monto: ['0', Validators.required],
     });
     this.personasFormArray.push(nuevoUsuario);
@@ -94,7 +97,7 @@ get f() {
         this.previousValue.delete(key);
       }
     });
-    this.formulario.get('responsable')?.setValue("--Seleccione una opción--");
+    this.formulario.get('responsable')?.setValue("");
     // Eliminar el usuario del FormArray
     this.personasFormArray.removeAt(index);
   }
@@ -127,6 +130,10 @@ get f() {
 
 
   armarGastoRequest(formulario: FormGroup) {
+    if (this.formulario.invalid) {
+      this.formulario.markAllAsTouched();
+      return;
+    }
     if (formulario.value.division === 'MONTOIGUAL') {
       formulario.value.personas.forEach((persona: any) => {
         persona.monto = formulario.value.monto / formulario.value.personas.length;
@@ -164,7 +171,7 @@ get f() {
     if (foundGroup) {
       this.integrantes = foundGroup.participantes;
       this.seleccionCargado.clear();
-      this.formulario.get('responsable')?.setValue("--Seleccione una opción--");
+      this.formulario.get('responsable')?.setValue("");
       this.personasFormArray.clear();
     } else {
       // Handle the case where no matching group is found
@@ -193,7 +200,7 @@ get f() {
       }
     });
     this.previousValue.delete(i);
-    this.personasFormArray.at(i).get('usuario')?.setValue("--Seleccione una opción--");
+    this.personasFormArray.at(i).get('usuario')?.setValue("");
   }
 
   chequearSeleccionado(persona: string, i: number) {
@@ -203,7 +210,7 @@ get f() {
   gastoGrupalCheck($event: any) {
     this.personasFormArray.clear();
     this.seleccionCargado.clear();
-    this.formulario.get('responsable')?.setValue("--Seleccione una opción--");
+    this.formulario.get('responsable')?.setValue("");
     this.formulario.get('id_grupo')?.setValue('');
     if (!$event.target.checked) {
       this.integrantes = this.usuario.amigos.slice();
