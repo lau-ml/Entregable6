@@ -15,6 +15,7 @@ import ttps.java.entregable6_v2.excepciones.UsuarioInvalidoException;
 import ttps.java.entregable6_v2.helpers.requests.PersonaGasto;
 import ttps.java.entregable6_v2.helpers.requests.gastos.GastoRequest;
 import ttps.java.entregable6_v2.helpers.requests.usuarios.*;
+import ttps.java.entregable6_v2.modelos.Division;
 import ttps.java.entregable6_v2.modelos.Usuario;
 import ttps.java.entregable6_v2.repository.UsuarioJPA;
 import ttps.java.entregable6_v2.response.AuthResponse;
@@ -190,6 +191,10 @@ public class UsuarioService {
             Usuario aux = this.recuperar(gastoRequest.getPersonas().get(i).getUsuario());
             if (aux == null) {
                 throw new UsuarioInvalidoException("Los usuarios ingresados no son válidos");
+            }
+            if (gastoRequest.getDivision().equals(Division.PORCENTAJE))
+            {
+                gastoRequest.getPersonas().get(i).setMonto(gastoRequest.getPersonas().get(i).getMonto() * gastoRequest.getMonto() / 100);
             }
             usuarios.put(aux, gastoRequest.getPersonas().get(i).getMonto());
         }

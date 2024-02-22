@@ -19,12 +19,6 @@ export class GastoCreacionComponent {
   integrantes: string[] = [];
   gastos: GastoResponse[] = [];
   grupos: GrupoResponse[] = [];
-
-  totalItems: number = 0;
-  totalPages: number = 0;
-  currentPage: number = 0;
-  loading: boolean = true;
-  itemsPerPage: number = 0;
   previousValue: Map<number, string> = new Map<number, string>();
   amigosConUsuario: string[] = [];
   seleccionCargado: Map<string, number> = new Map<string, number>();

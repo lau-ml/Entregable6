@@ -31,6 +31,7 @@ import {HomeComponent} from "./home/home.component";
 import {GastosComponent} from "./gasto/gastos/gastos.component";
 import {GastoCreacionComponent} from "./gasto/gasto-creacion/gasto-creacion.component";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {GastoModificacionComponent} from "./gasto/gasto-modificacion/gasto-modificacion.component";
 
 
 @NgModule({
@@ -64,7 +65,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     GrupoComponent,
     AmigosComponent,
     MiPerfilVisualizarComponent,
-    GastoCreacionComponent
+    GastoCreacionComponent,
+    GastoModificacionComponent
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},

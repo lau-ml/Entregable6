@@ -6,4 +6,5 @@ import ttps.java.entregable6_v2.modelos.Pago;
 @Repository
 public interface PagoJPA extends JpaRepository<Pago, Long> {
 
+
 }

@@ -12,6 +12,7 @@ import {GrupoComponent} from "./grupos/grupo.component";
 import {GastosComponent} from "./gasto/gastos/gastos.component";
 import {AmigosComponent} from "./amigos/amigos.component";
 import {GastoCreacionComponent} from "./gasto/gasto-creacion/gasto-creacion.component";
+import {GastoModificacionComponent} from "./gasto/gasto-modificacion/gasto-modificacion.component";
 
 export const routes: Routes = [
 
@@ -66,6 +67,11 @@ export const routes: Routes = [
   {
     path:'gastos/crear',
     component:GastoCreacionComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'gastos/modificar/:id',
+    component:GastoModificacionComponent,
     canActivate:[AuthGuard]
   },
   {

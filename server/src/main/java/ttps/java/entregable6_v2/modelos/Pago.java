@@ -2,6 +2,7 @@ package ttps.java.entregable6_v2.modelos;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -10,8 +11,7 @@ public class Pago {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Temporal(TemporalType.DATE)
-    private Date fecha;
+    private LocalDate fecha;
 
     private double monto;
 
@@ -29,10 +29,11 @@ public class Pago {
         // Constructor por defecto necesario para Hibernate
     }
 
-    public Pago(Date fecha, double monto, Usuario pagador) {
+    public Pago(LocalDate fecha, double monto, Usuario pagador, Gasto gasto) {
         this.fecha = fecha;
         this.monto = monto;
         this.pagador = pagador;
+        this.gasto = gasto;
     }
 
     // Getters y setters
@@ -45,11 +46,11 @@ public class Pago {
         this.id = id;
     }
 
-    public Date getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 

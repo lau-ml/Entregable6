@@ -9,10 +9,7 @@ import ttps.java.entregable6_v2.excepciones.GrupoException;
 import ttps.java.entregable6_v2.excepciones.UsuarioInvalidoException;
 import ttps.java.entregable6_v2.helpers.ImagenUtils.ImageUtils;
 import ttps.java.entregable6_v2.helpers.requests.gastos.GastoRequest;
-import ttps.java.entregable6_v2.modelos.Gasto;
-import ttps.java.entregable6_v2.modelos.Grupo;
-import ttps.java.entregable6_v2.modelos.TipoGasto;
-import ttps.java.entregable6_v2.modelos.Usuario;
+import ttps.java.entregable6_v2.modelos.*;
 import ttps.java.entregable6_v2.repository.GastoJPA;
 
 import java.io.IOException;
@@ -32,6 +29,9 @@ public class GastoService {
     @Autowired
     GrupoService grupoService;
 
+    @Autowired
+    ServicePago pagoService;
+
     public void persistir(Gasto entity) {
         dao.save(entity);
     }
@@ -48,11 +48,19 @@ public class GastoService {
     }
 
 
-    public Gasto crearGasto(GastoRequest gastoCreateRequest, String imagen) throws UsuarioInvalidoException {
-        Grupo grupo = gastoCreateRequest.getGrupoBool() ? grupoService.recuperar(gastoCreateRequest.getId_grupo()) : null;
+    public Gasto crearGasto(GastoRequest gastoCreateRequest, String imagen) throws UsuarioInvalidoException, GastoException {
+        Grupo grupo=null;
+        if (gastoCreateRequest.getGrupoBool() != null && gastoCreateRequest.getGrupoBool()) {
+            grupo = grupoService.recuperar(gastoCreateRequest.getId_grupo());
+        }
         HashMap<Usuario, Double> usuariosValores = usuarioService.usuariosGastoValores(gastoCreateRequest);
         Gasto gasto = new Gasto(gastoCreateRequest.getMonto(), gastoCreateRequest.getFecha(), imagen, usuariosValores, usuarioService.recuperar(gastoCreateRequest.getResponsable()), grupo, gastoCreateRequest.getTipo(), gastoCreateRequest.getDivision());
+
         this.persistir(gasto);
+        Pago pago = new Pago(LocalDate.now(), gastoCreateRequest.getMonto(), usuarioService.recuperar(gastoCreateRequest.getResponsable()),gasto);
+
+        pagoService.persistir(pago);
+
         return gasto;
 
     }
