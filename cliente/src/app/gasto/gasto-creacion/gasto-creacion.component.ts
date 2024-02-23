@@ -57,6 +57,9 @@ export class GastoCreacionComponent {
         this.grupos = data.grupos;
       }
     })
+    this.formulario.valueChanges.subscribe(() => {
+      this.eliminarErrores();
+    });
   }
 
   private requiredIfGrupoBool() {
@@ -113,6 +116,17 @@ export class GastoCreacionComponent {
     this.personasFormArray.removeAt(index);
   }
 
+  eliminarErrores() {
+    this.formulario.get('monto')?.setErrors(null);
+    this.formulario.get('imagen')?.setErrors(null);
+    this.formulario.get('id_grupo')?.setErrors(null);
+    this.formulario.get('responsable')?.setErrors(null);
+    this.formulario.get('division')?.setErrors(null);
+    this.formulario.get('tipo')?.setErrors(null);
+    this.formulario.get('fecha')?.setErrors(null);
+    this.formulario.get('personas')?.setErrors(null);
+    this.formulario.get('personas')?.setErrors(null);
+  }
   crearGasto() {
 
     const formData = new FormData();
@@ -122,6 +136,7 @@ export class GastoCreacionComponent {
     });
     formData.append('imagen', this.imagen);
     formData.append('gastoRequest', blob);
+
     // Realiza la solicitud HTTP POST
     this.gastoService.crearGasto(formData).subscribe(
       {
@@ -131,11 +146,43 @@ export class GastoCreacionComponent {
           this.router.navigate(['/gastos']);
         },
         error: (error) => {
-          console.log(error);
+          if (error.message.includes("monto")) {
+            this.formulario.get('monto')?.setErrors({error: true});
+          }
+          if (error.message.includes("imagen")) {
+            this.formulario.get('imagen')?.setErrors({error: true});
+          }
+          if (error.message.includes("grupo")) {
+            this.formulario.get('id_grupo')?.setErrors({error: true});
+          }
+
+          if (error.message.includes("responsable")) {
+            this.formulario.get('responsable')?.setErrors({error: true});
+          }
+          if (error.message.includes("division")) {
+            this.formulario.get('division')?.setErrors({error: true});
+          }
+          if (error.message.includes("tipo")) {
+            this.formulario.get('tipo')?.setErrors({error: true});
+          }
+          if (error.message.includes("fecha")) {
+            this.formulario.get('fecha')?.setErrors({error: true});
+          }
+
+          if (error.message.includes("participantes")) {
+            this.formulario.get('personas')?.setErrors({error: true});
+
+          }
+
+          if (error.message.includes("suma")) {
+            this.formulario.get('personas')?.setErrors({error2: true});
+          }
+
+
+          this.sweetAlertService.showAlert("error", "¡Error!", "No se pudo crear el gasto");
         }
         ,
         complete: () => {
-          this.formulario.reset();
         }
       }
     );
@@ -258,7 +305,7 @@ export class GastoCreacionComponent {
       this.integrantes.push(this.usuario.usuario);
       this.formulario.get('id_grupo')?.setValidators(null);
       return;
-    }else{
+    } else {
       this.integrantes = [];
       this.formulario.get('id_grupo')?.setValidators(Validators.required);
     }

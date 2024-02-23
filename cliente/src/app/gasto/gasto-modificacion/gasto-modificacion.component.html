@@ -14,6 +14,7 @@
             <div *ngIf="f['monto'].invalid && (f['monto'].dirty || f['monto'].touched )"
                  class="invalid-feedback">
               <div *ngIf="f['monto'].errors?.['required']">Monto requerido</div>
+              <div *ngIf="f['monto'].errors?.['error']">Monto debe ser mayor a 0 y es obligatorio</div>
             </div>
           </div>
           <div class="form-group">
@@ -23,12 +24,14 @@
             <div *ngIf="f['fecha'].invalid && (f['fecha'].dirty || f['fecha'].touched )"
                  class="invalid-feedback">
               <div *ngIf="f['fecha'].errors?.['required']">Fecha requerida</div>
+              <div *ngIf="f['fecha'].errors?.['error']">Fecha debe ser menor o igual a la actual</div>
             </div>
           </div>
           <div class="form-group">
             <label for="imagen">Imagen asociada:</label>
             <input (change)="onChange($event)" class="form-control" formControlName="imagen" id="imagen" type="file"
                    accept="image/*">
+            <div *ngIf="f['imagen'].errors?.['error']">Imagen debe ser menor a 2MB</div>
           </div>
 
 
@@ -46,6 +49,8 @@
             <div *ngIf="f['division'].invalid && (f['division'].dirty || f['division'].touched )"
                  class="invalid-feedback">
               <div *ngIf="f['division'].errors?.['required']">División requerida</div>
+              <div *ngIf="f['division'].errors?.['error']">Debe seleccionar una opción</div>
+
             </div>
           </div>
 
@@ -62,6 +67,8 @@
             <div *ngIf="f['tipo'].invalid && (f['tipo'].dirty || f['tipo'].touched )"
                  class="invalid-feedback">
               <div *ngIf="f['tipo'].errors?.['required']">Tipo requerido</div>
+              <div *ngIf="f['tipo'].errors?.['error']">Debe seleccionar una opción</div>
+
             </div>
           </div>
           <div
@@ -86,6 +93,8 @@
               <div *ngIf="f['id_grupo'].invalid && (f['id_grupo'].dirty || f['id_grupo'].touched )"
                    class="invalid-feedback">
                 <div *ngIf="f['id_grupo'].errors?.['required']">Grupo requerido</div>
+                <div *ngIf="f['id_grupo'].errors?.['error']">Debe seleccionar un grupo</div>
+
               </div>
 
             </div>
@@ -160,6 +169,12 @@
 
                 </div>
               </div>
+              <div class="text-danger" *ngIf="this.formulario.get('personas')?.errors?.['error']">
+                Problema con los participantes
+              </div>
+              <div class="text-danger" *ngIf="this.formulario.get('personas')?.errors?.['error2']">
+                Problema con la división de montos
+              </div>
               <div class="form-group mt-3">
                 <label for="responsable">Responsable: </label>
                 <ng-select formControlName="responsable" id="responsable"
@@ -171,6 +186,8 @@
                 <div *ngIf="f['responsable'].invalid && (f['responsable'].dirty || f['responsable'].touched )"
                      class="invalid-feedback">
                   <div *ngIf="f['responsable'].errors?.['required']">Responsable requerido</div>
+                  <div *ngIf="f['responsable'].errors?.['error']">Debe seleccionar un responsable</div>
+
                 </div>
               </div>
             </div>

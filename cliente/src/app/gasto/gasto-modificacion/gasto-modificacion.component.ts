@@ -26,6 +26,7 @@ export class GastoModificacionComponent {
   gastoId: number = 0;
   valores: Map<string, number> = new Map<string, number>();
 
+
   constructor(private formBuilder: FormBuilder, private gastoService: GastoService,
               private usuarioService: UsuarioService, private grupoService: GrupoService,
               private sweetAlertService: SweetalertService,
@@ -44,6 +45,9 @@ export class GastoModificacionComponent {
       division: ["", Validators.required],
       tipo: ["", Validators.required],
       personas: this.formBuilder.array([]),
+    });
+    this.formulario.valueChanges.subscribe(() => {
+      this.eliminarErrores();
     });
     this.usuarioService.getUsuario().subscribe({
       next: (data) => {
@@ -83,7 +87,17 @@ export class GastoModificacionComponent {
     })
   }
 
-
+  eliminarErrores() {
+    this.formulario.get('monto')?.setErrors(null);
+    this.formulario.get('imagen')?.setErrors(null);
+    this.formulario.get('id_grupo')?.setErrors(null);
+    this.formulario.get('responsable')?.setErrors(null);
+    this.formulario.get('division')?.setErrors(null);
+    this.formulario.get('tipo')?.setErrors(null);
+    this.formulario.get('fecha')?.setErrors(null);
+    this.formulario.get('personas')?.setErrors(null);
+    this.formulario.get('personas')?.setErrors(null);
+  }
   private requiredIfGrupoBool() {
     if (this.formulario.get('grupoBool')?.value) {
       return {required: true};
@@ -147,8 +161,17 @@ export class GastoModificacionComponent {
     });
     formData.append('imagen', this.imagen);
     formData.append('gastoRequest', blob);
+    this.formulario.get('monto')?.setErrors({ error: false });
+    this.formulario.get('imagen')?.setErrors({ error: false });
+    this.formulario.get('id_grupo')?.setErrors({ error: false });
+    this.formulario.get('responsable')?.setErrors({ error: false });
+    this.formulario.get('division')?.setErrors({ error: false });
+    this.formulario.get('tipo')?.setErrors({ error: false });
+    this.formulario.get('fecha')?.setErrors({ error: false });
+    this.formulario.get('personas')?.setErrors({ error: false });
+    this.formulario.get('personas')?.setErrors({ error2: false });
     // Realiza la solicitud HTTP POST
-    this.gastoService.updateGasto(this.gastoId,formData).subscribe(
+    this.gastoService.updateGasto(this.gastoId, formData).subscribe(
       {
         next: (data) => {
           this.resetearForm();
@@ -156,12 +179,42 @@ export class GastoModificacionComponent {
           this.router.navigate(['/gastos']);
         },
         error: (error) => {
+          if (error.message.includes("monto")){
+            this.formulario.get('monto')?.setErrors({ error: true });
+          }
+          if (error.message.includes("imagen")){
+            this.formulario.get('imagen')?.setErrors({ error: true });
+          }
+          if (error.message.includes("grupo")){
+            this.formulario.get('id_grupo')?.setErrors({ error: true });
+          }
+
+          if (error.message.includes("responsable")){
+            this.formulario.get('responsable')?.setErrors({ error: true });
+          }
+          if (error.message.includes("division")) {
+            this.formulario.get('division')?.setErrors({ error: true });
+          }
+          if (error.message.includes("tipo")){
+            this.formulario.get('tipo')?.setErrors({ error: true });
+          }
+          if (error.message.includes("fecha")){
+            this.formulario.get('fecha')?.setErrors({ error: true });
+          }
+
+          if(error.message.includes("participantes")){
+            this.formulario.get('personas')?.setErrors({ error: true });
+
+          }
+
+          if(error.message.includes("suma")){
+            this.formulario.get('personas')?.setErrors({ error2: true });
+          }
           this.sweetAlertService.showAlert("error", "¡Error!", "No se pudo modificar el gasto");
           console.log(error);
         }
         ,
         complete: () => {
-          this.formulario.reset();
         }
       }
     );

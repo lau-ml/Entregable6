@@ -105,9 +105,7 @@ public class GrupoService {
         if (grupoRequest.getCategoria() == null) {
             throw new GrupoException("La categoria no puede ser nula");
         }
-        if(grupoRequest.getParticipantes().isEmpty()){
-            throw new GrupoException("No hay participantes");
-        }
+
     }
 
 
@@ -141,9 +139,7 @@ public class GrupoService {
         if (grupoCreateRequest.getCategoria() == null) {
             throw new GrupoException("La categoria no puede ser nula");
         }
-        if(grupoCreateRequest.getParticipantes().isEmpty()){
-            throw new GrupoException("No hay participantes");
-        }
+
     }
 
     public List<Gasto> recuperarTodosLosGastos(long id) {

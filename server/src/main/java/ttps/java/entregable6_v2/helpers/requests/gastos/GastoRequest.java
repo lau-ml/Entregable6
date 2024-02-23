@@ -43,8 +43,8 @@ public class GastoRequest {
             throw new IllegalArgumentException("No se puede crear un gasto sin responsable");
         }
 
-        if (getFecha() == null) {
-            throw new IllegalArgumentException("No se puede crear un gasto sin fecha");
+        if (getFecha() == null || getFecha().isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("No se puede crear un gasto sin fecha o con fecha mayor");
         }
         if (getTipo() == null) {
             throw new IllegalArgumentException("No se puede crear un gasto sin tipo");
