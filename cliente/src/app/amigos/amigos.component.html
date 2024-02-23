@@ -33,22 +33,19 @@
         <thead>
         <tr>
           <th>Usuario</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
           <th>Acciones</th>
         </tr>
         </thead>
         <tbody
-          *ngFor="let gasto of gastos | paginate: { id: 'server', itemsPerPage: perPage, currentPage: currentPage, totalItems: totalItems }">
+          *ngFor="let amigo of amigos | paginate: { id: 'server', itemsPerPage: perPage, currentPage: currentPage, totalItems: totalItems }">
         <tr>
-          <td *ngFor="let integrante of gasto.valores"
-              style="max-width: 100px; overflow: hidden; text-overflow: ellipsis;">
-            <div class="text-truncate" ngbTooltip="{{integrante}}">{{ integrante }}</div>
-          </td>
-          <td>
-            <a download href="/assets/{{gasto.imagen}}">
-              <i class="fa-regular fa-file"></i> Comprobante
-            </a>
 
-          </td>
+          <td>{{ amigo.usuario }}</td>
+          <td>{{amigo.nombre}}</td>
+          <td>{{amigo.apellido}}</td>
+
 
         </tr>
 
@@ -78,8 +75,8 @@
 
 
       <div class="modal-footer">
-        <button (click)="resetearForm()" class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cerrar</button>
-        <button (click)="guardarRecibo()" class="btn btn-primary" data-bs-dismiss="modal" type="button">Guardar Recibo
+        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cerrar</button>
+        <button  class="btn btn-primary" data-bs-dismiss="modal" type="button">Enviar solicitud
         </button>
 
       </div>

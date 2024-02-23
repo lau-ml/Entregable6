@@ -3,6 +3,8 @@ package ttps.java.entregable6_v2.servicios;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import net.bytebuddy.utility.RandomString;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -184,6 +186,10 @@ public class UsuarioService {
         }
     }
 
+
+    public Page<Usuario> recuperarAmigos(Usuario usuario, int page, int pageSize, String nombreAmigo) {
+        return dao.getAmigos(usuario.getId(), nombreAmigo, PageRequest.of(page, pageSize));
+    }
 
     public HashMap<Usuario, Double> usuariosGastoValores(GastoRequest gastoRequest) throws UsuarioInvalidoException {
         HashMap<Usuario, Double> usuarios = new HashMap<>();
