@@ -49,7 +49,7 @@ export class GrupoComponent implements OnInit {
           this.nombre = data.nombreGrupo;
           this.saldo = data.saldo;
           this.id = data.id;
-          this.responsable = data.responsable;
+
 
         },
         error: (error) => {
@@ -85,7 +85,7 @@ export class GrupoComponent implements OnInit {
             categoria: data.categoria,
             participantes: participantes
           });
-
+          this.responsable = data.responsable;
           this.categoria = data.categoria;
           this.nombre = data.nombreGrupo;
           this.saldo = data.saldo;
