@@ -4,7 +4,8 @@
 
     <div class="input-group d-flex align-items-center">
       <div class="mr-2">
-        <select formControlName="categoria" required>
+        <label for="categoriaBusqueda">Categoría</label>
+        <select formControlName="categoria" id="categoriaBusqueda" required>
           <option value="" selected>Todas</option>
           <option value="FAMILIAR">Familiar</option>
           <option value="OCIO">Ocio</option>
@@ -13,12 +14,17 @@
 
         </select>
       </div>
-      <input aria-describedby="basic-addon2" aria-label="Buscar" class="form-control  border-0 small"
-             formControlName="nombreGrupo" placeholder="Buscar..." type="text">
-      <div class="input-group-append">
-        <button class="btn btn-primary" type="submit">
-          <i class="fas fa-search fa-sm"></i>
-        </button>
+      <div>
+        <label for="grupoBusqueda">Grupo</label>
+
+        <input id="grupoBusqueda" aria-describedby="basic-addon2" aria-label="Buscar"
+               class="form-control  border-0 small"
+               formControlName="nombreGrupo" placeholder="Buscar..." type="text">
+
+          <button class="btn btn-primary" type="submit">
+            <i class="fas fa-search fa-sm"></i>
+          </button>
+
       </div>
     </div>
   </form>
@@ -124,7 +130,7 @@
 
           <div class="modal-footer">
             <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cerrar</button>
-            <button [disabled]="!groupForm.valid" class="btn btn-primary"  type="submit">Crear
+            <button [disabled]="!groupForm.valid" class="btn btn-primary" type="submit">Crear
               Grupo
             </button>
           </div>
