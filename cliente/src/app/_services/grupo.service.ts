@@ -89,6 +89,6 @@ export class GrupoService {
     return this.http.put<any>(this.url +  "/" + id + "/rechazarSolicitud", {}).pipe(
       map((grupoData) => grupoData)
     );
-
   }
+
 }

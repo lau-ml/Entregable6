@@ -40,6 +40,7 @@ export class GastosComponent {
       next: (data) => {
         this.id = data.id;
         this.username = data.usuario;
+
       }
     })
     this.route.queryParams.subscribe(params => {

@@ -40,7 +40,7 @@ export class GastoService {
         };
       }));
   }
-  getGastos(page?: number, tipoGasto?: string, fechaDesde?: string, fechaHasta?: string, nombreGrupo?: string,grupoId?:number) {
+  getGastos(page?: number, tipoGasto?: string, fechaDesde?: string, fechaHasta?: string, nombreGrupo?: string,grupoId?:number, opciones?: string[]) {
 
     const options={
 
@@ -51,6 +51,7 @@ export class GastoService {
         .set('fechaHasta',fechaHasta ? new Date(fechaHasta).toISOString() : '')
         .set('nombreGrupo',nombreGrupo? nombreGrupo:'')
         .set('grupoId',grupoId? grupoId.toString():'')
+        .set('opciones',opciones? opciones.join(","):'')
     }
     return this.httpClient.get<any>(this.url, options).pipe(
       map((grupoData) => {
