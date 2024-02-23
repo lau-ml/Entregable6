@@ -54,28 +54,30 @@ export class GrupoComponent implements OnInit {
         },
         error: (error) => {
           this.sweetAlertService.showAlert("error", "¡Error!", "No se pudo actualizar el grupo");
+        },
+        complete: () => {
+          this.groupForm.reset()
+          this.obtenerGrupo();
+          this.solicitudesEnviadasGrupo();
         }
+
+
       }
     )
 
 
   }
 
-
-  get f() {
-    return this.groupForm.controls;
+  solicitudesEnviadasGrupo(){
+    this.grupoService.solicitudesEnviadasGrupoUsuarios(this.groupId).subscribe(
+      {
+        next: (data) => {
+          this.solicitudesEnviadas = data;
+        }
+      })
   }
 
-  ngOnInit(): void {
-    this.groupId = +this.route.snapshot.paramMap.get('id')!;
-
-    this.usuarioService.getUsuario().subscribe({
-      next: (data) => {
-        this.user = data;
-        this.usuario = data.usuario;
-        this.amigos = data.amigos.slice();
-      }
-    })
+  obtenerGrupo(){
     this.grupoService.getGroup(this.groupId).subscribe(
       {
         next: (data) => {
@@ -96,11 +98,22 @@ export class GrupoComponent implements OnInit {
         }
       }
     )
-    this.grupoService.solicitudesEnviadasGrupoUsuarios(this.groupId).subscribe(
-      {
-        next: (data) => {
-          this.solicitudesEnviadas = data;
-        }
-      })
+  }
+  get f() {
+    return this.groupForm.controls;
+  }
+
+  ngOnInit(): void {
+    this.groupId = +this.route.snapshot.paramMap.get('id')!;
+
+    this.usuarioService.getUsuario().subscribe({
+      next: (data) => {
+        this.user = data;
+        this.usuario = data.usuario;
+        this.amigos = data.amigos.slice();
+      }
+    })
+    this.obtenerGrupo();
+    this.solicitudesEnviadasGrupo();
   }
 }

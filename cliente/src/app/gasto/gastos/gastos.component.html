@@ -96,7 +96,7 @@
               <i class="fa-solid fa-eye"></i>
             </a>
 
-            <a [routerLink]="['/gastos/modificar',gasto.id]">
+            <a *ngIf="gasto.responsable.includes(username)" [routerLink]="['/gastos/modificar',gasto.id]">
               <i class="fa-solid fa-edit"></i>
             </a>
             <a *ngIf="gasto.responsable.includes(username)" href="#">
