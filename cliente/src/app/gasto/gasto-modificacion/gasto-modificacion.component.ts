@@ -61,7 +61,15 @@ export class GastoModificacionComponent {
     this.gastoId = +this.route.snapshot.paramMap.get('id')!;
     this.gastoService.getGasto(this.gastoId).subscribe({
       next: (data) => {
-        this.formulario.patchValue(data);
+        this.formulario.patchValue({
+          monto: data.monto,
+          fecha: new Date(data.fecha).toISOString().split('T')[0],
+          grupoBool: data.id_grupo != null,
+          id_grupo: data.id_grupo,
+          division: data.division,
+          tipo: data.tipo,
+          responsable: data.responsable
+        });
         for (const key in data.valores) {
           if (data.valores.hasOwnProperty(key)) {
             const value = data.valores[key];

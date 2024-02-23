@@ -59,7 +59,7 @@ public class GastoController {
         try {
             Usuario user = usuarioService.recuperarUsuario();
             gastoUpdateRequest.isValid();
-            Gasto gasto = gastoService.actualizarGasto(id, user, gastoUpdateRequest, imagen);
+            Gasto gasto = gastoService.actualizarGasto(id, user, gastoUpdateRequest, ImageUtils.guardarImagen(imagen));
             GastoGrupoDTO gastoDTO = new GastoGrupoDTO(gasto, (gasto.getValores().entrySet().stream().collect(Collectors.toMap(e -> e.getKey().getUsuario(), Map.Entry::getValue, (a, b) -> b, HashMap::new))));
             return new ResponseEntity<>(gastoDTO, HttpStatus.OK);
         } catch (Exception e) {

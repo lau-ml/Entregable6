@@ -69,7 +69,7 @@ public class GastoService {
 
     }
 
-    public Gasto actualizarGasto(Long id, Usuario user, GastoRequest gastoUpdateRequest, MultipartFile imagen) throws GastoException, GrupoException, UsuarioInvalidoException, IOException {
+    public Gasto actualizarGasto(Long id, Usuario user, GastoRequest gastoUpdateRequest, String imagen) throws GastoException, GrupoException, UsuarioInvalidoException, IOException {
         Gasto gasto = this.recuperar(id);
         if (!gasto.getResponsable().getUsuario().equals(user.getUsuario())) {
             throw new GastoException("No tiene permisos para modificar el gasto");
@@ -79,7 +79,7 @@ public class GastoService {
             grupo = grupoService.recuperar(gastoUpdateRequest.getId_grupo());
         }
         HashMap<Usuario, Double> usuariosGastos = usuarioService.usuariosGastoValores(gastoUpdateRequest);
-        ttps.java.entregable6_v2.helpers.actualizarGasto.Gasto.actualizarGasto(gasto, gastoUpdateRequest, grupo, usuariosGastos, ImageUtils.guardarImagen(imagen));
+        ttps.java.entregable6_v2.helpers.actualizarGasto.Gasto.actualizarGasto(gasto, gastoUpdateRequest, grupo, usuariosGastos,imagen);
         this.actualizar(gasto);
         return gasto;
     }

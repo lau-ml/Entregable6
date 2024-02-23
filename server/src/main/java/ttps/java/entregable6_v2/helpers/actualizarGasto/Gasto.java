@@ -13,7 +13,7 @@ public class Gasto {
 
         gasto.setMonto(gastoUpdateRequest.getMonto());
         gasto.setFecha(gastoUpdateRequest.getFecha());
-        gasto.setImagen(nombreArchivo);
+        gasto.setImagen(nombreArchivo != null ? nombreArchivo : gasto.getImagen());
         gasto.setResponsable(gasto.getResponsable());
         gasto.setGrupo(grupo);
         gasto.setTipo(gastoUpdateRequest.getTipo());
