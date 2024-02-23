@@ -26,8 +26,10 @@ export class GrupoComponent implements OnInit {
   saldo: number = 0;
   id: number = 0;
   user: any;
+  usuario: string = '';
   amigos: string[] = [];
   solicitudesEnviadas: string[] = [];
+  responsable: string = '';
 
   constructor(private formBuilder: FormBuilder, private router: Router, private grupoService: GrupoService, private sweetAlertService: SweetalertService,
               private route: ActivatedRoute, private usuarioService: UsuarioService) {
@@ -47,10 +49,11 @@ export class GrupoComponent implements OnInit {
           this.nombre = data.nombreGrupo;
           this.saldo = data.saldo;
           this.id = data.id;
+          this.responsable = data.responsable;
 
         },
         error: (error) => {
-          this.sweetAlertService.showAlert("error", "¡Error!", "No se pudo crear el grupo");
+          this.sweetAlertService.showAlert("error", "¡Error!", "No se pudo actualizar el grupo");
         }
       }
     )
@@ -69,6 +72,7 @@ export class GrupoComponent implements OnInit {
     this.usuarioService.getUsuario().subscribe({
       next: (data) => {
         this.user = data;
+        this.usuario = data.usuario;
         this.amigos = data.amigos.slice();
       }
     })
@@ -88,7 +92,7 @@ export class GrupoComponent implements OnInit {
           this.id = data.id;
         },
         error: (error) => {
-          this.sweetAlertService.showAlert("error", "¡Error!", "No se pudo cargar el grupo");
+          this.sweetAlertService.showAlert("error", "¡Error!", "No se pudo actualizar el grupo");
         }
       }
     )

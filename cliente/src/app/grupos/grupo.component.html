@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-between flex-wrap mb-4">
   <h4 class="m-2">Grupo: {{ nombre }}. Categoría: {{ categoria }}</h4>
   <div class="d-flex flex-wrap">
-    <a class="btn btn-sm btn-primary shadow-sm m-2" data-bs-target="#grupoModal" data-bs-toggle="modal"
+    <a *ngIf="responsable.includes(usuario)" class="btn btn-sm btn-primary shadow-sm m-2" data-bs-target="#grupoModal" data-bs-toggle="modal"
        data-target="#historialModal"
        href="#">
       <i class="fa-regular fa-file"></i>Modificar grupo
@@ -191,7 +191,7 @@
   </div>
 </div>
 
-<div aria-hidden="true" aria-labelledby="grupoModalLabel" class="modal fade" id="grupoModal" role="dialog"
+<div  *ngIf="responsable.includes(usuario)" aria-hidden="true" aria-labelledby="grupoModalLabel" class="modal fade" id="grupoModal" role="dialog"
      tabindex="-1">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
