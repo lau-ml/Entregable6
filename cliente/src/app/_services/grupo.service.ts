@@ -19,6 +19,11 @@ export class GrupoService {
 
   }
 
+  solicitudesEnviadasGrupoUsuarios(id: number){
+    return this.http.get<any>(this.url + '/'+id+"/solicitudesEnviadas").pipe(
+      map((grupoData) => grupoData)
+    );
+  }
 
   getGroupsPaginated(page?: number, perPage?: number, categoria?: string, nombreGrupo?: string, participantes?: any[]) {
     const options = {

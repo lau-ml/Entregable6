@@ -240,7 +240,7 @@
           <div class="form-group">
             <label for="amigos">Agregar Amigos</label>
             <ng-select id="amigos" [multiple]="true" formControlName="participantes">
-              <ng-option *ngFor="let amigo of amigos" [value]="amigo">{{ amigo }}</ng-option>
+              <ng-option *ngFor="let amigo of amigos" [value]="amigo" [disabled]="solicitudesEnviadas.includes(amigo)">{{ amigo }} <span *ngIf="solicitudesEnviadas.includes(amigo)">(Solicitud Enviada)</span></ng-option>
             </ng-select>
           </div>
 

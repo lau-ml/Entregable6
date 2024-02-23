@@ -27,6 +27,7 @@ export class GrupoComponent implements OnInit {
   id: number = 0;
   user: any;
   amigos: string[] = [];
+  solicitudesEnviadas: string[] = [];
 
   constructor(private formBuilder: FormBuilder, private router: Router, private grupoService: GrupoService, private sweetAlertService: SweetalertService,
               private route: ActivatedRoute, private usuarioService: UsuarioService) {
@@ -56,6 +57,7 @@ export class GrupoComponent implements OnInit {
 
 
   }
+
 
   get f() {
     return this.groupForm.controls;
@@ -90,8 +92,11 @@ export class GrupoComponent implements OnInit {
         }
       }
     )
-
+    this.grupoService.solicitudesEnviadasGrupoUsuarios(this.groupId).subscribe(
+      {
+        next: (data) => {
+          this.solicitudesEnviadas = data;
+        }
+      })
   }
-
-
 }

@@ -12,6 +12,8 @@ import ttps.java.entregable6_v2.modelos.SolicitudState;
 import ttps.java.entregable6_v2.repository.SolicitudGrupoJPA;
 import ttps.java.entregable6_v2.repository.UsuarioJPA;
 
+import java.util.List;
+
 @Service
 public class SolictudGrupoService extends SolicitudService {
     @Autowired
@@ -24,34 +26,30 @@ public class SolictudGrupoService extends SolicitudService {
 
 
 
-    public ResponseEntity<?> aceptarSolicitud(SolicitudGrupo solicitudPersistir) throws Exception {
+    public boolean aceptarSolicitud(SolicitudGrupo solicitudPersistir) throws Exception {
         try {
-
-            SolicitudGrupo solicitud = dao.encontrarSolicitudGrupo(solicitudPersistir.getGroupReceiver(), solicitudPersistir.getGrupo());
-            if (solicitud == null)
-                return new ResponseEntity<>("No existe la solicitud de amistad", HttpStatus.BAD_REQUEST);
-            if (solicitud.getEstado() == SolicitudState.ACEPTADA)
-                return new ResponseEntity<>("La solicitud ya ha sido aceptada", HttpStatus.BAD_REQUEST);
-            if (solicitud.getEstado() == SolicitudState.RECHAZADA)
-                return new ResponseEntity<>("La solicitud ya ha sido rechazada", HttpStatus.BAD_REQUEST);
+            if (solicitudPersistir == null)
+                throw new Exception("No existe la solicitud");
+            if (solicitudPersistir.getEstado() == SolicitudState.ACEPTADA)
+                throw new Exception("La solicitud ya ha sido aceptada");
+            if (solicitudPersistir.getEstado() == SolicitudState.RECHAZADA)
+                throw new Exception("La solicitud ya ha sido rechazada");
             solicitudPersistir.setEstado(SolicitudState.ACEPTADA);
             dao.save(solicitudPersistir);
-            solicitud.getGroupReceiver().agregarGrupo(solicitud.getGrupo());
-            usuarioDAO.save(solicitud.getGroupReceiver());
-            return new ResponseEntity<>(solicitudPersistir, HttpStatus.OK);
+            solicitudPersistir.getGroupReceiver().agregarGrupo(solicitudPersistir.getGrupo());
+            usuarioDAO.save(solicitudPersistir.getGroupReceiver());
+            return true;
         } catch (Exception e) {
-            return new ResponseEntity<>("Error al aceptar la solicitud de grupo", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new Exception("Error al aceptar la solicitud de grupo");
         }
     }
 
     public boolean rechazarSolicitud(SolicitudGrupo solicitudPersistir) throws Exception {
         try {
-            SolicitudGrupo solicitud = dao.encontrarSolicitudGrupo(solicitudPersistir.getGroupReceiver(), solicitudPersistir.getGrupo());
-            if (solicitud == null)
-                throw new Exception("No existe la solicitud de amistad");
-            if (solicitud.getEstado() == SolicitudState.ACEPTADA)
+
+            if (solicitudPersistir.getEstado() == SolicitudState.ACEPTADA)
                 throw new Exception("La solicitud ya ha sido aceptada");
-            if (solicitud.getEstado() == SolicitudState.RECHAZADA)
+            if (solicitudPersistir.getEstado() == SolicitudState.RECHAZADA)
                 throw new Exception("La solicitud ya ha sido rechazada");
             solicitudPersistir.setEstado(SolicitudState.RECHAZADA);
             dao.save(solicitudPersistir);
@@ -91,4 +89,7 @@ public class SolictudGrupoService extends SolicitudService {
     }
 
 
+    public List<String> getSolicitudesEnviadasUsuarios(long id) {
+        return dao.getSolicitudesEnviadasUsuarios(id);
+    }
 }

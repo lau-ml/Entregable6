@@ -83,8 +83,22 @@ public class GrupoController {
         }
     }
 
+
+    @RequestMapping(value = "/{id}/solicitudesEnviadas", method = RequestMethod.GET)
+    public ResponseEntity<?> getSolicitudesEnviadasUsuarios(@PathVariable("id") long id) throws UsuarioInvalidoException {
+        try {
+            Grupo grupo = grupoService.recuperar(id);
+            return new ResponseEntity<>(solictudGrupoService.getSolicitudesEnviadasUsuarios(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<String>("Error al recuperar grupo", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+
+
     @RequestMapping(value = "/{id}/actualizar", method = RequestMethod.PUT)
-    public ResponseEntity<?> actulizarGrupo(@RequestBody GrupoUpdateRequest grupoUpdateRequest, HttpSession httpSession, @PathVariable("id") long id) {
+    public ResponseEntity<?> actulizarGrupo(@RequestBody GrupoUpdateRequest grupoUpdateRequest, @PathVariable("id") long id) {
 
         try {
             Grupo grupo = grupoService.recuperar(id);
@@ -127,7 +141,7 @@ public class GrupoController {
 
         try {
             SolicitudGrupo solicitud = this.solictudGrupoService.encontrarSolicitudGrupo(id);
-            return solictudGrupoService.aceptarSolicitud(solicitud);
+            return new ResponseEntity<>(solictudGrupoService.aceptarSolicitud(solicitud),HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<String>("Error al actualizar grupo", HttpStatus.INTERNAL_SERVER_ERROR);
         }

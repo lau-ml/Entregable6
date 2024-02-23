@@ -18,13 +18,13 @@
                 <span class="badge badge-danger badge-counter">{{this.totalItems}}</span>
             </a>
             <!-- Menú desplegable - Alertas -->
-            <div *ngFor="let solicitud of solicitudesPendientes" class="dropdown-menu dropdown-menu-end shadow animate__animated animate__fadeIn"
+            <div  class="dropdown-menu dropdown-menu-end shadow animate__animated animate__fadeIn"
                  aria-labelledby="alertsDropdown">
                 <h6 class="dropdown-header">
                     Solicitud de grupos
                 </h6>
 
-                <a class="dropdown-item d-flex align-items-center" >
+                <a *ngFor="let solicitud of solicitudesPendientes" class="dropdown-item d-flex align-items-center" >
                     <div class="mr-3">
                         <div class="dropdown-list-image mr-3">
                             <img class="rounded-circle" src="/assets/icons8-jake.svg"

@@ -29,7 +29,7 @@ public class GrupoService {
 
     public Grupo persistir(Grupo entity) throws Exception {
         try {
-        return dao.save(entity);
+            return dao.save(entity);
         } catch (Exception e) {
             throw new Exception("Ya administra un grupo con ese nombre");
         }
@@ -62,17 +62,29 @@ public class GrupoService {
         this.usuarioPerteneciente(grupo, user);
         grupo.setNombre(grupoRequest.getNombreGrupo());
         grupo.setCategoria(grupoRequest.getCategoria());
-        Set<Usuario> participantes = grupoRequest.getParticipantes().stream().map(usuarioDAO::recuperarConGrupos).collect(Collectors.toSet());
-        participantes.add(user);
+        Set<Usuario> invitados = grupoRequest.getParticipantes().stream().map(usuarioDAO::recuperarConGrupos).collect(Collectors.toSet());
+        List<String> lista = solicitudGrupoDAO.getSolicitudesEnviadasUsuarios(grupo.getId());
+        Set<Usuario> participantesAntiguos = grupo.getParticipantes();
+        Set<Usuario> participantes = new HashSet<Usuario>();
         grupo.getParticipantes().forEach(participante -> {
-                participante.eliminarGrupo(grupo);
-                usuarioDAO.save(participante);
-        });
-        grupo.setParticipantes(participantes);
-        participantes.forEach(participante -> {
-            participante.agregarGrupo(grupo);
+            participante.eliminarGrupo(grupo);
             usuarioDAO.save(participante);
         });
+
+        invitados.forEach(invitado -> {
+            if (!participantesAntiguos.contains(invitado) && !lista
+                    .contains(invitado.getUsuario())) {
+                solicitudGrupoDAO.save(new SolicitudGrupo(grupo, user, invitado));
+            } else if (participantesAntiguos.contains(invitado)) {
+                participantes.add(invitado);
+                invitado.agregarGrupo(grupo);
+                usuarioDAO.save(invitado);
+            }
+        });
+        participantes.add(user);
+        user.agregarGrupo(grupo);
+        usuarioDAO.save(user);
+        grupo.setParticipantes(participantes);
         this.actualizar(grupo);
     }
 
@@ -82,13 +94,14 @@ public class GrupoService {
 
 
             Usuario usuarioConGrupos = usuarioDAO.recuperarConGrupos(usuario.getId());
-            Set<Usuario> invitaciones= grupoCreateRequest.getParticipantes().stream().map(usuarioDAO::recuperarConGrupos).collect(Collectors.toSet());
-            Set<Usuario> participantes = new HashSet<Usuario>() ;
+            Set<Usuario> invitaciones = grupoCreateRequest.getParticipantes().stream().map(usuarioDAO::recuperarConGrupos).collect(Collectors.toSet());
+            Set<Usuario> participantes = new HashSet<Usuario>();
             participantes.add(usuarioConGrupos);
             Grupo grupo_persistido = persistir(new Grupo(grupoCreateRequest.getNombreGrupo(), grupoCreateRequest.getCategoria(), .0, usuarioConGrupos, participantes));
             invitaciones.forEach(participante -> {
                 solicitudGrupoDAO.save(new SolicitudGrupo(grupo_persistido, usuarioConGrupos, participante));
             });
+            usuarioConGrupos.agregarGrupo(grupo_persistido);
             dao.save(grupo_persistido);
             usuarioDAO.save(usuarioConGrupos);
 

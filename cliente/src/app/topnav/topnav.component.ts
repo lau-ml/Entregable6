@@ -34,15 +34,17 @@ export class TopnavComponent implements OnInit {
       {
         next: (userLoginOn) => {
           this.userLoginOn = userLoginOn;
+          if (userLoginOn) {
+            this.usuarioService.getUsuario().subscribe({
+              next: (data) => {
+                this.user = data as UserResponse;
+              }
+            })
+            this.obtenerSolicitudes().subscribe();
+          }
         }
       }
     )
-    this.usuarioService.getUsuario().subscribe({
-      next: (data) => {
-        this.user = data as UserResponse;
-      }
-    })
-    this.obtenerSolicitudes().subscribe();
 
   }
 
@@ -61,16 +63,22 @@ export class TopnavComponent implements OnInit {
   aceptarSolicitud(id: number) {
     this.grupoService.aceptarSolicitud(id).pipe(
       concatMap(() => this.obtenerSolicitudes())
-    ).subscribe();
-    this.sweetAlertService.showAlert('success', 'Solicitud aceptada', 'La solicitud ha sido aceptada');
+    ).subscribe(
+      () => {
+        this.sweetAlertService.showAlert('success', 'Solicitud aceptada', 'La solicitud ha sido aceptada');
+      },
+      (error) => {
+        console.error('Error al aceptar la solicitud:', error);
+      }
+    );
   }
-
   rechazarSolicitud(id: number) {
     this.grupoService.rechazarSolicitud(id).pipe(
       concatMap(() => this.obtenerSolicitudes())
-    ).subscribe();
-    this.sweetAlertService.showAlert('success', 'Solicitud rechazada', 'La solicitud ha sido rechazada');
-
+    ).subscribe
+    (() => {
+      this.sweetAlertService.showAlert('success', 'Solicitud rechazada', 'La solicitud ha sido rechazada');
+    });
   }
   logout() {
     this.loginService.logout();

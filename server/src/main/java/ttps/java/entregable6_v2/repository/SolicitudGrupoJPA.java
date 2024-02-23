@@ -10,6 +10,8 @@ import ttps.java.entregable6_v2.modelos.Grupo;
 import ttps.java.entregable6_v2.modelos.SolicitudGrupo;
 import ttps.java.entregable6_v2.modelos.Usuario;
 
+import java.util.List;
+
 @Repository
 public interface SolicitudGrupoJPA extends JpaRepository<SolicitudGrupo, Long> {
 
@@ -27,4 +29,8 @@ public interface SolicitudGrupoJPA extends JpaRepository<SolicitudGrupo, Long> {
     @Query("select s from SolicitudGrupo s where s.groupReceiver.id = :id" +
             " and s.estado = ttps.java.entregable6_v2.modelos.SolicitudState.PENDIENTE")
     public Page<SolicitudGrupo> findAllByGroupReceiver(Long id, PageRequest pageRequest);
+
+    @Query("select s.groupReceiver.usuario from SolicitudGrupo s where s.grupo.id = :id_grupo" +
+            " and s.estado = ttps.java.entregable6_v2.modelos.SolicitudState.PENDIENTE")
+    List<String> getSolicitudesEnviadasUsuarios(long id_grupo);
 }
