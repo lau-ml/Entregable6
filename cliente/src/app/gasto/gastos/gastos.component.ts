@@ -25,6 +25,7 @@ export class GastosComponent {
     fechaDesde: [''],
     fechaHasta: ['']
   });
+  username: any;
 
 
   constructor(private formBuilder: FormBuilder, private gastoService: GastoService,
@@ -38,6 +39,7 @@ export class GastosComponent {
     this.usuarioService.getUsuario().subscribe({
       next: (data) => {
         this.id = data.id;
+        this.username= data.usuario;
       }
     })
     this.route.queryParams.subscribe(params => {

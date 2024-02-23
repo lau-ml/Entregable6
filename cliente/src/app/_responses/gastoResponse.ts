@@ -1,4 +1,5 @@
 export interface GastoResponse {
+  responsable: string;
     id: number;
     nombreGrupo: string;
     monto: number;

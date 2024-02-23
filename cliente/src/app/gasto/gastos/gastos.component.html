@@ -99,7 +99,7 @@
             <a [routerLink]="['/gastos/modificar',gasto.id]">
               <i class="fa-solid fa-edit"></i>
             </a>
-            <a href="#">
+            <a *ngIf="gasto.responsable.includes(username)" href="#">
               <i class="fa-solid fa-money-bill btn-danger"></i>
             </a>
           </td>

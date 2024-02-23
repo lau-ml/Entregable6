@@ -79,7 +79,8 @@ public class GastoService {
             grupo = grupoService.recuperar(gastoUpdateRequest.getId_grupo());
         }
         HashMap<Usuario, Double> usuariosGastos = usuarioService.usuariosGastoValores(gastoUpdateRequest);
-        ttps.java.entregable6_v2.helpers.actualizarGasto.Gasto.actualizarGasto(gasto, gastoUpdateRequest, grupo, usuariosGastos,imagen);
+        Usuario responsable = usuarioService.recuperar(gastoUpdateRequest.getResponsable());
+        ttps.java.entregable6_v2.helpers.actualizarGasto.Gasto.actualizarGasto(gasto,responsable, gastoUpdateRequest, grupo, usuariosGastos,imagen);
         this.actualizar(gasto);
         return gasto;
     }

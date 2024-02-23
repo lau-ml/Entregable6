@@ -39,6 +39,10 @@ public class GastoRequest {
             throw new IllegalArgumentException("No se puede crear un gasto con participantes repetidos");
         }
 
+        if(getResponsable() == null){
+            throw new IllegalArgumentException("No se puede crear un gasto sin responsable");
+        }
+
         if (getFecha() == null) {
             throw new IllegalArgumentException("No se puede crear un gasto sin fecha");
         }
