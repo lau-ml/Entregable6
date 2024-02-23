@@ -14,6 +14,7 @@ import ttps.java.entregable6_v2.repository.UsuarioJPA;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -58,8 +59,14 @@ public class GrupoService {
 
     }
 
+    public boolean esAdmin(Grupo grupo, Usuario usuario) throws GrupoException {
+
+        return Objects.equals(grupo.getResponsable().getId(), usuario.getId());
+    }
+
     public void actualizarGrupo(Grupo grupo, GrupoUpdateRequest grupoRequest, Usuario user) throws Exception {
         this.usuarioPerteneciente(grupo, user);
+         isValid(grupo, grupoRequest, user);
         grupo.setNombre(grupoRequest.getNombreGrupo());
         grupo.setCategoria(grupoRequest.getCategoria());
         Set<Usuario> invitados = grupoRequest.getParticipantes().stream().map(usuarioDAO::recuperarConGrupos).collect(Collectors.toSet());
@@ -88,10 +95,26 @@ public class GrupoService {
         this.actualizar(grupo);
     }
 
+    private void isValid(Grupo grupo, GrupoUpdateRequest grupoRequest, Usuario user) throws GrupoException {
+        if (!esAdmin(grupo, user)) {
+            throw new GrupoException("No es admin del grupo");
+        }
+        if (grupoRequest.getNombreGrupo() == null || grupoRequest.getNombreGrupo().isEmpty()) {
+            throw new GrupoException("El nombre no puede ser nulo");
+        }
+        if (grupoRequest.getCategoria() == null) {
+            throw new GrupoException("La categoria no puede ser nula");
+        }
+        if(grupoRequest.getParticipantes().isEmpty()){
+            throw new GrupoException("No hay participantes");
+        }
+    }
+
 
     public Grupo crearGrupo(GrupoCreateRequest grupoCreateRequest, Usuario usuario) throws GrupoException {
         try {
 
+            extracted(grupoCreateRequest);
 
             Usuario usuarioConGrupos = usuarioDAO.recuperarConGrupos(usuario.getId());
             Set<Usuario> invitaciones = grupoCreateRequest.getParticipantes().stream().map(usuarioDAO::recuperarConGrupos).collect(Collectors.toSet());
@@ -108,6 +131,18 @@ public class GrupoService {
             return grupo_persistido;
         } catch (Exception e) {
             throw new GrupoException(e.getMessage());
+        }
+    }
+
+    private static void extracted(GrupoCreateRequest grupoCreateRequest) throws GrupoException {
+        if (grupoCreateRequest.getNombreGrupo() == null || grupoCreateRequest.getNombreGrupo().isEmpty()) {
+            throw new GrupoException("El nombre no puede ser nulo");
+        }
+        if (grupoCreateRequest.getCategoria() == null) {
+            throw new GrupoException("La categoria no puede ser nula");
+        }
+        if(grupoCreateRequest.getParticipantes().isEmpty()){
+            throw new GrupoException("No hay participantes");
         }
     }
 

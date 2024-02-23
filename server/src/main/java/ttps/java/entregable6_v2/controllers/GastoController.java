@@ -86,13 +86,14 @@ public class GastoController {
                                        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate fechaDesde,
                                        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate fechaHasta,
                                        @RequestParam(defaultValue = "") String nombreGrupo,
-                                       @RequestParam(defaultValue = "") TipoGasto tipoGasto
+                                       @RequestParam(defaultValue = "") TipoGasto tipoGasto,
+                                        @RequestParam(defaultValue = "0") int grupoId
 
 
     ) {
         try {
             Usuario user = usuarioService.recuperarUsuario();
-            Page<Gasto> gastosPaginados = gastoService.recuperarGastosPaginados(user.getId(), page - 1, pageSize, fechaDesde, fechaHasta, nombreGrupo, tipoGasto);
+            Page<Gasto> gastosPaginados = gastoService.recuperarGastosPaginados(user.getId(), page - 1, pageSize, fechaDesde, fechaHasta, nombreGrupo, tipoGasto, grupoId);
             PaginationUtils<Gasto> paginationUtils = new PaginationUtils<>();
             Map<String, Object> response = paginationUtils.createPaginationResponse(gastosPaginados);
             List<GastoGrupoDTO> gastoDTOs = gastosPaginados.stream()

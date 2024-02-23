@@ -1,10 +1,15 @@
 <div class="d-flex justify-content-between flex-wrap mb-4">
   <h4 class="m-2">Grupo: {{ nombre }}. Categoría: {{ categoria }}</h4>
   <div class="d-flex flex-wrap">
-    <a *ngIf="responsable.includes(usuario)" class="btn btn-sm btn-primary shadow-sm m-2" data-bs-target="#grupoModal" data-bs-toggle="modal"
+
+    <a [routerLink]="['/gastos']" [queryParams]="{ grupoId: groupId }"
+       class="btn btn-sm btn-primary shadow-sm m-2">Gastos</a>
+    <a *ngIf="responsable.includes(usuario)" class="btn btn-sm btn-primary shadow-sm m-2" data-bs-target="#grupoModal"
+       data-bs-toggle="modal"
        data-target="#historialModal"
        href="#">
       <i class="fa-regular fa-file"></i>Modificar grupo
+
     </a>
   </div>
 </div>
@@ -191,7 +196,8 @@
   </div>
 </div>
 
-<div  *ngIf="responsable.includes(usuario)" aria-hidden="true" aria-labelledby="grupoModalLabel" class="modal fade" id="grupoModal" role="dialog"
+<div *ngIf="responsable.includes(usuario)" aria-hidden="true" aria-labelledby="grupoModalLabel" class="modal fade"
+     id="grupoModal" role="dialog"
      tabindex="-1">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -240,13 +246,15 @@
           <div class="form-group">
             <label for="amigos">Agregar Amigos</label>
             <ng-select id="amigos" [multiple]="true" formControlName="participantes">
-              <ng-option *ngFor="let amigo of amigos" [value]="amigo" [disabled]="solicitudesEnviadas.includes(amigo)">{{ amigo }} <span *ngIf="solicitudesEnviadas.includes(amigo)">(Solicitud Enviada)</span></ng-option>
+              <ng-option *ngFor="let amigo of amigos" [value]="amigo"
+                         [disabled]="solicitudesEnviadas.includes(amigo)">{{ amigo }} <span
+                *ngIf="solicitudesEnviadas.includes(amigo)">(Solicitud Enviada)</span></ng-option>
             </ng-select>
           </div>
 
           <div class="modal-footer">
             <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cerrar</button>
-            <button [disabled]="!groupForm.valid" class="btn btn-primary"  type="submit">Actualizar
+            <button [disabled]="!groupForm.valid" class="btn btn-primary" type="submit">Actualizar
               Grupo
             </button>
           </div>

@@ -6,6 +6,7 @@ import {GrupoService} from "../_services/grupo.service";
 import {SweetalertService} from "../_services/sweetalert.service";
 import {GrupoCreateRequest} from "../_requests/grupoCreateRequest";
 import {UsuarioService} from "../_services/usuario.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-grupo',
@@ -32,7 +33,8 @@ export class GrupoComponent implements OnInit {
   responsable: string = '';
 
   constructor(private formBuilder: FormBuilder, private router: Router, private grupoService: GrupoService, private sweetAlertService: SweetalertService,
-              private route: ActivatedRoute, private usuarioService: UsuarioService) {
+              private route: ActivatedRoute, private usuarioService: UsuarioService,
+              private modalService: NgbModal) {
 
   }
 
@@ -44,6 +46,7 @@ export class GrupoComponent implements OnInit {
     this.grupoService.updateGroup(this.id, this.groupForm.value as GrupoCreateRequest).subscribe(
       {
         next: (data) => {
+
           this.sweetAlertService.showAlert("success", "¡Éxito!", "Grupo actualizado");
           this.categoria = data.categoria;
           this.nombre = data.nombreGrupo;
@@ -56,6 +59,7 @@ export class GrupoComponent implements OnInit {
           this.sweetAlertService.showAlert("error", "¡Error!", "No se pudo actualizar el grupo");
         },
         complete: () => {
+
           this.groupForm.reset()
           this.obtenerGrupo();
           this.solicitudesEnviadasGrupo();

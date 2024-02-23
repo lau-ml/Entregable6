@@ -25,12 +25,14 @@ public interface GastoJPA extends JpaRepository<Gasto, Long> {
             "AND(:tipoGasto IS NULL OR g.tipo = :tipoGasto)" +
             "AND(cast(:fechaDesde as localdate )IS NULL OR g.fecha >= :fechaDesde)" +
             "AND(cast(:fechaHasta as localdate)  IS NULL OR g.fecha <= :fechaHasta)" +
-            "AND(:nombreGrupo = '' OR g.grupo.nombre ilike %:nombreGrupo%)"
+            "AND(:nombreGrupo = '' OR g.grupo.nombre ilike %:nombreGrupo%)" +
+            " AND(:grupoId = 0 OR g.grupo.id = :grupoId)"
     )
     Page<Gasto> recuperarGastosPaginados(@Param("id") Long id,
                                          @Param("fechaDesde") LocalDate fechaDesde,
                                          @Param("fechaHasta") LocalDate fechaHasta,
                                          @Param("nombreGrupo") String nombreGrupo,
                                          @Param("tipoGasto") TipoGasto tipoGasto,
+                                         @Param("grupoId") int grupoId,
                                          Pageable pageable);
 }

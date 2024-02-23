@@ -86,7 +86,7 @@ public class GastoService {
     }
 
 
-    public Page<Gasto> recuperarGastosPaginados(Long id, int page, int pageSize, LocalDate fechaDesde, LocalDate fechaHasta, String nombreGrupo, TipoGasto tipoGasto) {
-        return dao.recuperarGastosPaginados(id, fechaDesde, fechaHasta, nombreGrupo, tipoGasto, PageRequest.of(page, pageSize));
+    public Page<Gasto> recuperarGastosPaginados(Long id, int page, int pageSize, LocalDate fechaDesde, LocalDate fechaHasta, String nombreGrupo, TipoGasto tipoGasto, int grupoId) {
+        return dao.recuperarGastosPaginados(id, fechaDesde, fechaHasta, nombreGrupo, tipoGasto, grupoId, PageRequest.of(page, pageSize));
     }
 }

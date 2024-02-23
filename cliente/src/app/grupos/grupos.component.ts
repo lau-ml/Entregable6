@@ -6,6 +6,7 @@ import {GrupoCreateRequest} from "../_requests/grupoCreateRequest";
 import {SweetalertService} from "../_services/sweetalert.service";
 import {GrupoResponse} from "../_responses/grupoResponse";
 import {UsuarioService} from "../_services/usuario.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-grupos',
@@ -33,7 +34,8 @@ export class GruposComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private router: Router, private grupoService: GrupoService, private sweetAlertService: SweetalertService,
               private route: ActivatedRoute,
-              private usuarioService: UsuarioService) {
+              private usuarioService: UsuarioService,
+              private modalService: NgbModal) {
   }
 
 
@@ -50,7 +52,7 @@ export class GruposComponent implements OnInit {
         next: (data) => {
           this.sweetAlertService.showAlert("success", "¡Éxito!", "Grupo creado");
           this.getPage(1);
-          this.closeModal();
+
         },
         error: (error) => {
           this.sweetAlertService.showAlert("error", "¡Error!", "No se pudo crear el grupo");
@@ -72,15 +74,6 @@ export class GruposComponent implements OnInit {
     )
 
 
-  }
-
-  closeModal() {
-    // Assuming you have a reference to your modal, replace 'yourModalId' with the actual ID or reference of your modal
-    const modal: any = document.getElementById('modal');
-    if (modal) {
-      // Close the modal
-      modal.hide();
-    }
   }
   getPage(page: number) {
     this.loading = true;

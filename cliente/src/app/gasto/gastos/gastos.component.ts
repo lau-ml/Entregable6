@@ -26,7 +26,7 @@ export class GastosComponent {
     fechaHasta: ['']
   });
   username: any;
-
+  grupoId: any;
 
   constructor(private formBuilder: FormBuilder, private gastoService: GastoService,
               private usuarioService: UsuarioService,
@@ -39,7 +39,7 @@ export class GastosComponent {
     this.usuarioService.getUsuario().subscribe({
       next: (data) => {
         this.id = data.id;
-        this.username= data.usuario;
+        this.username = data.usuario;
       }
     })
     this.route.queryParams.subscribe(params => {
@@ -50,6 +50,7 @@ export class GastosComponent {
         fechaHasta: params['fechaHasta'] || '',
 
       });
+      this.grupoId = params['grupoId'] || '';
     });
     this.getPage(1);
 
@@ -59,10 +60,10 @@ export class GastosComponent {
   getPage(page: number) {
     const tipoGasto = this.groupForm.get('tipoGasto')?.value ?? '';
     const fechaDesde = this.groupForm.get('fechaDesde')?.value ?? '';
-    const fechaHasta = this.groupForm.get('fechaHasta')?.value?? "";
+    const fechaHasta = this.groupForm.get('fechaHasta')?.value ?? "";
     const nombreGrupo = this.groupForm.get('nombreGrupo')?.value ?? '';
 
-    this.gastoService.getGastos(page, tipoGasto, fechaDesde, fechaHasta, nombreGrupo).subscribe(
+    this.gastoService.getGastos(page, tipoGasto, fechaDesde, fechaHasta, nombreGrupo,this.grupoId).subscribe(
       {
         next: (data) => {
           this.loading = false;
@@ -77,18 +78,19 @@ export class GastosComponent {
         },
         complete: () => {
           this.loading = false;
-          this.updateQueryParams(page, nombreGrupo, tipoGasto, fechaDesde,fechaHasta);
+          this.updateQueryParams(page, nombreGrupo, tipoGasto, fechaDesde, fechaHasta, this.grupoId);
         }
       }
     )
   }
 
-  updateQueryParams(page: number, nombreGrupo: string, tipoGasto: string, fechaDesde: string, fechaHasta: string) {
+  updateQueryParams(page: number, nombreGrupo: string, tipoGasto: string, fechaDesde: string, fechaHasta: string, grupoId: number) {
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { page, nombreGrupo, tipoGasto, fechaDesde, fechaHasta },
+      queryParams: {page, nombreGrupo, tipoGasto, fechaDesde, fechaHasta, grupoId},
       queryParamsHandling: 'merge',
     });
   }
+
   protected readonly Object = Object;
 }
