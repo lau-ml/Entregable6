@@ -220,6 +220,7 @@
                  class="invalid-feedback">
               <div *ngIf="f['nombreGrupo'].errors?.['required']">Nombre de grupo requerido</div>
               <div *ngIf="f['nombreGrupo'].errors?.['unique']">Ya administra un grupo con ese nombre</div>
+              <div *ngIf="f['nombreGrupo'].errors?.['error']">El nombre ingresado no es válido</div>
             </div>
 
           </div>
@@ -239,7 +240,7 @@
             <div *ngIf="f['categoria'].invalid && (f['categoria'].dirty || f['categoria'].touched )"
                  class="invalid-feedback">
               <div *ngIf="f['categoria'].errors?.['required']">La categoría es requerida</div>
-
+              <div *ngIf="f['categoria'].errors?.['error']">La categoría ingresada no es válida</div>
             </div>
           </div>
 

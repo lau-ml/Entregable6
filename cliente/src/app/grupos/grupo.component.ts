@@ -52,10 +52,14 @@ export class GrupoComponent implements OnInit {
           this.nombre = data.nombreGrupo;
           this.saldo = data.saldo;
           this.id = data.id;
-
-
         },
         error: (error) => {
+          if (error.message.includes("nombre")){
+          this.groupForm.get('nombreGrupo')?.setErrors({error: true});
+          }
+          if (error.message.includes("categoria")) {
+            this.groupForm.get('categoria')?.setErrors({error: true});
+          }
           this.sweetAlertService.showAlert("error", "¡Error!", "No se pudo actualizar el grupo");
         },
         complete: () => {
@@ -119,5 +123,13 @@ export class GrupoComponent implements OnInit {
     })
     this.obtenerGrupo();
     this.solicitudesEnviadasGrupo();
+    this.groupForm.valueChanges.subscribe(() => {
+      this.eliminarErrores();
+    });
+  }
+
+  private eliminarErrores() {
+    this.groupForm.get('nombreGrupo')?.setErrors(null);
+    this.groupForm.get('categoria')?.setErrors(null);
   }
 }

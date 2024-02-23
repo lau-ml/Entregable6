@@ -90,7 +90,7 @@ public class GrupoController {
             Grupo grupo = grupoService.recuperar(id);
             return new ResponseEntity<>(solictudGrupoService.getSolicitudesEnviadasUsuarios(id), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<String>("Error al recuperar grupo", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -106,7 +106,7 @@ public class GrupoController {
             grupoService.actualizarGrupo(grupo, grupoUpdateRequest, user);
             return new ResponseEntity<GrupoDTO>(mapper.grupoDTO(grupo), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<String>("Error al actualizar grupo", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -143,7 +143,7 @@ public class GrupoController {
             SolicitudGrupo solicitud = this.solictudGrupoService.encontrarSolicitudGrupo(id);
             return new ResponseEntity<>(solictudGrupoService.aceptarSolicitud(solicitud),HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<String>("Error al actualizar grupo", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -156,7 +156,7 @@ public class GrupoController {
             SolicitudGrupo solicitud = this.solictudGrupoService.encontrarSolicitudGrupo(id);
             return new ResponseEntity<>(solictudGrupoService.rechazarSolicitud(solicitud), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<String>("Error al actualizar grupo", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
