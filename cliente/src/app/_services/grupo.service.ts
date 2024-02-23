@@ -20,8 +20,7 @@ export class GrupoService {
   }
 
 
-
-  getGroupsPaginated(page?: number,perPage?:number, categoria?: string, nombreGrupo?: string, participantes?: any[] ) {
+  getGroupsPaginated(page?: number, perPage?: number, categoria?: string, nombreGrupo?: string, participantes?: any[]) {
     const options = {
       params: new HttpParams()
         .set('page', page ? page.toString() : "1")
@@ -42,9 +41,23 @@ export class GrupoService {
             itemsPerPage: grupoData.itemsPerPage
           };
         }
-
       )
+    );
+  }
 
+  getSolicitudesPendientes() {
+    return this.http.get<any>(this.url + "/solicitudes").pipe(
+      map((grupoData) => {
+          return {
+            solicitudes: grupoData.solicitudes,
+            totalItems: grupoData.totalItems,
+            totalPages: grupoData.totalPages,
+            currentPage: grupoData.currentPage,
+            itemsPerPage: grupoData.itemsPerPage
+
+          };
+        }
+      )
     );
   }
 
@@ -58,5 +71,19 @@ export class GrupoService {
     return this.http.put<any>(this.url + "/" + id + "/actualizar", grupo).pipe(
       map((grupoData) => grupoData)
     );
+  }
+
+  aceptarSolicitud(id: number) {
+    return this.http.put<any>(this.url + "/" + id + "/aceptarSolicitud", {}).pipe(
+      map((grupoData) => grupoData)
+    );
+
+  }
+
+  rechazarSolicitud(id: number) {
+    return this.http.put<any>(this.url +  "/" + id + "/rechazarSolicitud", {}).pipe(
+      map((grupoData) => grupoData)
+    );
+
   }
 }

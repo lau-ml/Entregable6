@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ttps.java.entregable6_v2.dto.GrupoDTO;
+import ttps.java.entregable6_v2.dto.SolicitudGrupoDTO;
 import ttps.java.entregable6_v2.excepciones.UsuarioInvalidoException;
 import ttps.java.entregable6_v2.helpers.Pagination.PaginationUtils;
 import ttps.java.entregable6_v2.helpers.requests.grupos.GrupoCreateRequest;
@@ -120,29 +121,51 @@ public class GrupoController {
 
     }
 
-    @RequestMapping(value = "/{id}/aceptarSolicitud/{id_usuario}", method = RequestMethod.POST)
-    public ResponseEntity<?> aceptarSolicitud(HttpSession httpSession, @PathVariable("id") long id, @PathVariable("id_usuario") long id_usuario) throws UsuarioInvalidoException {
-        Long user_id = (Long) httpSession.getAttribute("connectedUser");
-        if (user_id == null) {
-            return new ResponseEntity<String>("No hay usuario conectado", HttpStatus.UNAUTHORIZED);
-        }
+    @RequestMapping(value = "/{id}/aceptarSolicitud", method = RequestMethod.PUT)
+    public ResponseEntity<?> aceptarSolicitud( @PathVariable("id") long id) throws UsuarioInvalidoException {
+
 
         try {
-            Usuario user = usuarioService.recuperar(user_id);
-            Usuario usuario = usuarioService.recuperar(id_usuario);
-            if (usuario == null) {
-                return new ResponseEntity<String>("El usuario no existe", HttpStatus.BAD_REQUEST);
-            }
-            Grupo grupo = grupoService.recuperar(id);
-            if (grupo == null) {
-                return new ResponseEntity<String>("El grupo no existe", HttpStatus.BAD_REQUEST);
-            }
-            SolicitudGrupo solicitud = new SolicitudGrupo(grupo, user, usuario);
+            SolicitudGrupo solicitud = this.solictudGrupoService.encontrarSolicitudGrupo(id);
             return solictudGrupoService.aceptarSolicitud(solicitud);
         } catch (Exception e) {
             return new ResponseEntity<String>("Error al actualizar grupo", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    @RequestMapping(value = "/{id}/rechazarSolicitud", method = RequestMethod.PUT)
+    public ResponseEntity<?> rechazarSolicitud( @PathVariable("id") long id) throws UsuarioInvalidoException {
+
+
+        try {
+            SolicitudGrupo solicitud = this.solictudGrupoService.encontrarSolicitudGrupo(id);
+            return new ResponseEntity<>(solictudGrupoService.rechazarSolicitud(solicitud), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<String>("Error al actualizar grupo", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    @RequestMapping(value = "/solicitudes", method = RequestMethod.GET)
+    public ResponseEntity<?> getSolicitudes(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "3") int pageSize
+    ) throws UsuarioInvalidoException {
+        try {
+            Usuario user = usuarioService.recuperarUsuario();
+
+            Page<SolicitudGrupo> solicitudesGrupo = this.solictudGrupoService.solicitudesPendientes(user.getId(), page-1, pageSize);
+            List<SolicitudGrupoDTO> solicitudGrupoDTOS = solicitudesGrupo.stream()
+                    .map(mapper::solicitudGrupo)
+                    .collect(Collectors.toList());
+            PaginationUtils<SolicitudGrupo> paginationUtils = new PaginationUtils<>();
+            Map<String, Object> response = paginationUtils.createPaginationResponse(solicitudesGrupo);
+            response.put("solicitudes", solicitudGrupoDTOS);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<String>("Error al actualizar grupo", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @RequestMapping(value = "/{id}/gastos", method = RequestMethod.GET)

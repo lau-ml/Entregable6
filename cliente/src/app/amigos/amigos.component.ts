@@ -12,7 +12,6 @@ import {UserResponse} from "../_responses/userResponse";
   styleUrl: './amigos.component.css'
 })
 export class AmigosComponent {
-  formulario: FormGroup = new FormGroup({});
   imagen: File = new File([], "");
   private id: number = 0;
   gastos: GastoResponse[] = [];

@@ -3,9 +3,11 @@ package ttps.java.entregable6_v2.mapper;
 import org.springframework.stereotype.Component;
 import ttps.java.entregable6_v2.dto.GastoGrupoDTO;
 import ttps.java.entregable6_v2.dto.GrupoDTO;
+import ttps.java.entregable6_v2.dto.SolicitudGrupoDTO;
 import ttps.java.entregable6_v2.dto.UsuarioDTO;
 import ttps.java.entregable6_v2.modelos.Gasto;
 import ttps.java.entregable6_v2.modelos.Grupo;
+import ttps.java.entregable6_v2.modelos.SolicitudGrupo;
 import ttps.java.entregable6_v2.modelos.Usuario;
 
 import java.util.HashMap;
@@ -35,6 +37,13 @@ public class Mapper {
                 .build();
     }
 
+    public SolicitudGrupoDTO solicitudGrupo(SolicitudGrupo solicitudGrupoDTO) {
+        return SolicitudGrupoDTO.builder()
+                .id(solicitudGrupoDTO.getId())
+                .teInvito(solicitudGrupoDTO.getGroupRequester().getUsuario())
+                .grupo(solicitudGrupoDTO.getGrupo().getNombre())
+                .build();
+    }
     public GrupoDTO grupoDTO(Grupo grupo) {
         return GrupoDTO.builder()
                 .id(grupo.getId())

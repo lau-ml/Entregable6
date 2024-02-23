@@ -1,9 +1,12 @@
 package ttps.java.entregable6_v2.servicios;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import ttps.java.entregable6_v2.modelos.Solicitud;
 import ttps.java.entregable6_v2.modelos.SolicitudGrupo;
 import ttps.java.entregable6_v2.modelos.SolicitudState;
 import ttps.java.entregable6_v2.repository.SolicitudGrupoJPA;
@@ -20,8 +23,10 @@ public class SolictudGrupoService extends SolicitudService {
 
 
 
+
     public ResponseEntity<?> aceptarSolicitud(SolicitudGrupo solicitudPersistir) throws Exception {
         try {
+
             SolicitudGrupo solicitud = dao.encontrarSolicitudGrupo(solicitudPersistir.getGroupReceiver(), solicitudPersistir.getGrupo());
             if (solicitud == null)
                 return new ResponseEntity<>("No existe la solicitud de amistad", HttpStatus.BAD_REQUEST);
@@ -75,6 +80,14 @@ public class SolictudGrupoService extends SolicitudService {
         } catch (Exception e) {
             return new ResponseEntity<>("Error al enviar la solicitud de grupo", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+   public Page<SolicitudGrupo> solicitudesPendientes(long id, int page, int pageSize) {
+        return dao.findAllByGroupReceiver(id, PageRequest.of(page, pageSize));
+    }
+
+    public SolicitudGrupo encontrarSolicitudGrupo(long id) {
+        return dao.findById(id).orElse(null);
     }
 
 

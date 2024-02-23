@@ -1,5 +1,7 @@
 package ttps.java.entregable6_v2.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,4 +18,13 @@ public interface SolicitudGrupoJPA extends JpaRepository<SolicitudGrupo, Long> {
             "or (s.groupRequester = :usuario and s.grupo = :grupo))")
     public SolicitudGrupo encontrarSolicitudGrupo(@Param("usuario") Usuario usuario, @Param("grupo") Grupo grupo);
 
+
+    @Query("select s from SolicitudGrupo s where " +
+            "((s.groupReceiver = :usuario and s.grupo = :grupo) " +
+            "or (s.groupRequester = :usuario and s.grupo = :grupo))")
+    public SolicitudGrupo encontrarSolicitudGrupo(@Param("usuario") Usuario usuario, @Param("grupo") Long grupo);
+
+    @Query("select s from SolicitudGrupo s where s.groupReceiver.id = :id" +
+            " and s.estado = ttps.java.entregable6_v2.modelos.SolicitudState.PENDIENTE")
+    public Page<SolicitudGrupo> findAllByGroupReceiver(Long id, PageRequest pageRequest);
 }
