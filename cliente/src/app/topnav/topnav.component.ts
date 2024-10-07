@@ -7,7 +7,7 @@ import {GrupoService} from "../_services/grupo.service";
 import {SolicitudGrupoResponse} from "../_responses/solicitudGrupoResponse";
 import {concatMap} from "rxjs";
 import {tap} from "rxjs/operators";
-import {SweetalertService} from "../_services/sweetalert.service";
+import {SweetalertService} from "../../../../../../dssd/cliente/src/app/services/sweetalert.service";
 
 @Component({
   selector: 'app-topnav',

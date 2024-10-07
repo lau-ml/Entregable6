@@ -6,7 +6,7 @@ import {FormBuilder, Validators} from '@angular/forms';
 import {AuthenticationService} from '../_services';
 
 import {LoginRequest} from "../_requests/loginRequest";
-import {SweetalertService} from "../_services/sweetalert.service";
+import {SweetalertService} from "../../../../../../dssd/cliente/src/app/services/sweetalert.service";
 import {UsuarioService} from "../_services/usuario.service";
 
 @Component({templateUrl: 'login.component.html', styleUrl: "./login.css"})

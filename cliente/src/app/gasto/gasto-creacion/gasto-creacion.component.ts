@@ -5,7 +5,7 @@ import {GastoService} from "../../_services/gasto.service";
 import {UsuarioService} from "../../_services/usuario.service";
 import {GrupoResponse} from "../../_responses/grupoResponse";
 import {GrupoService} from "../../_services/grupo.service";
-import {SweetalertService} from "../../_services/sweetalert.service";
+import {SweetalertService} from "../../../../../../../dssd/cliente/src/app/services/sweetalert.service";
 import {Router} from "@angular/router";
 
 @Component({

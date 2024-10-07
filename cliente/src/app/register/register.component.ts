@@ -3,7 +3,7 @@ import {FormBuilder, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {RegisterService} from "../_services/register.service";
 import {RegisterRequest} from "../_requests/registerRequest";
-import {SweetalertService} from "../_services/sweetalert.service";
+import {SweetalertService} from "../../../../../../dssd/cliente/src/app/services/sweetalert.service";
 
 @Component({
   selector: 'app-register',

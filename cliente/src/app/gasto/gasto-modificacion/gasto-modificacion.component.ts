@@ -6,7 +6,7 @@ import {GastoService} from "../../_services/gasto.service";
 import {UsuarioService} from "../../_services/usuario.service";
 import {GrupoService} from "../../_services/grupo.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {SweetalertService} from "../../_services/sweetalert.service";
+import {SweetalertService} from "../../../../../../../dssd/cliente/src/app/services/sweetalert.service";
 
 @Component({
   selector: 'app-gasto-modificacion',

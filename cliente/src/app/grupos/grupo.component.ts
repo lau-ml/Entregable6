@@ -3,7 +3,7 @@ import {FormBuilder, Validators} from "@angular/forms";
 import {GrupoResponse} from "../_responses/grupoResponse";
 import {ActivatedRoute, Router} from "@angular/router";
 import {GrupoService} from "../_services/grupo.service";
-import {SweetalertService} from "../_services/sweetalert.service";
+import {SweetalertService} from "../../../../../../dssd/cliente/src/app/services/sweetalert.service";
 import {GrupoCreateRequest} from "../_requests/grupoCreateRequest";
 import {UsuarioService} from "../_services/usuario.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
